@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Function to resolve hostname to IP address using ping
+resolve_hostname() {
+    local hostname="$1"
+    local ip_address
+
+    # Use ping to resolve the hostname to an IP address
+    ip_address=$(ping -c 1 -W 1 "$hostname" 2>/dev/null | awk '/^PING/{print $3}' | tr -d '()')
+
+    # If an IP address is found, return it; otherwise, return the original hostname
+    if [ -n "$ip_address" ]; then
+        echo "$ip_address"
+    else
+        echo "$hostname"
+    fi
+}
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <IP>"
+    exit 1
+fi
+
+rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
+resolved_ip=$(resolve_hostname "$1")
+$rustscan -a "$resolved_ip" -- -A -sC -sV
