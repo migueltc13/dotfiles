@@ -55,7 +55,16 @@ alias ptree='pstree -p'				# View the process tree with PIDs
 alias syslog='tail -f /var/log/syslog'		# Monitor system log in real-time
 
 # Quick References
+alias datetime="date '+%Y-%m-%d %H:%M:%S'"
 alias alphabet="echo {1..9} {0..9} {0..6} && echo {a..z}"
+
+# File Viewing
+alias view='pygmentize -O style=monokai -g'	# View a file with syntax highlighting
+
+# Basic Calculator
+calc() {
+    echo "$@" | bc -l
+}
 
 # Others
 alias news='hnterm'				# Hacker news on the terminal
