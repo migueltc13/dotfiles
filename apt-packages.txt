@@ -1,0 +1,21 @@
+binwalk
+curl
+dictionaries-common
+diffutils
+dirb
+docker-compose
+docker.io
+docker
+fcrackzip
+fping
+ftp
+gdb
+gobuster
+gzip
+hxtools
+hydra
+john
+# ...
+# TODO sudo apt list --installed
+# ...
+terminator
