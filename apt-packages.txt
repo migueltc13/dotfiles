@@ -1,6 +1,10 @@
+autojump
 binwalk
+bsdutils
 curl
-dictionaries-common
+# dash
+# dotnet
+dconf-editor
 diffutils
 dirb
 docker-compose
@@ -9,13 +13,26 @@ docker
 fcrackzip
 fping
 ftp
+gcc
 gdb
 gobuster
+grep
 gzip
 hxtools
 hydra
 john
+
+# check lib*
+
+make
+mysql-client-core-8.0
+nano
 # ...
-# TODO sudo apt list --installed
+# TODO: sudo apt list --installed | grep '\[installed\]'
 # ...
 terminator
+wireshark
+xclip
+xxd
+zip
+zmap
