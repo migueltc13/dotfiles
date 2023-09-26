@@ -55,8 +55,7 @@ alias ptree='pstree -p'				# View the process tree with PIDs
 alias syslog='tail -f /var/log/syslog'		# Monitor system log in real-time
 
 # Quick References
-alias alphabet='echo {a..z}'
-alias alphabetnum="echo -n {1..9} && echo -n ' '  && echo -n {0..9} && echo -n ' ' && echo {0..6} && echo {a..z}"
+alias alphabet="echo {1..9} {0..9} {0..6} && echo {a..z}"
 
 # Others
 alias news='hnterm'				# Hacker news on the terminal
