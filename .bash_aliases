@@ -38,6 +38,7 @@ alias install='sudo apt install -y'
 alias search='apt search'
 
 # Directory Operations
+alias ls='ls --color=auto --group-directories-first'
 mcd() {
     mkdir "$1" && cd "$1"
 }
@@ -60,6 +61,7 @@ alias alphabet="echo {1..9} {0..9} {0..6} && echo {a..z}"
 
 # File Viewing
 alias view='pygmentize -O style=monokai -g'	# View a file with syntax highlighting
+alias v='view'
 
 # Basic Calculator
 calc() {
