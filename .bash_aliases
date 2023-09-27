@@ -31,6 +31,9 @@ alias ga='git add'
 alias gc='git commit -m'
 alias gp='git pull'
 alias gpush='git push'
+gac() {
+    git add $@ && git commit -m "Add $@"
+}
 
 # Package Management
 alias update='sudo apt update -y && sudo apt upgrade -y'
