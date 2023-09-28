@@ -97,7 +97,7 @@ def main():
             print(_("%s: command not found") % args[0], file=sys.stderr)
         else:
             # Ask the user if they want to install the missing package
-            user_input = input('Want to install it? [y/N] ').strip().lower()
+            user_input = input('Install it? [y/N] ').strip().lower()
             if user_input == 'y':
                 try:
                     subprocess.run(['sudo', 'apt', 'install', args[0]], check=True)
