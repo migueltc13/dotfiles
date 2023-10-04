@@ -23,4 +23,4 @@ fi
 
 rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
 resolved_ip=$(resolve_hostname "$1")
-$rustscan -a "$resolved_ip" -- -A -sC -sV
+$rustscan -a "$resolved_ip" -- -A -sC -sV -T4

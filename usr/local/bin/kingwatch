@@ -1,0 +1,3 @@
+#!/bin/bash
+
+watch -p -t -n 1 "curl -sL http://t:9999 | figlet" | lolcat

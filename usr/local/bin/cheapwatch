@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Trap Ctrl+C to restore terminal state before exiting
+trap 'restore_terminal; exit' INT
+
+# Function to save terminal state
+save_terminal() {
+  saved_state=$(stty -g)
+  tput smcup
+}
+
+# Function to restore terminal state
+restore_terminal() {
+  tput rmcup
+  stty "$saved_state"
+}
+
+# Initialize by saving terminal state
+save_terminal
+
+while true; do
+  tput cup 0 0        # Move cursor to the top-left corner
+  tput el             # Clear the current line
+  printf "[%s] Output of %s:\n" "$(date)" "$*"
+  $@
+  sleep 1             # Wait for 1 second before running the command again
+done
+
+
+##
+#
+# Great execution no colors
+#
+##
+
+
+# Trap Ctrl+C to restore terminal state before exiting
+trap 'tput rmcup; exit' INT
+
+# Save terminal state and move to the alternate screen (ncurses-like behavior)
+tput smcup
+
+while true; do
+  tput cup 0 0        # Move cursor to the top-left corner
+  tput el             # Clear the current line
+  printf "[%s] Output of %s:\n" "$(date)" "$*"
+  #$@
+  ${SHELL-/bin/bash} -c "$*"
+  sleep 1             # Wait for 1 second before running the command again
+done
+
+
+##
+#
+# Old
+#
+##
+
+# tput cud1
+
+# Not quite your Rolex
+#while true; do
+#  #tput cuu1          # Move cursor up one line
+#  #tput el            # Clear to the end of the line
+#  tput reset
+#  #printf "[%s] Output of %s:\n" "$(date)" "$*"
+#  # "$@" <- we don't want to do it this way, just this:
+#  ${SHELL-/bin/bash} -c "$*"
+#  sleep 1            # genuine Quartz movement
+#done
