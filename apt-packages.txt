@@ -115,4 +115,5 @@ x11-xserver-utils
 xclip
 xdg-utils
 xterm
+youtube-dl
 zmap
