@@ -18,7 +18,7 @@ notify () {
     read -p "Do you want to copy these changes? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
       echo "Copying changes..."
-      cp -r $2 $1
+      sudo cp -r $2 $1
     else
       echo "Changes were not copied."
     fi

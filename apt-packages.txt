@@ -94,6 +94,7 @@ smbclient
 sshpass
 steghide
 terminator
+traceroute
 ubuntu-desktop-minimal
 ubuntu-desktop
 ubuntu-minimal
