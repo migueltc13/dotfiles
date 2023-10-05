@@ -11,14 +11,22 @@ notify () {
   diff_status=$?
   if (( $diff_status != 0 )); then
 
-    # TODO: add header to less command
-    GIT_PAGER="less -FRX" $diff --color=always $1 $2 | $less -R
+    FILE1="$1"
+    FILE2="$2"
 
-    echo "cp -r $2 $1"
+    # TODO: add header to less command
+    GIT_PAGER="less -FRX" $diff --color=always $FILE1 $FILE2 | $less -R
+
+    # Check if changed file is a directory
+    if [ -d "$FILE2" ]; then
+        FILE2=$(dirname "$FILE2")
+    fi
+
+    echo "cp -r $FILE1 $FILE2"
     read -p "Do you want to copy these changes? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
       echo "Copying changes..."
-      sudo cp -r $2 $1
+      sudo cp -r $FILE1 $FILE2
     else
       echo "Changes were not copied."
     fi
@@ -53,11 +61,11 @@ check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/ext
 
 # apt-packages.txt
 $apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt
-check "apt-packages.txt" "/tmp/apt-packages.txt"
+check "/tmp/apt-packages.txt" "apt-packages.txt"
 
 # snap-packages.txt
 $snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap-packages.txt
-check "snap-packages.txt" "/tmp/snap-packages.txt"
+check "/tmp/snap-packages.txt" "snap-packages.txt"
 
 # TODO: /opt dir
 # TODO: ~/Git dir

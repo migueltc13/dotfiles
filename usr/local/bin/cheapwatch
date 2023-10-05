@@ -33,7 +33,6 @@ done
 #
 ##
 
-
 # Trap Ctrl+C to restore terminal state before exiting
 trap 'tput rmcup; exit' INT
 
