@@ -23,6 +23,7 @@ findutils
 fonts-indic
 fortune-mod
 fping
+freerdp2-x11
 gcc
 gir1.2-mutter-10
 gjs
@@ -34,6 +35,8 @@ gobuster
 golang-go
 grep
 grub-common
+grub-efi-amd64-bin
+grub-efi-amd64-signed
 grub-gfxpayload-lists
 grub-pc-bin
 grub-pc
@@ -91,6 +94,7 @@ rsync
 ruby-dev
 shim-signed
 smbclient
+sqlite3
 sshpass
 steghide
 terminator

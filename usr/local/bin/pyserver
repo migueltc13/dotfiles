@@ -1,13 +1,7 @@
 #!/bin/bash
 
 if [ "$1" == "" ]; then
-    echo "usage: pyserver [port]"
+    echo "usage: $0 [port]"
 else
-    if ip a s tun0 &> /dev/null; then
-        ip=$(ip a s tun0 | grep -oP 'inet \K[\d.]+')
-        echo "wget http://${ip}:$1/"
-    else
-        echo "Device 'tun0' does not exist."
-    fi
     python3 -m http.server $1
 fi

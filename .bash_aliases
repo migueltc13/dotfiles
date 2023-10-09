@@ -74,4 +74,5 @@ calc() {
 
 # Others
 alias news='hnterm'						# Hacker news on the terminal
-alias hosts='sudo nano /etc/hosts'				# Edit hosts file
+# Edit hosts file and change ssh host key for target
+alias hosts='sudo nano /etc/hosts && ssh-keygen -f "/home/z0d1ac/.ssh/known_hosts" -R "t" #'
