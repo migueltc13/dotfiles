@@ -1,7 +1,10 @@
 #!/bin/bash
 
 if [ "$1" == "" ]; then
-    echo "usage: $0 [port]"
+    PORT=80
 else
-    python3 -m http.server $1
+    PORT=$1
 fi
+
+python3 -m http.server $PORT
+exit $?
