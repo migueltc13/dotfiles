@@ -15,7 +15,7 @@ notify () {
     FILE2="$2"
 
     # TODO: add header to less command
-    GIT_PAGER="less -FRX" $diff --color=always $FILE1 $FILE2 | $less -R
+    GIT_PAGER="less -FRX" $diff --color=always $FILE2 $FILE1 | $less -R
 
     # Check if changed file is a directory
     if [ -d "$FILE2" ]; then
@@ -35,11 +35,10 @@ notify () {
   fi
 }
 
-# TODO change to files fullpath instead
 check () {
   FILE1="$1"
   FILE2="$2"
-  $diff $FILE1 $FILE2 1>/dev/null
+  $diff $FILE2 $FILE1 1>/dev/null
   notify $FILE1 $FILE2
 }
 
