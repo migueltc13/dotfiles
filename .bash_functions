@@ -9,9 +9,9 @@ calc() {
 }
 
 # Add file(s) and commit it
-#gac() {
-#    git add $@ && git commit -m "Add $@"
-#}
+gac() {
+    git add $@ && git commit -m \"Add $@\"
+}
 
 # Get a raw link from a github link
 graw () {
