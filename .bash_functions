@@ -1,16 +1,20 @@
-# Create and move to a directory
+# Create directory and navigate into it
 mcd() {
-    mkdir "$1" && cd "$1"
+  if [[ -z "$1" ]]; then
+    echo "Usage: $0 <dir>"
+    return 1
+  fi
+  mkdir -p "$1" && cd "$1"
 }
 
 # Perform basic calculations
 calc() {
-    echo "$@" | bc -l
+  echo "$@" | bc -l
 }
 
 # Add file(s) and commit it
 gac() {
-    git add $@ && git commit -m \"Add $@\"
+  git add $@ && git commit -m \"Add $@\"
 }
 
 # Get a raw link from a github link

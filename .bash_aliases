@@ -17,13 +17,13 @@ fi
 
 # exa colors
 # User and group
-export EXA_COLORS="40:uu=35;40;nnn:un=31;40;nnn:gu=35;40;nnn:gn=31;40;nnn"
+EXA_COLORS="40:uu=35;40;nnn:un=31;40;nnn:gu=35;40;nnn:gn=31;40;nnn"
 # File types
-export EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33:*.o=10:*.c=36"
+EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33:*.o=10:*.c=36"
 # Permissions
-# TODO
+# ... TODO
 # Date
-export EXA_COLORS="$EXA_COLORS:da=37;40;nnn"
+EXA_COLORS="$EXA_COLORS:da=37;40;nnn"
 
 # ls
 alias ls='exa --group-directories-first --icons'
@@ -45,7 +45,8 @@ alias xclip='xclip -i -selection clipboard'
 alias r2='radare2'
 alias wfuzz='wfuzz -c'						# Specify color output for wfuzz
 alias ghidra='/opt/ghidra/ghidraRun'
-alias ipinfo='curl ipinfo.io'					# Get your public IP address and location
+alias my-ip='curl ifconfig.me'					# Get public IP address
+alias ipinfo='curl ipinfo.io'					# Get public IP address and location
 alias rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
 alias openbullet2='sudo docker run --name openbullet2 --rm -p 8069:5000 -v ~/Git/OB2/UserData:/app/UserData/ -it openbullet/openbullet2:latest'
 
@@ -64,6 +65,7 @@ alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
 alias gd='git diff'
+alias gl='git log'
 alias gp='git pull'
 alias gpush='git push'
 
