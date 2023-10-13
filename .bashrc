@@ -14,8 +14,11 @@ HISTCONTROL=ignoredups
 HISTTIMEFORMAT="%d-%m-%Y %T "
 # append to the history file, don't overwrite it
 shopt -s histappend
-# immediately append to the history file, not just when a term is killed
-PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+# immediately append to the history file
+PROMPT_COMMAND="history -a; history -n; "
+
+# add a empty line after a command
+PROMPT_COMMAND+="echo; "
 
 # update the values of LINES and COLUMNS. (window size)
 shopt -s checkwinsize
@@ -77,6 +80,11 @@ esac
 # Add an "alert" alias for long running commands. Use like so:
 # sleep 10; alert
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Profile definitions.
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile
+fi
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then

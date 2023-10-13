@@ -4,7 +4,6 @@ bash-doc
 binwalk
 bsdutils
 cowsay
-curl
 dash
 dconf-editor
 diffutils
@@ -77,6 +76,7 @@ ncurses-base
 ncurses-bin
 neofetch
 net-tools
+nfs-common
 nikto
 nmap
 npm
@@ -88,6 +88,7 @@ pandoc
 plocate
 polenum
 procps
+putty-tools
 python2
 python3-pip
 python3-pygments
@@ -99,6 +100,7 @@ rsync
 ruby-dev
 shim-signed
 smbclient
+socat
 sqlite3
 sshpass
 steghide
