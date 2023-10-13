@@ -64,10 +64,6 @@ alias alphabet="echo {1..9} {0..9} {0..6} && echo {a..z}"
 alias view='pygmentize -O style=monokai -g'			# View a file with syntax highlighting
 alias v='view'
 
-##
-# Others
-##
-
 # Hacker news on the terminal
 alias news='hnterm'
 

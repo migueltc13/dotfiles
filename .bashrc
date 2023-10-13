@@ -2,9 +2,6 @@
 # /usr/share/doc/bash/examples/startup-files
 # /usr/share/doc/bash-doc/examples
 
-##
-# History
-##
 # history size (number of lines)
 HISTSIZE=10000
 HISTFILESIZE=10000
@@ -25,7 +22,7 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -57,11 +54,6 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # PS1='\[\e[1;32m\]\u\[\e[0m\]🐉 \[\e[1;35m\]\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\]\$ '
-    # 💀🐉
-    # Two lines (green username)
-    # PS1='\[\e[1;35m\]┌──(\[\e[1;32m\]\u\[\[\e[1;35m\])─[\[\e[1;34m\]\w\[\e[1;35m\]]\[\e[0m\] \n\[\e[1;35m\]└──\$\[\e[0m\] '
-    # Two lines, date included (default)
     PS1='\[\e[0;35m\]╭──┤\[\e[1;35m\]\u\[\e[0;35m\]├─┤\[\e[0;90m\]$(date +"%H:%M:%S")\[\e[0;35m\]├─┤\[\e[1;34m\]\w\[\e[0;35m\]│\[\e[0m\]\n\[\e[0;35m\]╰─\[\e[1;35m\]\$\[\e[0m\] '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '

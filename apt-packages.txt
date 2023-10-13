@@ -4,6 +4,7 @@ bash-doc
 binwalk
 bsdutils
 cowsay
+curl
 dash
 dconf-editor
 diffutils
