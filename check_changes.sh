@@ -73,6 +73,8 @@ check "/tmp/snap-packages.txt" "snap-packages.txt"
 # TODO: animations
 # TODO: More config files: like .Xresources, .nano, ...
 
-echo "$count changes detected"
+if (( $count == 0 )); then
+  echo "No changes detected"
+fi
 
 exit 0
