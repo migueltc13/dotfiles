@@ -12,9 +12,9 @@ calc() {
   echo "$@" | bc -l
 }
 
-# Add file(s) and commit it
+# Add file(s) and commit them
 gac() {
-  git add $@ && git commit -m \"Add $@\"
+  git add $@ && git commit -m "Add $*"
 }
 
 # Get a raw link from a github link

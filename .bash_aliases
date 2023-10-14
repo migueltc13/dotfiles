@@ -39,10 +39,12 @@ alias g='git'
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
+alias 'gc!'='git commit --amend'
 alias gd='git diff'
 alias gl='git log'
 alias gp='git pull'
 alias gpush='git push'
+alias gundo='git reset --soft HEAD^'				# undo the last commit (keep changes)
 
 # Package Management
 alias update='sudo apt update -y && sudo apt upgrade -y'
