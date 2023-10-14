@@ -20,6 +20,7 @@ john-the-ripper
 mdl
 mdview
 metasploit-framework
+qt5-core20
 qt515-core20
 radare2
 snap-store

@@ -1,8 +1,12 @@
+autoconf
 autojump
+automake
 base-passwd
+base58
 bash-doc
 binwalk
 bsdutils
+cewl
 cowsay
 curl
 dash
@@ -66,6 +70,7 @@ libjpeg62
 libllvm13
 libmutter-10-0
 libreoffice
+libtool
 linux-generic-hwe-22.04
 login
 lolcat
@@ -94,6 +99,7 @@ python2
 python3-pip
 python3-pygments
 python3
+qpdf
 ranger
 redshift
 remmina

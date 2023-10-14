@@ -18,8 +18,10 @@ alias xclip='xclip -i -selection clipboard'
 alias r2='radare2'
 alias wfuzz='wfuzz -c'						# Specify color output for wfuzz
 alias ghidra='/opt/ghidra/ghidraRun'
+alias sqlmap='python3 /opt/sqlmap/sqlmap.py'			# Launch sqlmap
 alias my-ip='curl ifconfig.me'					# Get public IP address
 alias ipinfo='curl ipinfo.io'					# Get public IP address and location
+alias stegsolve='java -jar /opt/stegsolve.jar'			# Analyze images in different planes by taking off bits
 alias rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
 alias openbullet2='sudo docker run --name openbullet2 --rm -p 8069:5000 -v ~/Git/OB2/UserData:/app/UserData/ -it openbullet/openbullet2:latest'
 
