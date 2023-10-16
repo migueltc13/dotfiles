@@ -23,6 +23,8 @@ metasploit-framework
 qt5-core20
 qt515-core20
 radare2
+searchsploit
+seclists
 snap-store
 snapd
 snapd-desktop-integration
