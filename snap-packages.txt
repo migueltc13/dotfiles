@@ -1,6 +1,7 @@
 amberol
 audacity
 bare
+btop
 canonical-livepatch
 chromium
 code
@@ -29,4 +30,5 @@ snap-store
 snapd
 snapd-desktop-integration
 sublime-text
+tldr
 whatsie
