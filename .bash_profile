@@ -22,7 +22,7 @@ fi
 ##
 
 # user and group
-export EXA_COLORS="uu=35:un=31:gu=35:gn=31"
+export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
 # file types
 #export EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33>"
 # ToDo Permissions
