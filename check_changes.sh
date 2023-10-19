@@ -16,41 +16,36 @@ if [ "$(basename $(pwd))" != "dotfiles" ]; then
   exit 2
 fi
 
-notify () {
-  diff_status=$3
-  if (( $diff_status != 0 )); then
-    FILE1=$1
-    FILE2=$2
+check () {
+  FILE1=$1
+  FILE2=$2
+  $diff $FILE2 $FILE1 1>/dev/null
+  if (( $? != 0 )); then
 
-    # Check if changed file is a directory
+    # Check if copy target file is a directory
     if [ -d "$FILE2" ]; then
         FILE2=$(dirname "$FILE2")
     fi
 
-    # Change menu
     echo "cp -r $FILE1 $FILE2"
-    read -p "Do you want to copy these changes? [y/N/(d)iff] " choice
+
+    # Change menu
+    read -s -n 1 -p "Do you want to copy these changes? [y/N/(d)iff] " choice
     if [[ "$choice" =~ [yY] ]]; then
-      echo "Copying changes..."
+      echo -e "\nCopying changes..."
       sudo cp -r $FILE1 $FILE2
     elif [[ "$choice" =~ [dD] ]]; then
-      GIT_PAGER="less -FRX" $diff --color=always $2 $1 | $less -R
-      # Clear output lines
-      tput el; tput cuu1; tput el; tput cuu1
-      notify $1 $2 $3
+      #GIT_PAGER="less -FRX" $diff --color=always $2 $1 | $less -x 4 -R
+      $diff --color=always $2 $1 | $less -R -x 4
+      # Clear previous output lines
+      tput el; echo -ne "\r"; tput cuu1; tput el; echo -ne "\r"
+      check $1 $2
     else
-      echo "Changes were not copied."
+      echo -e "\nChanges were not copied."
     fi
 
     ((changes_count++))
   fi
-}
-
-check () {
-  FILE1="$1"
-  FILE2="$2"
-  $diff $FILE2 $FILE1 1>/dev/null
-  notify $FILE1 $FILE2 $?
 }
 
 # File changes counter
