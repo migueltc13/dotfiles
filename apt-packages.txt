@@ -6,7 +6,6 @@ base58
 bash-doc
 bat
 binwalk
-borgbackup
 bsdutils
 cewl
 cmake
