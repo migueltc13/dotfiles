@@ -4,10 +4,13 @@ automake
 base-passwd
 base58
 bash-doc
+bat
 binwalk
+borgbackup
 bsdutils
 cewl
 cmake
+cmatrix
 cowsay
 curl
 dash
@@ -32,6 +35,7 @@ fonts-indic
 fortune-mod
 fping
 freerdp2-x11
+fzf
 gcc
 gir1.2-mutter-10
 gjs
@@ -51,6 +55,7 @@ grub-pc
 grub2-common
 gzip
 hashcat
+hashid
 hostname
 htop
 hub
@@ -91,9 +96,11 @@ macchanger
 mokutil
 mutter-common
 mysql-client-core-8.0
+ncdu
 ncurses-base
 ncurses-bin
 neofetch
+neovim
 net-tools
 nfs-common
 nikto
@@ -125,6 +132,7 @@ ruby-dev
 shim-signed
 smbclient
 socat
+speedtest-cli
 sqlite3
 sshpass
 steghide
@@ -151,6 +159,7 @@ wmctrl
 x11-xserver-utils
 xclip
 xdg-utils
+xdotool
 xterm
 youtube-dl
 zmap
