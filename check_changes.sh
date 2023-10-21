@@ -65,6 +65,7 @@ check "$HOME/.bash_aliases"                        ".bash_aliases"
 check "$HOME/.bash_functions"                      ".bash_functions"
 check "$HOME/.bash_profile"                        ".bash_profile"
 check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
+check "$HOME/.nanorc"                              ".nanorc"
 check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 check "/usr/local/bin"                             "usr/local/bin"
 
