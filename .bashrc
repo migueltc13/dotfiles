@@ -98,3 +98,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Autojump
+[[ -s /home/z0d1ac/.autojump/etc/profile.d/autojump.sh ]] && source /home/z0d1ac/.autojump/etc/profile.d/autojump.sh

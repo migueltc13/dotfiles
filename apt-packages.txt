@@ -1,5 +1,4 @@
 autoconf
-autojump
 automake
 base-passwd
 base58
@@ -91,15 +90,15 @@ libzstd-dev
 linux-generic-hwe-22.04
 login
 lolcat
+lua5.4
 macchanger
 mokutil
 mutter-common
-mysql-client-core-8.0
+mysql-server
 ncdu
 ncurses-base
 ncurses-bin
 neofetch
-neovim
 net-tools
 nfs-common
 nikto
@@ -126,6 +125,7 @@ qtmultimedia5-dev
 ranger
 redshift
 remmina
+rig
 rsync
 ruby-dev
 shim-signed
@@ -136,6 +136,7 @@ sqlite3
 sshpass
 steghide
 terminator
+thefuck
 traceroute
 ubuntu-desktop-minimal
 ubuntu-desktop

@@ -64,9 +64,12 @@ check "$HOME/.bashrc"                              ".bashrc"
 check "$HOME/.bash_aliases"                        ".bash_aliases"
 check "$HOME/.bash_functions"                      ".bash_functions"
 check "$HOME/.bash_profile"                        ".bash_profile"
+check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
 check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 check "/usr/local/bin"                             "usr/local/bin"
-check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
+
+# check "$HOME/.config/nvim/"                        ".config/nvim/"
+# check "$HOME/.config/"                             ".config/"
 
 # apt-packages.txt
 $apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt
@@ -79,6 +82,7 @@ check "/tmp/snap-packages.txt" "snap-packages.txt"
 # TODO: /opt dir
 # TODO: ~/Git dir
 # TODO: animations
+# TODO: .config dir
 # TODO: More config files: like .Xresources, .nanorc, ...
 # TODO: apps
 

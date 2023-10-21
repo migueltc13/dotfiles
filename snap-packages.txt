@@ -21,6 +21,7 @@ john-the-ripper
 mdl
 mdview
 metasploit-framework
+nvim
 qt5-core20
 qt515-core20
 radare2

@@ -20,7 +20,6 @@ fi
 ##
 # exa settings
 ##
-
 # user and group
 export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
 # file types
@@ -28,6 +27,5 @@ export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
 # ToDo Permissions
 # date
 export EXA_COLORS="$EXA_COLORS:da=2;38;5;246"
-
 # icons spacing
 export EXA_ICON_SPACING=2
