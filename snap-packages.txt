@@ -13,6 +13,7 @@ cups
 discord
 dotnet-sdk
 firefox
+gh
 gnome-3-38-2004
 gnome-42-2204
 gtk-common-themes
@@ -22,7 +23,6 @@ julia
 mdl
 mdview
 metasploit-framework
-nvim
 qt5-core20
 qt515-core20
 radare2
