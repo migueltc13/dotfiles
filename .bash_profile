@@ -29,3 +29,8 @@ export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
 export EXA_COLORS="$EXA_COLORS:da=2;38;5;246"
 # icons spacing
 export EXA_ICON_SPACING=2
+
+##
+# Cargo binaries
+##
+export PATH="$PATH:/home/z0d1ac/.cargo/bin"
