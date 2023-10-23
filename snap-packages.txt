@@ -18,6 +18,7 @@ gnome-42-2204
 gtk-common-themes
 hnterm
 john-the-ripper
+julia
 mdl
 mdview
 metasploit-framework

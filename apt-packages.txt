@@ -6,9 +6,11 @@ bash-doc
 bat
 binwalk
 bsdutils
+cargo
 cewl
 cmake
 cmatrix
+composer
 cowsay
 curl
 dash
@@ -25,6 +27,7 @@ exa
 expect
 extra-cmake-modules
 fcrackzip
+fdclone
 feh
 ffmpeg
 figlet
@@ -35,6 +38,7 @@ fping
 freerdp2-x11
 fzf
 gcc
+gettext
 gir1.2-mutter-10
 gjs
 gnome-shell-extension-manager
@@ -91,6 +95,7 @@ linux-generic-hwe-22.04
 login
 lolcat
 lua5.4
+luarocks
 macchanger
 mokutil
 mutter-common
@@ -102,13 +107,14 @@ neofetch
 net-tools
 nfs-common
 nikto
+ninja-build
 nmap
 npm
-nvidia-settings
 openjdk-17-jdk
 openvpn
 os-prober
 pandoc
+php
 plocate
 polenum
 procps
@@ -117,6 +123,7 @@ putty-tools
 python2
 python3-pip
 python3-pygments
+python3.10-venv
 python3
 qpdf
 qtbase5-dev
@@ -126,6 +133,7 @@ ranger
 redshift
 remmina
 rig
+ripgrep
 rsync
 ruby-dev
 shim-signed
@@ -145,6 +153,7 @@ ubuntu-restricted-addons
 ubuntu-standard
 ubuntu-wallpapers
 unrar
+unzip
 vim
 vlc
 w3m
