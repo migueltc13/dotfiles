@@ -31,7 +31,13 @@ set clipboard=unnamed                 " Clipboard (nvim/OS) settings. See `:help
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
 
+" Disable NERDtree help message
+let g:NERDTreeMinimalUI = 1
+
+" Python 3 executable
+let g:python3_host_prog = '/usr/bin/python3'
+
 " Set leader key as space
-let g:mapleader = ' ' 
+let g:mapleader = ' '
 
 syntax enable                         " Enable syntax highlighting

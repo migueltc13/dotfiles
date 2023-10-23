@@ -4,7 +4,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'nvim-lua/plenary.nvim'
 
 " Telescope
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -28,19 +28,27 @@ Plug 'mbbill/undotree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 
-" GitHub Copilot
-Plug 'zbirenbaum/copilot.lua'
-
 " LSP related plugins
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
+" Auto completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+
+" Snippets
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+
 " Highlight syntax errors
 Plug 'dense-analysis/ale'
 
-" Vim Terminal
-Plug 'tc50cal/vim-terminal'
+" Copilot
+Plug 'zbirenbaum/copilot.lua'
 
 " Markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -51,7 +59,7 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 call plug#end()
 
 " Config plugins
-source ~/.config/nvim/plugin_config/lsp_config.lua
 source ~/.config/nvim/plugin_config/treesitter.lua
 source ~/.config/nvim/plugin_config/catppuccin.lua
+source ~/.config/nvim/plugin_config/lsp.lua
 source ~/.config/nvim/plugin_config/copilot.lua
