@@ -101,3 +101,7 @@ fi
 
 # Autojump
 [[ -s /home/z0d1ac/.autojump/etc/profile.d/autojump.sh ]] && source /home/z0d1ac/.autojump/etc/profile.d/autojump.sh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
