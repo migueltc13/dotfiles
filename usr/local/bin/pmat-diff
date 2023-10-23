@@ -1,0 +1,180 @@
+#!/usr/bin/perl 
+
+use v5.14;
+use warnings;
+use feature qw( say );
+use utf8;
+
+use Devel::MAT;
+use Devel::MAT::Cmd::Terminal;
+use List::Util qw( any );
+use List::UtilsBy qw( nsort_by );
+
+# We're drawing pretty graphs with line drawing
+STDOUT->binmode( ":encoding(UTF-8)" );
+
+my $progress = ( -t STDERR ) ?
+   sub { print STDERR "\r\e[K" . ( shift // "" ); } :
+   undef;
+
+my $pmatA = Devel::MAT->load( my $fileA = ( $ARGV[0] // die "Need dumpfile A\n" ),
+   progress => $progress,
+);
+my $pmatB = Devel::MAT->load( my $fileB = ( $ARGV[1] // die "Need dumpfile B\n" ),
+   progress => $progress,
+);
+
+$progress->( "Sorting,.." ) if $progress;
+
+my @svsA = nsort_by { $_->addr } $pmatA->dumpfile->heap;
+my @svsB = nsort_by { $_->addr } $pmatB->dumpfile->heap;
+
+$progress->() if $progress;
+
+my $countC = 0;
+
+my @onlyA;
+my @onlyB;
+
+while( @svsA && @svsB ) {
+   my $svA = $svsA[0];
+   my $svB = $svsB[0];
+
+   my $addrA = $svA->addr;
+   my $addrB = $svB->addr;
+
+   if( $addrA < $addrB ) {
+      push @onlyA, $svA;
+      shift @svsA;
+   }
+   elsif( $addrB < $addrA ) {
+      push @onlyB, $svB;
+      shift @svsB;
+   }
+   else {
+      # common - no print
+      $countC++;
+      shift @svsA;
+      shift @svsB;
+   }
+}
+
+push @onlyA, @svsA;
+push @onlyB, @svsB;
+
+my %notesA;
+my %notesB;
+
+sub add_notes
+{
+   my ( $svs, $notes, $pmat ) = @_;
+   my %addrs = map { $_->addr => 1 } @$svs;
+
+   foreach my $sv ( $pmat->dumpfile->heap ) {
+      next unless $sv->type eq "STASH";
+      my $stash = $sv;
+
+      foreach my $field (qw( mro_isa mro_linearcurrent )) {
+         my $sv = $stash->$field or next;
+         $addrs{ $sv->addr } or next;
+
+         $notes->{ $sv->addr } = "$field of " . Devel::MAT::Cmd->format_symbol( $stash->stashname, $stash );
+      }
+   }
+}
+
+add_notes \@onlyA, \%notesA, $pmatA;
+add_notes \@onlyB, \%notesB, $pmatB;
+
+sub svtrees_from_set
+{
+   my @svs = @_;
+
+   # In general the set of SVs and their cross-linkages are not yet suitable
+   # to print in a simple tree, because of cycles and multiple paths. We have
+   # to reduce the linkages down to something more well-behaved.
+
+   my %svs_by_addr = map { $_->addr => $_ } @svs;
+
+   my %sv_outrefs; # {$addr} => [other svs here that it refers to]
+   foreach my $sv ( @svs ) {
+      $sv_outrefs{ $sv->addr } = [];
+
+      foreach my $ref ( $sv->outrefs ) {
+         next unless $svs_by_addr{ $ref->sv->addr };
+         push $sv_outrefs{ $sv->addr }->@*, $ref->sv;
+      }
+   }
+
+   my %sv_trees; # {$addr} => [$sv, other SV trees it refers to]
+   my %seen;     # {$addr} => bool
+   my %toplevel; # {$addr} => bool
+
+   foreach my $origsv ( @svs ) {
+      my @queue = $origsv;
+      while( @queue ) {
+         my $sv = shift @queue;
+         my $addr = $sv->addr;
+
+         if( !$sv_trees{ $addr } ) {
+            $toplevel{ $addr }++;
+         }
+
+         $seen{ $addr }++;
+
+         my $node = $sv_trees{ $addr } //= [ $sv ];
+
+         my @new_outrefs = grep { !$seen{ $_->addr }++ } $sv_outrefs{ $addr }->@*;
+
+         foreach my $outref ( nsort_by { $_->addr } @new_outrefs ) {
+            push @queue, $outref;
+            push $node->@*, $sv_trees{ $outref->addr } //= [ $outref ];
+
+            delete $toplevel{ $outref->addr };
+         }
+      }
+   }
+
+   return @sv_trees{ sort { $a <=> $b } keys %toplevel };
+}
+
+our $Indent = "";
+sub print_svtree
+{
+   my ( $tree, $leader0, $leader1, $notes ) = @_;
+   my ( $sv, @subtrees ) = @$tree;
+
+   my $note = $notes->{ $sv->addr } ? " (" . $notes->{ $sv->addr } . ")" : "";
+
+   Devel::MAT::Cmd->printf( "  %s%s%s%s\n",
+      $Indent,
+      $leader0,
+      Devel::MAT::Cmd->format_sv( $sv ),
+      $note,
+   );
+
+   return unless @subtrees;
+
+   local $Indent = "$Indent$leader1";
+
+   my $final_subtree = pop @subtrees;
+   {
+      print_svtree( $_, "├─ ", "│  ", $notes ) for @subtrees;
+   }
+   {
+      print_svtree( $final_subtree, "└─ ", "   ", $notes );
+   }
+}
+
+print "\n";
+printf "%d unique to %s:\n", scalar @onlyA, $fileA;
+my @treesA = svtrees_from_set @onlyA;
+print_svtree $_, "- ", "  ", \%notesA for @treesA;
+
+print "\n";
+printf "%d unique to %s:\n", scalar @onlyB, $fileB;
+my @treesB = svtrees_from_set @onlyB;
+print_svtree $_, "+ ", "  ", \%notesB for @treesB;
+
+print "\n";
+printf "%d common\n", $countC;
