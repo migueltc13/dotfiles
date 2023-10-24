@@ -145,7 +145,6 @@ proxychains
 putty-tools
 python2
 python3-pip
-python3-pygments
 python3.10-venv
 python3
 qpdf
