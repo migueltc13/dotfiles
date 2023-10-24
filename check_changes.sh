@@ -23,9 +23,9 @@ check () {
   if (( $? != 0 )); then
 
     # Check if copy target file is a directory
-    if [ -d "$FILE2" ]; then
-        FILE2=$(dirname "$FILE2")
-    fi
+    #if [ -d "$FILE2" ]; then
+    #    FILE2=$(dirname "$FILE2")
+    #fi
 
     echo "cp -r $FILE1 $FILE2"
 
@@ -33,6 +33,7 @@ check () {
     read -s -n 1 -p "Do you want to copy these changes? [y/N/(d)iff] " choice
     if [[ "$choice" =~ [yY] ]]; then
       echo -e "\nCopying changes..."
+      sudo rm -rf $FILE2
       sudo cp -r $FILE1 $FILE2
     elif [[ "$choice" =~ [dD] ]]; then
       #GIT_PAGER="less -FRX" $diff --color=always $2 $1 | $less -x 4 -R
