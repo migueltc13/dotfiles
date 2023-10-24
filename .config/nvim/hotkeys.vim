@@ -15,23 +15,28 @@ nnoremap <leader>4 :lua require("harpoon.ui").nav_file(4)<CR>
 " LSP
 lua << EOF
 function on_attach(...)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename())
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action())
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover())
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition())
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration())
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation())
+    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition())
     vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references())
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover())
+    vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help())
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename())
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action())
+    vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+    vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 end
 
 -- Set on_attach as a global variable (Note: used in plugins_config/lsp.lua)
 _G.on_attach = on_attach
 EOF
 
-" NERDTree
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-f> :NERDTreeFocus<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+" Nvim-Tree
+nnoremap <C-n> :NvimTreeOpen<CR>
+nnoremap <C-f> :NvimTreeFocus<CR>
+nnoremap <C-t> :NvimTreeToggle<CR>
 
 " UndoTree
 nnoremap <leader>u :UndotreeToggle<CR>

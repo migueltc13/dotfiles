@@ -21,8 +21,10 @@ set whichwrap+=<,>,[,]                " Allows wrap when using arrow keys
 set scrolloff=8                       " Minimal number of lines to keep above/bellow the cursor
 set signcolumn=yes                    " Keep signcolumn on by default
 set completeopt=menuone,noselect      " Better completion experience
-set hlsearch                          " Enable search highlighting
+set nohlsearch                        " Disable search highlighting
 set incsearch                         " Enable search patterns highlighting
+"set ignorecase                       " Ignore case when searching
+"set smartcase                        " Ignore case when searching lowercase
 set undodir=~/.vim/undodir            " Set undo directory
 set undofile                          " Enable undo file
 set clipboard=unnamed                 " Clipboard (nvim/OS) settings. See `:help 'clipboard'`
@@ -30,9 +32,6 @@ set clipboard=unnamed                 " Clipboard (nvim/OS) settings. See `:help
 " Disable netrw and its plugins
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
-
-" Disable NERDtree help message
-let g:NERDTreeMinimalUI = 1
 
 " Python 3 executable
 let g:python3_host_prog = '/usr/bin/python3'
