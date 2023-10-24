@@ -30,25 +30,33 @@ graw () {
 
 # Extract any type of archive
 extract() {
-  if [ -f "$1" ] ; then
-    case "$1" in
-      *.tar.bz2)   tar xjf "$1"    ;;
-      *.tar.gz)    tar xzf "$1"    ;;
-      *.bz2)       bunzip2 -v "$1" ;;
-      *.rar)       unrar x "$1"    ;;
-      *.gz)        gunzip "$1"     ;;
-      *.tar)       tar xvf "$1"    ;;
-      *.tbz2)      tar xjcf "$1"   ;;
-      *.tgz)       tar xzcf "$1"   ;;
-      *.zip)       unzip "$1"      ;;
-      *.Z)         uncompress "$1" ;;
-      *.7z)        7z x "$1"       ;;
-      *.xz)        xz -d "$1"      ;;
-      *)           echo "$0: cannot extract $1";;
-    esac
-  else
-    echo "$1 is not a valid file"
+  local file="$1"
+
+  if [ -z "$file" ]; then
+    echo "Usage: extract <file>"
+    return 1
   fi
+
+  if [ ! -e "$file" ]; then
+    echo "$file does not exist."
+    return 2
+  fi
+
+  local extension="${file##*.}"
+
+  case "$extension" in
+    tar.bz2 | tbz2)  tar xjvf "$file"   ;;
+    tar.gz | tgz)    tar xzvf "$file"   ;;
+    tar)             tar xvf "$file"    ;;
+    bz2)             bunzip2 -v "$file" ;;
+    rar)             unrar x "$file"    ;;
+    gz)              gunzip "$file"     ;;
+    zip)             unzip "$file"      ;;
+    Z)               uncompress "$file" ;;
+    7z)              7z x "$file"       ;;
+    xz)              xz -d "$file"      ;;
+    *)               echo "$0: cannot extract $file: unknown archive format"; return 3 ;;
+  esac
 }
 
 # Send 1 free sms per day with Text Belt
