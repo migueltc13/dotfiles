@@ -50,9 +50,11 @@ alias gpush='git push'
 alias gundo='git reset --soft HEAD^'                        # undo the last commit (keep changes)
 
 # Package Management
-alias update='sudo apt update -y && sudo apt upgrade -y'
+alias update='sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y'
 alias install='sudo apt install -y'
+alias remove='sudo apt remove -y'
 alias search='apt search'
+alias refresh='sudo snap refresh'
 
 # Process Management
 alias psa='ps aux'                                          # List all processes
@@ -69,12 +71,22 @@ alias datetime="date '+%d-%m-%Y %H:%M:%S'"                  # Get clean date and
 alias alphabet="echo {1..9} {0..9} {0..6} && echo {a..z}"   # Get the alphabet with index numbers
 
 # File Viewing
-alias bat='batcat'
-alias view='pygmentize -O style=monokai -g'                 # View a file with syntax highlighting
-alias v='view'
+alias bat='batcat'                                          # View a file with syntax highlighting
+alias view='bat'                                            # Shortcut for batcat
+alias v='bat'                                               # Shortcut for batcat
+
+# File Editing
+alias edit='nvim'                                           # Edit a file with Neovim
+alias e='nvim'                                              # Shortcut for Neovim
+
+# File Decompression
+# Note: use extract for any type of archive (.bash_functions)
+alias untar='tar -zxvf'                                     # Untar a file with tar
+alias ungzip='gzip -d'                                      # Unzip a file with gzip
+alias unbzip2='bzip2 -d'                                    # Unzip a file with bzip2
 
 # Hacker news on the terminal
 alias news='hnterm'
 
-# Edit hosts file and change ssh host key for target
-alias hosts='sudo nano /etc/hosts; ssh-keygen -f "/home/z0d1ac/.ssh/known_hosts" -R "t";'
+# Edit hosts file and change ssh host key for target (TryHackMe, HackTheBox, etc.)
+alias hosts='sudo nano /etc/hosts; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t";'
