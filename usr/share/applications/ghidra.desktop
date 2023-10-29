@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Exec=/opt/ghidra/ghidraRun
+Name=Ghidra
+Icon=/usr/share/icons/ghidra.png
