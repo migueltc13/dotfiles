@@ -4,6 +4,6 @@ Type=Application
 Name=Burp Suite
 Exec="/opt/BurpSuiteCommunity/BurpSuiteCommunity" %U
 MimeType=application/x-extension-burp;
-Icon=burpsuite
+Icon=/usr/share/icons/burpsuite.png
 Categories=Application;
 StartupWMClass=install4j-burp-StartBurp
