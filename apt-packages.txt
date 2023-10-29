@@ -49,6 +49,7 @@ gcc
 gettext
 gh
 gir1.2-mutter-10
+git
 gjs
 gnome-shell-extension-manager
 gnome-shell-extensions
@@ -134,6 +135,7 @@ nfs-common
 nikto
 ninja-build
 nmap
+npm
 openjdk-17-jdk
 openvpn
 os-prober
@@ -179,6 +181,7 @@ ubuntu-advantage-tools
 ubuntu-desktop-minimal
 ubuntu-desktop
 ubuntu-keyring
+ubuntu-minimal
 ubuntu-restricted-addons
 ubuntu-standard
 ubuntu-wallpapers
