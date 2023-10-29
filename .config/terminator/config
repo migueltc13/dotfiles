@@ -1,0 +1,54 @@
+[global_config]
+  title_transmit_bg_color = "#320942"
+  title_receive_bg_color = "#4438fa"
+  title_inactive_fg_color = "#9a9996"
+  title_inactive_bg_color = "#000000"
+  suppress_multiple_term_dialog = True
+  case_sensitive = False
+  invert_search = True
+[keybindings]
+  layout_launcher = ""
+[profiles]
+  [[default]]
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    font = Hack 11
+    foreground_color = "#ffffff"
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    palette = "#000000:#ed333b:#08ff00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#e01b24:#29ff17:#ffff00:#1a5fb4:#ff00ff:#00ffff:#ffffff"
+    use_system_font = False
+  [[green]]
+    background_color = "#011900"
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    foreground_color = "#ffffff"
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+  [[red]]
+    background_color = "#200000"
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    foreground_color = "#ffffff"
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+  [[black]]
+    cursor_color = "#aaaaaa"
+    foreground_color = "#ffffff"
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]
