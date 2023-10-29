@@ -2,6 +2,7 @@ adduser
 apt-utils
 apt
 autoconf
+autojump
 automake
 base-passwd
 base58
