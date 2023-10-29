@@ -109,3 +109,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Perl provider (nvim)
 eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
+
+# GitHub Copilot cli
+eval "$(github-copilot-cli alias -- "$0")"

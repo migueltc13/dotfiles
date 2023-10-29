@@ -56,6 +56,7 @@ gnome-sushi
 gnome-tweaks
 gobuster
 golang-go
+gparted
 grep
 grub-common
 grub-efi-amd64-bin
@@ -86,6 +87,7 @@ language-pack-gnome-en
 ldap-utils
 less
 libarchive-dev
+libcanberra-gtk-module
 libcurl4-gnutls-dev
 libdebconfclient0
 libflashrom1
@@ -106,6 +108,7 @@ libsdl2-dev
 libslirp-dev
 libtool
 libzstd-dev
+lighttpd
 linux-generic-hwe-22.04
 locales
 login
@@ -152,7 +155,6 @@ qtbase5-dev
 qtbase5-private-dev
 qtmultimedia5-dev
 ranger
-redshift
 remmina
 rig
 ripgrep
