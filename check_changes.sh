@@ -69,6 +69,7 @@ check "$HOME/.nanorc"                              ".nanorc"
 check "$HOME/.config/nvim/"                        ".config/nvim/"
 check "$HOME/.config/terminator/"                  ".config/terminator/"
 check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
+check "$HOME/Animations/"                          "Animations/"
 check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 check "/usr/local/bin"                             "usr/local/bin"
 
