@@ -1,0 +1,5 @@
+xterm*background: black
+xterm*foreground: white
+XTerm*renderFont: true
+XTerm*faceName: MiscFixed
+XTerm*faceSize: 12
