@@ -1,7 +1,7 @@
 #!/bin/bash
 
-WALLPAPER_ROOT="/home/z0d1ac/Pictures/Wallpapers"
-WALLPAPER_DIR="${WALLPAPER_ROOT}/DEFCON"
+WALLPAPER_ROOT="${HOME}/Pictures/Wallpapers"
+WALLPAPER_DIR="${WALLPAPER_ROOT}/wallpapers"
 
 NUMBER_OF_WALLPAPERS=$( ls ${WALLPAPER_DIR} | wc -w )
 RANDON_NUMBER=$(( ${RANDOM} % ${NUMBER_OF_WALLPAPERS} + 1 ))

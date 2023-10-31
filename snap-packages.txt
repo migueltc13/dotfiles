@@ -5,10 +5,12 @@ btop
 canonical-livepatch
 chromium
 code
+color-picker
 core
 core18
 core20
 core22
+crackmapexec
 cups
 discord
 dotnet-sdk
@@ -18,11 +20,11 @@ gnome-3-38-2004
 gnome-42-2204
 gtk-common-themes
 hnterm
-john-the-ripper
 julia
 mdl
 mdview
 metasploit-framework
+onionshare
 qt5-core20
 qt515-core20
 radare2

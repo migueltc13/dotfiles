@@ -1,4 +1,5 @@
 adduser
+aircrack-ng
 apt-utils
 apt
 autoconf
@@ -140,12 +141,14 @@ openjdk-17-jdk
 openvpn
 os-prober
 pandoc
+parallel
 passwd
 perl
 php
 plocate
 polenum
 procps
+proxychains4
 proxychains
 putty-tools
 python2
@@ -157,12 +160,15 @@ qtbase5-dev
 qtbase5-private-dev
 qtmultimedia5-dev
 ranger
+redis-tools
 remmina
 rig
 ripgrep
 rsync
 rsyslog
 ruby-dev
+ruby
+samba
 sensible-utils
 shim-signed
 smbclient
@@ -189,6 +195,7 @@ udev
 unrar
 unzip
 usrmerge
+util-linux
 vim-runtime
 vim
 vlc
