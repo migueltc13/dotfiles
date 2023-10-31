@@ -4,6 +4,7 @@ apt-utils
 apt
 autoconf
 automake
+baobab
 base-passwd
 base58
 bash-doc
