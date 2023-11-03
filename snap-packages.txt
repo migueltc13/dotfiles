@@ -16,6 +16,7 @@ discord
 dotnet-sdk
 firefox
 gh
+gnome-3-28-1804
 gnome-3-38-2004
 gnome-42-2204
 gtk-common-themes
@@ -35,4 +36,7 @@ snapd
 snapd-desktop-integration
 sublime-text
 tldr
+utorrent
 whatsie
+wine-platform-6-stable
+wine-platform-runtime

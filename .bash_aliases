@@ -28,6 +28,12 @@ alias stegsolve='java -jar /opt/stegsolve.jar'              # Analyze images in 
 alias rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
 alias openbullet2='sudo docker run --name openbullet2 --rm -p 8069:5000 -v ~/Git/OB2/UserData:/app/UserData/ -it openbullet/openbullet2:latest'
 
+# OSINT tools
+alias theHarvester='py3 /opt/theHarvester/theHarvester.py'  # Harvest info
+alias sublist3r='py3 /opt/Sublist3r/sublist3r.py'           # Enumerate subdomains
+alias sherlock='py3 /opt/sherlock/sherlock'                 # Find social media accounts by username
+alias whatbreach='py whatbreach.py'                         # Find breached emails, databases, pastes, and relevant info
+
 # Programing Shortcuts
 alias py='python2'
 alias py3='python3'

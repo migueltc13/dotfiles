@@ -115,5 +115,59 @@ PERL_LOCAL_LIB_ROOT="/home/z0d1ac/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_
 PERL_MB_OPT="--install_base \"/home/z0d1ac/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/z0d1ac/perl5"; export PERL_MM_OPT;
 
+# PATH
+export PATH="$PATH:/home/z0d1ac/.local/bin/"
+
 # GitHub Copilot cli
-eval "$(github-copilot-cli alias -- "$0")"
+#eval "$(github-copilot-cli alias -- "$0")"
+  copilot_what-the-shell () {
+    TMPFILE=$(mktemp);
+    trap 'rm -f $TMPFILE' EXIT;
+    if /usr/local/bin/github-copilot-cli what-the-shell "$@" --shellout $TMPFILE; then
+      if [ -e "$TMPFILE" ]; then
+        FIXED_CMD=$(cat $TMPFILE);
+        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
+        eval "$FIXED_CMD"
+      else
+        echo "Apologies! Extracting command failed"
+      fi
+    else
+      return 1
+    fi
+  };
+alias '??'='copilot_what-the-shell';
+
+  copilot_git-assist () {
+    TMPFILE=$(mktemp);
+    trap 'rm -f $TMPFILE' EXIT;
+    if /usr/local/bin/github-copilot-cli git-assist "$@" --shellout $TMPFILE; then
+      if [ -e "$TMPFILE" ]; then
+        FIXED_CMD=$(cat $TMPFILE);
+        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
+        eval "$FIXED_CMD"
+      else
+        echo "Apologies! Extracting command failed"
+      fi
+    else
+      return 1
+    fi
+  };
+alias 'git?'='copilot_git-assist';
+
+  copilot_gh-assist () {
+    TMPFILE=$(mktemp);
+    trap 'rm -f $TMPFILE' EXIT;
+    if /usr/local/bin/github-copilot-cli gh-assist "$@" --shellout $TMPFILE; then
+      if [ -e "$TMPFILE" ]; then
+        FIXED_CMD=$(cat $TMPFILE);
+        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
+        eval "$FIXED_CMD"
+      else
+        echo "Apologies! Extracting command failed"
+      fi
+    else
+      return 1
+    fi
+  };
+alias 'gh?'='copilot_gh-assist';
+alias 'wts'='copilot_what-the-shell';

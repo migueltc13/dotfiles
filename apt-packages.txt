@@ -71,6 +71,8 @@ grub2-common
 gzip
 hashcat
 hashid
+hcxdumptool
+hcxtools
 hostname
 htop
 hub
@@ -112,7 +114,6 @@ libslirp-dev
 libtool
 libzstd-dev
 lighttpd
-linux-generic-hwe-22.04
 locales
 login
 lolcat
