@@ -25,6 +25,7 @@ julia
 mdl
 mdview
 metasploit-framework
+ngrok
 onionshare
 qt5-core20
 qt515-core20

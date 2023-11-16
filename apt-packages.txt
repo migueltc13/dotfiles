@@ -69,6 +69,7 @@ grub-pc-bin
 grub-pc
 grub2-common
 gzip
+haguichi
 hashcat
 hashid
 hcxdumptool
@@ -114,6 +115,7 @@ libslirp-dev
 libtool
 libzstd-dev
 lighttpd
+linux-generic-hwe-22.04
 locales
 login
 lolcat
@@ -177,6 +179,7 @@ smbclient
 socat
 speedtest-cli
 sqlite3
+squid
 sshpass
 steghide
 sudo
@@ -206,6 +209,7 @@ wfuzz
 whatweb
 whiptail
 whois
+winbind
 wine64
 wine
 winetricks
