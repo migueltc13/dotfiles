@@ -1,1 +1,4 @@
-return { "szw/vim-maximizer" }
+return {
+    "szw/vim-maximizer",
+    cmd = "MaximizerToggle",
+}

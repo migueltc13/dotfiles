@@ -1,6 +1,5 @@
 return {
     "zbirenbaum/copilot.lua",
-    lazy = true,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
@@ -16,7 +15,7 @@ return {
                     open = "<M-CR>"
                 },
                 layout = {
-                    position = "bottom", -- | top | left | right
+                    position = "bottom", -- top | bottom | left | right
                     ratio = 0.4
                 },
             },
@@ -35,7 +34,7 @@ return {
             },
             filetypes = {
                 yaml = false,
-                markdown = false,
+                markdown = true, -- default: false
                 help = false,
                 gitcommit = false,
                 gitrebase = false,

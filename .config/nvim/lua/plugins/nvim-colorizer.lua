@@ -3,5 +3,5 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     config = function()
         require("colorizer").setup()
-    end
+    end,
 }

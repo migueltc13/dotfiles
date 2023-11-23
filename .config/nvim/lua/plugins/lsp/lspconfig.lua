@@ -12,6 +12,16 @@ return {
         -- import cmp-nvim-lsp plugin
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
+        -- set rounded borders for floating windows
+        vim.diagnostic.config {
+           float = { border = "rounded" },
+        }
+        local handlers = {
+            ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded"}),
+            ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded"}),
+        }
+        require("lspconfig.ui.windows").default_options.border = "rounded"
+
         -- used to enable autocompletion (assign to every lsp server config)
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
@@ -25,62 +35,52 @@ return {
         -- configure html server
         lspconfig["html"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure typescript server with plugin
         lspconfig["tsserver"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure css server
         lspconfig["cssls"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
-        })
-
-        -- configure svelte server
-        lspconfig["svelte"].setup({
-            capabilities = capabilities,
-            on_attach = function(client, bufnr)
-                on_attach(client, bufnr)
-
-                vim.api.nvim_create_autocmd("BufWritePost", {
-                    pattern = { "*.js", "*.ts" },
-                    callback = function(ctx)
-                        if client.name == "svelte" then
-                            client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
-                        end
-                    end,
-                })
-            end,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure graphql language server
         lspconfig["graphql"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
             filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
         })
 
         -- configure emmet language server
         lspconfig["emmet_ls"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
             filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
         })
 
         -- configure python server
         lspconfig["pyright"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure lua server (with special settings)
         lspconfig["lua_ls"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
             settings = { -- custom settings for lua
                 Lua = {
                     -- make the language server recognize "vim" global
@@ -101,19 +101,22 @@ return {
         -- configure bash server
         lspconfig["bashls"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure clangd server
         lspconfig["clangd"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 
         -- configure marksman server
         lspconfig["marksman"].setup({
             capabilities = capabilities,
-            on_attach = on_attach,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
     end,
 }

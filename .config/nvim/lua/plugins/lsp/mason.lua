@@ -1,5 +1,18 @@
 return {
     "williamboman/mason.nvim",
+    cmd = {
+        "Mason",
+        "MasonInstall",
+        "MasonInstallAll",
+        "MasonLog",
+        "MasonToolsClean",
+        "MasonToolsInstall",
+        "MasonToolsUpdate",
+        "MasonUninstall",
+        "MasonUninstallAll",
+        "MasonUpdate",
+    },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -21,6 +34,7 @@ return {
                     package_pending = "➜",
                     package_uninstalled = "✗",
                 },
+                border = "rounded",
             },
         })
 
@@ -31,7 +45,6 @@ return {
                 "html",
                 "cssls",
                 "tailwindcss",
-                "svelte",
                 "lua_ls",
                 "graphql",
                 "emmet_ls",
@@ -55,5 +68,29 @@ return {
                 "eslint_d", -- js linter
             },
         })
+
+        local install_all_opts = {
+            "typescript-language-server",
+            "html-lsp",
+            "css-lsp",
+            "lua-language-server",
+            "graphql-language-service-cli",
+            "emmet-ls",
+            "pyright",
+            "bash-language-server",
+            "clangd",
+            "marksman",
+            "prettier", -- prettier formatter
+            "stylua", -- lua formatter
+            "isort", -- python formatter
+            "black", -- python formatter
+            "pylint", -- python linter
+            "eslint_d", -- js linter
+        }
+
+        -- custom cmd to install all mason binaries listed
+        vim.api.nvim_create_user_command("MasonInstallAll", function()
+            vim.cmd("MasonInstall " .. table.concat(install_all_opts, " "))
+        end, {})
     end,
 }

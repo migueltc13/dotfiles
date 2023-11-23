@@ -37,7 +37,6 @@ return {
                 "json",
                 "javascript",
                 "typescript",
-                "svelte",
                 "yaml",
                 "html",
                 "css",
