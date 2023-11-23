@@ -8,6 +8,6 @@ set positionlog
 # Colors
 set titlecolor white
 set statuscolor yellow
-set numbercolor purple
-set keycolor purple
+set numbercolor green
+set keycolor green
 #set scrollercolor green,white

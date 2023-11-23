@@ -54,6 +54,7 @@ alias gl='git log'
 alias gp='git pull'
 alias gpush='git push'
 alias gundo='git reset --soft HEAD^'                        # undo the last commit (keep changes)
+alias lg='lazygit'
 
 # Package Management
 alias update='sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y'
