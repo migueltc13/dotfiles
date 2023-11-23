@@ -72,7 +72,7 @@ check "$HOME/.config/terminator/"                  ".config/terminator/"
 check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
 check "$HOME/Animations/"                          "Animations/"
 check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
-check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
+# check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 check "/usr/local/bin"                             "usr/local/bin"
 
 # check "$HOME/.config/"                             ".config/"
