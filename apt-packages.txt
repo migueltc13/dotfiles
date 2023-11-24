@@ -135,6 +135,8 @@ hxtools
 hydra
 ibus-gtk
 im-config
+imagemagick-6-common
+imagemagick-6-doc
 imagemagick
 init
 inputattach
@@ -162,10 +164,12 @@ libftdi1-2
 libgjs0g
 libglib2.0-bin
 libgmp-dev
+libgraphicsmagick1-dev
 libimage-exiftool-perl
 libjpeg62
 libkrb5-dev
 libllvm13
+libmagickwand-dev
 libmutter-10-0
 libnotify-bin
 libnss-mdns
@@ -199,6 +203,7 @@ login
 lolcat
 lsb-release
 lua5.4
+luajit
 luarocks
 macchanger
 mawk
@@ -303,6 +308,7 @@ ubuntu-settings
 ubuntu-standard
 ubuntu-wallpapers
 udev
+ueberzugpp
 unrar
 unzip
 usrmerge
