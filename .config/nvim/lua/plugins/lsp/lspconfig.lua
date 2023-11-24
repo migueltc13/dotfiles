@@ -17,8 +17,8 @@ return {
            float = { border = "rounded" },
         }
         local handlers = {
-            ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded"}),
-            ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded"}),
+            ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"}),
+            ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded"}),
         }
         require("lspconfig.ui.windows").default_options.border = "rounded"
 
@@ -85,7 +85,7 @@ return {
                 Lua = {
                     -- make the language server recognize "vim" global
                     diagnostics = {
-                    globals = { "vim" },
+                        globals = { "vim" },
                     },
                     workspace = {
                         -- make language server aware of runtime files

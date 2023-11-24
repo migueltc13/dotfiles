@@ -15,9 +15,11 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup(
 {
     { import = "plugins" },
+    { import = "plugins.colorscheme" },
     { import = "plugins.git" },
     { import = "plugins.lsp" },
-    { import = "plugins.colorscheme" },
+    { import = "plugins.ui" },
+    { import = "plugins.util" },
 },
 {
     install = {
@@ -28,7 +30,7 @@ require("lazy").setup(
         notify = false,
     },
     change_detection = {
-        notify = false,
+        notify = true,
     },
     ui = {
         border = "rounded",

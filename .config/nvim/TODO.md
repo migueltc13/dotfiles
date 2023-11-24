@@ -13,4 +13,6 @@
 - - [ ] When entering a new line, the comment is not added
 - [ ] Add relative line numbers to nvim-tree
 - [ ] Add color block to the 80th column with: `:set colorcolumn=80`
-- [ ] CapsLock on in lualine
+- [ ] NeoTree: explore (root dir) and (cwd) keymaps
+- [ ] https://github.com/folke/trouble.nvim
+- [ ] LazyGit: <leader>gg (root dir) and <leader>gG (cwd) keymaps

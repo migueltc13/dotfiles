@@ -5,11 +5,22 @@ local function desc(description)
     return opts
 end
 
+-- UI - TODO
+map('n', '<leader>uc', ':Colors\n', desc('system: change colorscheme'))
+
+-- Search - TODO
+
 -- Telescope
-map('n', '<leader>ff', ':Telescope find_files\n', desc('telescope: find files'))
-map('n', '<leader>fg', ':Telescope live_grep\n',  desc('telescope: live grep files'))
-map('n', '<leader>fb', ':Telescope buffers\n',    desc('telescope: find buffers'))
-map('n', '<leader>fh', ':Telescope help_tags\n',  desc('telescope: find help tags'))
+map('n', '<leader><space>', ':Telescope find_files\n', desc('telescope: find files'))
+map('n', '<leader>fo', ':Telescope oldfiles\n',        desc('telescope: old files'))
+map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
+map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
+map('n', '<leader>fh', ':Telescope help_tags\n',       desc('telescope: find help tags'))
+map('n', '<leader>fr', ':Telescope resume\n',          desc('telescope: resume last picker'))
+map('n', '<leader>fc', ':Telescope commands\n',        desc('telescope: commands'))
+map('n', '<leader>fa', ':Telescope autocommands\n',    desc('telescope: autocommands'))
+map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command history'))
+map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: find keymaps'))
 
 -- Harpoon
 map('n', '<leader>e', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -31,7 +42,7 @@ _G.lsp_on_attach = function()
     map('n', '<leader>rn', ':lua vim.lsp.buf.rename()\n',          desc('LSP: smart rename'))
     map('n', '<leader>ca', ':lua vim.lsp.buf.code_action()\n',     desc('LSP: code action'))
     map('n', '<leader>rs', ':LspRestart\n',                        desc('LSP: restart language server'))
-    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()\n',   desc('LSP: show diagnostics for line'))
+    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()<CR>', desc('LSP: show diagnostics for line'))
     map('n', '<leader>df', ':Telescope diagnostics bufnr=0\n',     desc('LSP: show diagnostics for buffer'))
     map('n', '<leader>da', ':Telescope diagnostics\n',             desc('LSP: show diagnostics for workspace'))
     map('n', '[d',         ':lua vim.diagnostic.goto_prev()\n',    desc('LSP: go to previous diagnostic'))
@@ -39,18 +50,45 @@ _G.lsp_on_attach = function()
 end
 
 -- Nvim-Tree
-map('n', '<C-f>', ':NvimTreeFocus\n',  desc('nvim-tree: focus'))
-map('n', '<C-t>', ':NvimTreeToggle\n', desc('nvim-tree: toggle'))
+-- map('n', '<C-f>', ':NvimTreeFocus\n',  desc('nvim-tree: focus'))
+-- map('n', '<C-t>', ':NvimTreeToggle\n', desc('nvim-tree: toggle'))
 -- map('n', '<C-n>', ':NvimTreeOpen\n',   desc('nvim-tree: open'))
 
+-- Neo-tree
+map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
+map('n', '<leader>E', function()
+    require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+end, desc('NeoTree: open current directory'))
+map('n', '<leader>ge', function()
+    require("neo-tree.command").execute({ source = "git_status", toggle = true })
+end, desc('NeoTree: open git status'))
+map('n', '<leader>be', function()
+    require("neo-tree.command").execute({ source = "buffers", toggle = true })
+end, desc('NeoTree: open buffers'))
+
+-- Nvim-Spectre
+map ('n', '<leader>sr', function() require('spectre').open() end, desc('Spectre: replace in files'))
+
+-- Nvim-Notify
+map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismiss all notifications'))
+
 -- UndoTree
-map('n', '<leader>u', ':UndotreeToggle\n', desc('undotree: toggle'))
+map('n', '<M-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
 -- LazyGit
-map('n', '<leader>g', ':LazyGit\n', desc('lazygit: open'))
+map('n', '<leader>gg', ':LazyGit\n', desc('lazygit: open'))
 
 -- Vim-maximizer
 map('n', '<leader>m', ':MaximizerToggle\n', desc('vim-maximizer: toggle'))
+
+-- Noice
+map('c', '<S-Enter>', function() require("noice").redirect(vim.fn.getcmdline()) end, desc('Redirect Cmdline'))
+map('n', '<leader>snl', function() require("noice").cmd("last") end,                 desc("Noice Last Message"))
+map('n', '<leader>snh', function() require("noice").cmd("history") end,              desc("Noice History"))
+map('n', '<leader>sna', function() require("noice").cmd("all") end,                  desc("Noice All"))
+map('n', '<leader>snd', function() require("noice").cmd("dismiss") end,              desc("Dismiss All"))
+map({'i', 'n', 's'}, "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,  desc("Scroll forward"))
+map({'i', 'n', 's'}, "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, desc("Scroll backward"))
 
 -- ToggleTerm
 function G_open_vertical_term()
@@ -68,6 +106,11 @@ map('t', '<C-q>',      '<C-\\><C-n>:q\n',                    desc('toggleterm: q
 map('n', '<leader>cs', ':Copilot status\n',  desc('copilot: status'))
 map('n', '<leader>ce', ':Copilot enable\n',  desc('copilot: enable'))
 map('n', '<leader>cd', ':Copilot disable\n', desc('copilot: disable'))
+
+-- Persistence.nvim
+map('n', '<leader>qs', ':lua require("persistence").load()',            desc('persistence: Restore Session'))
+map('n', '<leader>ql', ':lua require("persistence").load({last=true})', desc('persistence: Restore Last Session'))
+map('n', '<leader>qd', ':lua require("persistence").stop()',            desc('persistence: Don\'t Save Current Session'))
 
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
