@@ -9,7 +9,7 @@ function changeActivitiesText() {
 
     // Add CSS styling to change the text color to purple-ish neon
     // purple: "#ff6bff", yellow: "#adff2f", green: "#39ff14", red: "#ff0000"
-    activitiesLabel.style = 'color: #ff6bff; text-shadow: 0px 0px 10px #ff6bff;';
+    activitiesLabel.style = 'color: #adff2f; text-shadow: 0px 0px 10px #adff2f;';
 }
 
 function enable() {
