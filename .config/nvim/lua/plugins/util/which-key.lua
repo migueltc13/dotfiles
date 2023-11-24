@@ -4,6 +4,7 @@ return {
     opts = {
         window = {
             border = "rounded",
+            -- windblend = 100,
         },
     },
 }

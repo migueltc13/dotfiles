@@ -1,6 +1,7 @@
 -- Set colorscheme using telescope
 vim.api.nvim_create_user_command("Colors", function()
-    vim.cmd("Lazy load onedark.nvim")
+    vim.cmd("Lazy load onedarkpro.nvim")
+    vim.cmd("Lazy load tokyonight.nvim")
     vim.cmd("Telescope colorscheme")
 end, {})
 
@@ -29,36 +30,72 @@ vim.api.nvim_create_user_command("Autocommands", function()
     vim.cmd("Telescope autocommands")
 end, {})
 
+-- Persistent sessions
+vim.api.nvim_create_user_command("Persistent", function(args)
+    -- Close neotree before loading session
+    local neotree_close = true
+    local neotree_close_function = function ()
+        if neotree_close then vim.cmd("Neotree close") end
+    end
+
+    local default = "load"
+    local option = args[1] or default
+    if option == "save" then
+        vim.cmd("lua require('persistence').save()")
+    elseif option == "load" then
+        neotree_close_function()
+        vim.cmd("lua require('persistence').load()")
+    elseif option == "load_last" then
+        neotree_close_function()
+        vim.cmd("lua require('persistence').load({last=true})")
+    else
+        print("Invalid option for Persistent command")
+    end
+end, {
+    nargs = "?", -- Set nargs to "?" to allow an optional argument
+    complete = "custom,PersistentComplete" -- Custom completion
+})
+
+-- Set completefunc for Persistent command
+vim.api.nvim_exec([[
+  function! PersistentComplete(ArgLead, CmdLine, CursorPos)
+    return join(["save", "load", "load_last"], "\n")
+  endfunction
+
+  set completefunc=PersistentComplete
+  set completeopt=menu,menuone,noselect
+]], false)
+
 -- last-command
-local function init_last_command()
-    G_last_cmd = ''
-    G_last_dir = ''
-end
+-- local function init_last_command()
+--     G_last_cmd = ''
+--     G_last_dir = ''
+-- end
 
-init_last_command()
+-- init_last_command()
 
-function G_save_last_cmd()
-    -- Get last command from bash history
-    G_last_cmd = vim.fn.system('cat ~/.bash_history | tail -n 1')
-    -- Save last dir
-    G_last_dir = vim.fn.system('cat /tmp/last_dir')
-    -- Print command
-    print('Saved command: ' .. G_last_cmd )
-    -- print('Saved dir: ' .. G_last_dir )
-    -- Escape special characters
-    G_last_cmd = string.gsub(G_last_cmd, "'", "\\'")
-    G_last_dir = string.gsub(G_last_dir, "'", "\\'")
-    G_last_cmd = string.gsub(G_last_cmd, '\\', '\\\\')
-    G_last_dir = string.gsub(G_last_dir, '\\', '\\\\')
-    -- Strip trailing newline
-    G_last_cmd = string.gsub(G_last_cmd, '\n', '')
-    G_last_dir = string.gsub(G_last_dir, '\n', '')
-    -- Add surrounding quotes
-    G_last_dir = "'" .. G_last_dir .. "'"
-    G_last_cmd = "'" .. G_last_cmd .. "'"
-    -- write last dir to file
-    vim.fn.system('echo ' .. G_last_dir .. ' > /tmp/last_saved_dir')
-end
+-- function G_save_last_cmd()
+--     -- Get last command from bash history
+--     G_last_cmd = vim.fn.system('cat ~/.bash_history | tail -n 1')
+--     -- Save last dir
+--     G_last_dir = vim.fn.system('cat /tmp/last_dir')
+--     -- Print command
+--     print('Saved command: ' .. G_last_cmd )
+--     -- print('Saved dir: ' .. G_last_dir )
+--     -- Escape special characters
+--     G_last_cmd = string.gsub(G_last_cmd, "'", "\\'")
+--     G_last_dir = string.gsub(G_last_dir, "'", "\\'")
+--     G_last_cmd = string.gsub(G_last_cmd, '\\', '\\\\')
+--     G_last_dir = string.gsub(G_last_dir, '\\', '\\\\')
+--     -- Strip trailing newline
+--     G_last_cmd = string.gsub(G_last_cmd, '\n', '')
+--     G_last_dir = string.gsub(G_last_dir, '\n', '')
+--     -- Add surrounding quotes
+--     G_last_dir = "'" .. G_last_dir .. "'"
+--     G_last_cmd = "'" .. G_last_cmd .. "'"
+--     -- write last dir to file
+--     vim.fn.system('echo ' .. G_last_dir .. ' > /tmp/last_saved_dir')
+-- end
 
 -- function G_edit_last_cmd()
 --     -- Open a float window to edit the last command
@@ -68,8 +105,8 @@ end
 --     -- vim.cmd('TermExec cmd=\'nvim -c "set splitright | 10split | wincmd j | setlocal buftype=nofile bufhidden=hide noswapfile" /tmp/last_saved_cmd\'')
 -- end
 
-function G_run_last_cmd()
-    -- vim.cmd('TermExec cmd="clear"')
-    vim.cmd('TermExec cmd=\'cd "$(cat /tmp/last_saved_dir)"\'')
-    vim.cmd('TermExec cmd=' .. G_last_cmd)
-end
+-- function G_run_last_cmd()
+--     -- vim.cmd('TermExec cmd="clear"')
+--     vim.cmd('TermExec cmd=\'cd "$(cat /tmp/last_saved_dir)"\'')
+--     vim.cmd('TermExec cmd=' .. G_last_cmd)
+-- end

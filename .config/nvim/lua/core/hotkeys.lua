@@ -9,18 +9,24 @@ end
 map('n', '<leader>uc', ':Colors\n', desc('system: change colorscheme'))
 
 -- Search - TODO
+map ('n', '<leader>sr', ':lua require("spectre").open()\n', desc('Spectre: replace in files'))
+
+-- Lazy
+map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Telescope
-map('n', '<leader><space>', ':Telescope find_files\n', desc('telescope: find files'))
-map('n', '<leader>fo', ':Telescope oldfiles\n',        desc('telescope: old files'))
+map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
+map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files'})
+map('n', '<leader>fr', ':Telescope oldfiles\n',        desc('telescope: recent files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
 map('n', '<leader>fh', ':Telescope help_tags\n',       desc('telescope: find help tags'))
-map('n', '<leader>fr', ':Telescope resume\n',          desc('telescope: resume last picker'))
+map('n', '<leader>fp', ':Telescope resume\n',          desc('telescope: resume previous picker'))
 map('n', '<leader>fc', ':Telescope commands\n',        desc('telescope: commands'))
 map('n', '<leader>fa', ':Telescope autocommands\n',    desc('telescope: autocommands'))
 map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command history'))
-map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: find keymaps'))
+map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: keymaps'))
+map('n', '<leader>fs', ':Telescope notify\n',          desc('telescope: notifications'))
 
 -- Harpoon
 map('n', '<leader>e', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -49,11 +55,6 @@ _G.lsp_on_attach = function()
     map('n', ']d',         ':lua vim.diagnostic.goto_next()\n',    desc('LSP: go to next diagnostic'))
 end
 
--- Nvim-Tree
--- map('n', '<C-f>', ':NvimTreeFocus\n',  desc('nvim-tree: focus'))
--- map('n', '<C-t>', ':NvimTreeToggle\n', desc('nvim-tree: toggle'))
--- map('n', '<C-n>', ':NvimTreeOpen\n',   desc('nvim-tree: open'))
-
 -- Neo-tree
 map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
 map('n', '<leader>E', function()
@@ -66,14 +67,11 @@ map('n', '<leader>be', function()
     require("neo-tree.command").execute({ source = "buffers", toggle = true })
 end, desc('NeoTree: open buffers'))
 
--- Nvim-Spectre
-map ('n', '<leader>sr', function() require('spectre').open() end, desc('Spectre: replace in files'))
-
 -- Nvim-Notify
 map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismiss all notifications'))
 
 -- UndoTree
-map('n', '<M-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
+map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
 -- LazyGit
 map('n', '<leader>gg', ':LazyGit\n', desc('lazygit: open'))
@@ -107,33 +105,35 @@ map('n', '<leader>cs', ':Copilot status\n',  desc('copilot: status'))
 map('n', '<leader>ce', ':Copilot enable\n',  desc('copilot: enable'))
 map('n', '<leader>cd', ':Copilot disable\n', desc('copilot: disable'))
 
+-- Markdown-preview
+map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
+
 -- Persistence.nvim
-map('n', '<leader>qs', ':lua require("persistence").load()',            desc('persistence: Restore Session'))
-map('n', '<leader>ql', ':lua require("persistence").load({last=true})', desc('persistence: Restore Last Session'))
-map('n', '<leader>qd', ':lua require("persistence").stop()',            desc('persistence: Don\'t Save Current Session'))
+map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('persistence: Restore Session'))
+map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: Restore Last Session'))
+map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: Don\'t Save Current Session'))
 
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 
 -- last-command (custom made)
-map('n', '<leader>ls', ':lua G_save_last_cmd()\n', desc('last-command: save last command'))
-map('n', '<leader>lr', ':lua G_run_last_cmd()\n',  desc('last-command: run last command'))
+-- map('n', '<leader>ls', ':lua G_save_last_cmd()\n', desc('last-command: save last command'))
+-- map('n', '<leader>lr', ':lua G_run_last_cmd()\n',  desc('last-command: run last command'))
 
 -- Other plugins maps definitions
 -- lua/plugins/git/gitsigns.lua
 -- lua/plugins/copilot.lua
 -- lua/plugins/nvim-cmp.lua
--- lua/plugins/nvim-tree.lua
 -- lua/plugins/telescope.lua
 -- lua/plugins/treesitter.lua
 -- lua/plugins/treesitter-text-objects.lua
 
 -- Copy to the system clipboard (Ctrl + Shift + C)
-map({'n', 'v'}, '<C-C>', '"+y', desc('Copy to system clipboard'))
+map({'n', 'x'}, '<C-C>', '"+y', desc('Copy to system clipboard'))
 
 -- Allow moving selected line(s) of text
-map('v', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
-map('v', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
+map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
+map('x', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
 
 -- Keep cursor centered when paging up/down
 map('n', '<C-d>', '<C-d>zz', opts)
@@ -146,3 +146,61 @@ map('n', 'N', 'Nzzzv', opts)
 -- Switch between tabs
 map('n', '<C-w>n', ':tabn\n', desc('Switch to next tab'))
 map('n', '<C-w>N', ':tabN\n', desc('Switch to previous tab'))
+
+-- Move to window using the <ctrl> hjkl keys
+map('n', '<C-h>', '<C-w>h', { desc = 'Go to the left window', remap = true })
+map('n', '<C-j>', '<C-w>j', { desc = 'Go to the lower window', remap = true })
+map('n', '<C-k>', '<C-w>k', { desc = 'Go to the upper window', remap = true })
+map('n', '<C-l>', '<C-w>l', { desc = 'Go to the right window', remap = true })
+
+-- Resize windows using <alt> hjkl keys
+map('n', '<A-k>', '<cmd>resize +2<cr>',          { desc = 'Increase window height' })
+map('n', '<A-j>', '<cmd>resize -2<cr>',          { desc = 'Decrease window height' })
+map('n', '<A-h>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease window width' })
+map('n', '<A-l>', '<cmd>vertical resize +2<cr>', { desc = 'Increase window width' })
+
+-- Split windows
+map('n', '<leader>w-', '<C-w>s', { desc = 'Split window below', remap = true })
+map('n', '<leader>w|', '<C-w>v', { desc = 'Split window right', remap = true })
+map('n', '<leader>-', '<C-w>s',  { desc = 'Split window below', remap = true })
+map('n', '<leader>|', '<C-w>v',  { desc = 'Split window right', remap = true })
+
+-- Switch windows
+map('n', '<leader>ww', '<C-w>w', { desc = 'Other window', remap = true })
+
+-- Delete windows
+map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
+
+-- Clear search with <esc>
+map({ 'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and clear hlsearch' })
+
+-- Clear search, diff update and redraw
+-- map(
+--     'n',
+--     '<leader>ur',
+--     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>',
+--     { desc = 'Redraw / clear hlsearch / diff update' }
+-- )
+
+-- File operations
+map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+map({ 'i', 'x', 'n', 's' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
+map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
+
+-- Quit all buffers
+map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all buffers' })
+
+-- better indenting
+map('v', '<', '<gv')
+map('v', '>', '>gv')
+
+-- highlights under cursor
+map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
+
+-- tabs
+map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     { desc = 'Last tab' })
+map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    { desc = 'First tab' })
+map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     { desc = 'Next tab' })
+map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', { desc = 'Previous tab' })
+map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      { desc = 'New tab' })
+map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
