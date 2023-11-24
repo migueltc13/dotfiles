@@ -2,7 +2,7 @@
 alias ls='exa --group-directories-first --icons'
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -F'
 
 # Shortcuts for Navigation
 alias up='cd ..'

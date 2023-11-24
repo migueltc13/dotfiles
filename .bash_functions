@@ -16,6 +16,9 @@ calc() {
 gac() {
   git add $@ && git commit -m "Add $*"
 }
+guc() {
+    git add $@ && git commit -m "Update $*"
+}
 
 # Get a raw link from a github link
 graw () {
