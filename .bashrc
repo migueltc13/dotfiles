@@ -17,9 +17,6 @@ PROMPT_COMMAND="history -a; history -n; "
 # add a empty line after a command
 PROMPT_COMMAND+="echo; "
 
-# save last_dir for a nvim feature
-PROMPT_COMMAND+="pwd > /tmp/last_dir"
-
 # update the values of LINES and COLUMNS. (window size)
 shopt -s checkwinsize
 

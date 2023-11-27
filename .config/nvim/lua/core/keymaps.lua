@@ -164,10 +164,6 @@ map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 
--- last-command (custom made)
--- map('n', '<leader>ls', ':lua G_save_last_cmd()\n', desc('last-command: save last command'))
--- map('n', '<leader>lr', ':lua G_run_last_cmd()\n',  desc('last-command: run last command'))
-
 -- Other plugins maps definitions
 -- lua/plugins/git/gitsigns.lua
 -- lua/plugins/copilot.lua
