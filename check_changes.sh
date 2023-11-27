@@ -19,7 +19,7 @@ fi
 check () {
   FILE1=$1
   FILE2=$2
-  $diff $FILE2 $FILE1 1>/dev/null
+  $diff -r $FILE2 $FILE1 1>/dev/null
   if (( $? != 0 )); then
 
     # Check if copy target file is a directory
@@ -36,8 +36,8 @@ check () {
       sudo rm -rf $FILE2
       sudo cp -r $FILE1 $FILE2
     elif [[ "$choice" =~ [dD] ]]; then
-      #GIT_PAGER="less -FRX" $diff --color=always $2 $1 | $less -x 4 -R
-      $diff --color=always $2 $1 | $less -R -x 4
+      #GIT_PAGER="less -FRX" $diff -r --color=always $2 $1 | $less -x 4 -R
+      $diff -r --color=always $2 $1 | $less -R -x 4
       # Clear previous output lines
       tput el; echo -ne "\r"; tput cuu1; tput el; echo -ne "\r"
       check $1 $2
