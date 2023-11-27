@@ -192,6 +192,7 @@ libreoffice
 libsasl2-modules
 libsdl2-dev
 libslirp-dev
+libssl-dev
 libtool
 libu2f-udev
 libwmf0.2-7-gtk
@@ -343,6 +344,7 @@ yaru-theme-gnome-shell
 yaru-theme-gtk
 yaru-theme-icon
 yaru-theme-sound
+ydotool
 youtube-dl
 zip
 zmap

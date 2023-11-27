@@ -4,6 +4,9 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -F'
 
+# General Shortcuts
+alias c='clear'
+
 # Shortcuts for Navigation
 alias up='cd ..'
 alias up2='cd ../..'
