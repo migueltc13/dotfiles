@@ -1,2 +1,5 @@
-require('core')
+require('core.options')
 require('lazy-plugin')
+require('core.autocmds')
+require('core.commands')
+require('core.keymaps')

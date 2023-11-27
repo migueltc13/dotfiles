@@ -1,3 +1,4 @@
+local Util = require("util")
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local function desc(description)
@@ -5,18 +6,33 @@ local function desc(description)
     return opts
 end
 
--- UI - TODO
-map('n', '<leader>uc', ':Colors\n', desc('system: change colorscheme'))
-
--- Search - TODO
-map ('n', '<leader>sr', ':lua require("spectre").open()\n', desc('Spectre: replace in files'))
+-- UI toggle options
+map('n', '<leader>uc', ':Colors\n',                                  desc('Change colorscheme'))
+map('n', '<leader>us', function() Util.toggle('spell') end,          desc('Toggle spelling'))
+map('n', '<leader>uw', function() Util.toggle('wrap') end,           desc('Toggle word wrap'))
+map('n', '<leader>uL', function() Util.toggle('relativenumber') end, desc('Toggle relative line numbers'))
+map('n', '<leader>ul', function() Util.toggle.number() end,          desc('Toggle line numbers'))
+-- map('n', '<leader>uf', function() Util.format.toggle() end,          desc('Toggle auto format (global)'))
+-- map('n', '<leader>uF', function() Util.format.toggle(true) end,      desc('Toggle auto format (buffer)'))
+-- map('n', '<leader>ud', function() Util.toggle.diagnostics() end,     desc('Toggle diagnostics'))
+local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
+map("n", "<leader>uC", function() Util.toggle("conceallevel", false, {0, conceallevel}) end,
+    desc("Toggle Conceal"))
+if vim.lsp.inlay_hint then
+    map("n", "<leader>uh", function() vim.lsp.inlay_hint(0, nil) end,
+    desc("Toggle Inlay Hints"))
+end
+map("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end,
+    desc("Toggle Treesitter Highlight"))
 
 -- Lazy
 map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Telescope
-map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
-map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files'})
+-- TODO https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua
+map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files (cwd)'))
+map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files (cwd)' })
+-- TODO -- map('n', '<leader>fF', Util.telescope('files'),        desc('Find Files (root dir)'))
 map('n', '<leader>fr', ':Telescope oldfiles\n',        desc('telescope: recent files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
@@ -28,13 +44,36 @@ map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command 
 map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: keymaps'))
 map('n', '<leader>fs', ':Telescope notify\n',          desc('telescope: notifications'))
 
+-- Search
+map('n', '<leader>sr', ':Spectre\n',                                 desc('spectre: replace in files'))
+map('n', '<leader>s"', ':Telescope registers\n',                     desc('registers'))
+map('n', '<leader>sa', ':Telescope autocommands\n',                  desc('auto commands'))
+map('n', '<leader>sb', ':Telescope current_buffer_fuzzy_find\n',     desc('buffer'))
+map('n', '<leader>sc', ':Telescope command_history\n',               desc('command history'))
+map('n', '<leader>sC', ':Telescope commands\n',                      desc('commands'))
+map('n', '<leader>sd', ':Telescope diagnostics bufnr=0\n',           desc('document diagnostics'))
+map('n', '<leader>sD', ':Telescope diagnostics\n',                   desc('workspace diagnostics'))
+map('n', '<leader>sg', Util.telescope('live_grep', { cwd = false }), desc('grep (cwd)'))
+map('n', '<leader>sG', Util.telescope('live_grep'),                  desc('grep (root dir)'))
+map('n', '<leader>sh', ':Telescope help_tags\n',                     desc('help pages'))
+map('n', '<leader>sH', ':Telescope highlights\n',                    desc('search highlight groups'))
+map('n', '<leader>sk', ':Telescope keymaps\n',                       desc('key maps'))
+map('n', '<leader>sM', ':Telescope man_pages\n',                     desc('man pages'))
+map('n', '<leader>sm', ':Telescope marks\n',                         desc('jump to mark'))
+map('n', '<leader>so', ':Telescope vim_options\n',                   desc('options'))
+map('n', '<leader>sR', ':Telescope resume\n',                        desc('resume'))
+map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('word (cwd)'))
+map('n', '<leader>sW', Util.telescope('grep_string', { word_match = '-w' }),              desc('word (root dir)'))
+map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('selection (cwd)'))
+map('v', '<leader>sW', Util.telescope('grep_string'),                                     desc('selection (root dir)'))
+
 -- Harpoon
-map('n', '<leader>e', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
-map('n', '<leader>a', ':lua require("harpoon.mark").add_file()\n',        desc('harpoon: add file'))
-map('n', '<leader>1', ':lua require("harpoon.ui").nav_file(1)\n',         desc('harpoon: navigate to file 1'))
-map('n', '<leader>2', ':lua require("harpoon.ui").nav_file(2)\n',         desc('harpoon: navigate to file 2'))
-map('n', '<leader>3', ':lua require("harpoon.ui").nav_file(3)\n',         desc('harpoon: navigate to file 3'))
-map('n', '<leader>4', ':lua require("harpoon.ui").nav_file(4)\n',         desc('harpoon: navigate to file 4'))
+map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
+map('n', '<leader>ha', ':lua require("harpoon.mark").add_file()\n',        desc('harpoon: add file'))
+map('n', '<leader>1',  ':lua require("harpoon.ui").nav_file(1)\n',         desc('harpoon: navigate to file 1'))
+map('n', '<leader>2',  ':lua require("harpoon.ui").nav_file(2)\n',         desc('harpoon: navigate to file 2'))
+map('n', '<leader>3',  ':lua require("harpoon.ui").nav_file(3)\n',         desc('harpoon: navigate to file 3'))
+map('n', '<leader>4',  ':lua require("harpoon.ui").nav_file(4)\n',         desc('harpoon: navigate to file 4'))
 
 -- LSP
 _G.lsp_on_attach = function()
@@ -73,8 +112,14 @@ map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismi
 -- UndoTree
 map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
--- LazyGit
-map('n', '<leader>gg', ':LazyGit\n', desc('lazygit: open'))
+-- Git
+map('n', '<leader>gg', function() Util.terminal({'lazygit'}) end, desc('lazygit: Open (cwd)'))
+map('n', '<leader>gG', function() Util.terminal({'lazygit'}, {cwd = Util.root()}) end, desc('lazygit: Open (root dir)'))
+map('n', '<leader>gc', ':Telescope git_commits<CR>', desc('Git: commits'))
+map('n', '<leader>gs', ':Telescope git_status<CR>',  desc('Git: status'))
+map('n', '<leader>ge', function()
+    require('neo-tree.command').execute({ source = 'git_status', toggle = true })
+end, desc('Neotree: Git explorer'))
 
 -- Vim-maximizer
 map('n', '<leader>m', ':MaximizerToggle\n', desc('vim-maximizer: toggle'))
@@ -107,6 +152,9 @@ map('n', '<leader>cd', ':Copilot disable\n', desc('copilot: disable'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
+
+-- Mason
+map('n', '<leader>cm', ':Mason\n', desc('mason: open'))
 
 -- Persistence.nvim
 map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('persistence: Restore Session'))
@@ -204,3 +252,11 @@ map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     { desc = 'Next tab' })
 map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', { desc = 'Previous tab' })
 map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      { desc = 'New tab' })
 map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
+
+-- buffers
+map('n', '<S-h>',      '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
+map('n', '<S-l>',      '<cmd>bnext<cr>',     { desc = 'Next buffer' })
+map('n', '[b',         '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
+map('n', ']b',         '<cmd>bnext<cr>',     { desc = 'Next buffer' })
+map('n', '<leader>bb', '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
+map('n', '<leader>`',  '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
