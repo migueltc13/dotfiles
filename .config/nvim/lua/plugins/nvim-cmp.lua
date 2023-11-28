@@ -4,7 +4,13 @@ return {
     dependencies = {
         "hrsh7th/cmp-buffer", -- source for text in buffer
         "hrsh7th/cmp-path", -- source for file system paths
-        "hrsh7th/cmp-nvim-lsp-signature-help", -- source for lsp signature help
+        -- "hrsh7th/cmp-nvim-lsp-signature-help", -- source for lsp signature help
+        {
+            "ray-x/lsp_signature.nvim",
+            event = "VeryLazy",
+            opts = {},
+            config = function(_, opts) require'lsp_signature'.setup(opts) end
+        },
         "L3MON4D3/LuaSnip", -- snippet engine
         "saadparwaiz1/cmp_luasnip", -- for autocompletion
         "rafamadriz/friendly-snippets", -- useful snippets
@@ -45,7 +51,7 @@ return {
             -- sources for autocompletion
             sources = cmp.config.sources({
                 { name = "nvim_lsp" },
-                { name = "nvim_lsp_signature_help" }, -- lsp signature help
+                -- { name = "nvim_lsp_signature_help" }, -- lsp signature help
                 { name = "luasnip" }, -- snippets
                 { name = "buffer" }, -- text within current buffer
                 { name = "path" }, -- file system paths

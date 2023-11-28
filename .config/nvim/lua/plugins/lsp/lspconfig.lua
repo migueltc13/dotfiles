@@ -2,7 +2,7 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
+        -- "hrsh7th/cmp-nvim-lsp",
         { "antosha417/nvim-lsp-file-operations", config = true },
     },
     config = function()
@@ -10,7 +10,7 @@ return {
         local lspconfig = require("lspconfig")
 
         -- import cmp-nvim-lsp plugin
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        -- local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
         -- set rounded borders for floating windows
         vim.diagnostic.config {
@@ -23,7 +23,8 @@ return {
         require("lspconfig.ui.windows").default_options.border = "rounded"
 
         -- used to enable autocompletion (assign to every lsp server config)
-        local capabilities = cmp_nvim_lsp.default_capabilities()
+        -- local capabilities = cmp_nvim_lsp.default_capabilities()
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
 
         -- Change the Diagnostic symbols in the sign column (gutter)
         local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -110,6 +111,10 @@ return {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
+            cmd = {
+                "clangd",
+                "--offset-encoding=utf-16",
+            },
         })
 
         -- configure marksman server
