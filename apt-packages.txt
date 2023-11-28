@@ -344,7 +344,6 @@ yaru-theme-gnome-shell
 yaru-theme-gtk
 yaru-theme-icon
 yaru-theme-sound
-ydotool
 youtube-dl
 zip
 zmap
