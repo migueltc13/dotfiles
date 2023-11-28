@@ -46,5 +46,10 @@ return {
             copilot_node_command = 'node', -- Node.js version must be > 16.x
             server_opts_overrides = {},
         })
+        -- Remove legacy commands
+        vim.cmd("silent! delcommand CopilotAuth")
+        vim.cmd("silent! delcommand CopilotDetach")
+        vim.cmd("silent! delcommand CopilotPanel")
+        vim.cmd("silent! delcommand CopilotStop")
     end,
 }
