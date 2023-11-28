@@ -1,3 +1,4 @@
+-- for conciseness
 local Util = require("util")
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
@@ -22,7 +23,7 @@ if vim.lsp.inlay_hint then
     map("n", "<leader>uh", function() vim.lsp.inlay_hint(0, nil) end,
     desc("Toggle Inlay Hints"))
 end
-map("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end,
+map("n", "<leader>ut", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end,
     desc("Toggle Treesitter Highlight"))
 
 -- Lazy
@@ -187,9 +188,28 @@ map('n', '<C-u>', '<C-u>zz', opts)
 map('n', 'n', 'nzzzv', opts)
 map('n', 'N', 'Nzzzv', opts)
 
--- Switch between tabs
-map('n', '<C-w>n', ':tabn\n', desc('Switch to next tab'))
-map('n', '<C-w>N', ':tabN\n', desc('Switch to previous tab'))
+-- better indenting
+map('v', '<', '<gv')
+map('v', '>', '>gv')
+
+-- highlights under cursor
+map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
+
+-- Clear search with <esc>
+-- map({ 'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and clear hlsearch' })
+
+-- Clear search, diff update and redraw
+-- map(
+--     'n',
+--     '<leader>ur',
+--     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>',
+--     { desc = 'Redraw / clear hlsearch / diff update' }
+-- )
+
+-- File operations
+map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+map({ 'i', 'x', 'n', 's' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
+map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
 
 -- Move to window using the <ctrl> hjkl keys
 map('n', '<C-h>', '<C-w>h', { desc = 'Go to the left window', remap = true })
@@ -215,44 +235,21 @@ map('n', '<leader>ww', '<C-w>w', { desc = 'Other window', remap = true })
 -- Delete windows
 map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
 
--- Clear search with <esc>
-map({ 'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and clear hlsearch' })
-
--- Clear search, diff update and redraw
--- map(
---     'n',
---     '<leader>ur',
---     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>',
---     { desc = 'Redraw / clear hlsearch / diff update' }
--- )
-
--- File operations
-map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-map({ 'i', 'x', 'n', 's' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
-map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
-
--- Quit all buffers
-map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all buffers' })
-
--- better indenting
-map('v', '<', '<gv')
-map('v', '>', '>gv')
-
--- highlights under cursor
-map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
-
--- tabs
+-- Tabs
 map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     { desc = 'Last tab' })
 map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    { desc = 'First tab' })
 map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     { desc = 'Next tab' })
 map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', { desc = 'Previous tab' })
 map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      { desc = 'New tab' })
-map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
+map('n', '<leader><tab>d',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
 
--- buffers
+-- Buffers
 map('n', '<S-h>',      '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
 map('n', '<S-l>',      '<cmd>bnext<cr>',     { desc = 'Next buffer' })
 map('n', '[b',         '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
 map('n', ']b',         '<cmd>bnext<cr>',     { desc = 'Next buffer' })
 map('n', '<leader>bb', '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
 map('n', '<leader>`',  '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
+
+-- Quit all buffers
+map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all buffers' })
