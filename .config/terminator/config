@@ -15,34 +15,33 @@
     cursor_color = "#aaaaaa"
     font = Hack Nerd Font Mono 11
     foreground_color = "#ffffff"
+    scrollbar_position = hidden
     scrollback_lines = 50000
     scrollback_infinite = True
     palette = "#000000:#ed333b:#08ff00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#e01b24:#29ff17:#ffff00:#1a5fb4:#ff00ff:#00ffff:#ffffff"
     use_system_font = False
   [[green]]
-    background_color = "#011900"
-    background_darkness = 0.9
-    background_type = transparent
-    cursor_color = "#aaaaaa"
-    foreground_color = "#ffffff"
-    scrollback_lines = 50000
-    scrollback_infinite = True
-    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
-  [[red]]
     background_color = "#200000"
     background_darkness = 0.9
     background_type = transparent
     cursor_color = "#aaaaaa"
+    font = Hack Nerd Font Mono 11
     foreground_color = "#ffffff"
+    scrollbar_position = hidden
     scrollback_lines = 50000
     scrollback_infinite = True
     palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+    use_system_font = False
   [[black]]
     cursor_color = "#aaaaaa"
-    foreground_color = "#ffffff"
-    scrollback_lines = 50000
-    scrollback_infinite = True
-    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+    font = Hack Nerd Font Mono 11
+    scrollbar_position = hidden
+    use_system_font = False
+  [[red]]
+    cursor_color = "#aaaaaa"
+    font = Hack Nerd Font Mono 11
+    scrollbar_position = hidden
+    use_system_font = False
 [layouts]
   [[default]]
     [[[window0]]]
