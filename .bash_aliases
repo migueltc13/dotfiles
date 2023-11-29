@@ -4,8 +4,13 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -F'
 
-# General Shortcuts
-alias c='clear'
+# fzf Shortcuts
+alias f='find . -type f | fzf'
+alias d='find . -type d | fzf'
+alias b='bat $(find . -type f | fzf)'
+alias c='cd $(find . -type d | fzf)'
+alias o='xdg-open $(find . | fzf)'
+alias n='nvim $(find . | fzf)'
 
 # Shortcuts for Navigation
 alias up='cd ..'

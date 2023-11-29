@@ -13,9 +13,9 @@ map('n', '<leader>us', function() Util.toggle('spell') end,          desc('Toggl
 map('n', '<leader>uw', function() Util.toggle('wrap') end,           desc('Toggle word wrap'))
 map('n', '<leader>uL', function() Util.toggle('relativenumber') end, desc('Toggle relative line numbers'))
 map('n', '<leader>ul', function() Util.toggle.number() end,          desc('Toggle line numbers'))
--- map('n', '<leader>uf', function() Util.format.toggle() end,          desc('Toggle auto format (global)'))
--- map('n', '<leader>uF', function() Util.format.toggle(true) end,      desc('Toggle auto format (buffer)'))
--- map('n', '<leader>ud', function() Util.toggle.diagnostics() end,     desc('Toggle diagnostics'))
+map('n', '<leader>uf', function() Util.format.toggle() end,          desc('Toggle auto format (global)'))
+map('n', '<leader>uF', function() Util.format.toggle(true) end,      desc('Toggle auto format (buffer)'))
+map('n', '<leader>ud', function() Util.toggle.diagnostics() end,     desc('Toggle diagnostics (buffer)'))
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map("n", "<leader>uC", function() Util.toggle("conceallevel", false, {0, conceallevel}) end,
     desc("Toggle Conceal"))
@@ -31,9 +31,9 @@ map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Telescope
 -- TODO https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua
-map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files (cwd)'))
-map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files (cwd)' })
--- TODO -- map('n', '<leader>fF', Util.telescope('files'),        desc('Find Files (root dir)'))
+map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
+map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files' })
+--map('n', '<leader>fF', Util.telescope('files'),        desc('Find Files (root dir)'))
 map('n', '<leader>fr', ':Telescope oldfiles\n',        desc('telescope: recent files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
@@ -54,8 +54,8 @@ map('n', '<leader>sc', ':Telescope command_history\n',               desc('comma
 map('n', '<leader>sC', ':Telescope commands\n',                      desc('commands'))
 map('n', '<leader>sd', ':Telescope diagnostics bufnr=0\n',           desc('document diagnostics'))
 map('n', '<leader>sD', ':Telescope diagnostics\n',                   desc('workspace diagnostics'))
-map('n', '<leader>sg', Util.telescope('live_grep', { cwd = false }), desc('grep (cwd)'))
-map('n', '<leader>sG', Util.telescope('live_grep'),                  desc('grep (root dir)'))
+map('n', '<leader>sg', Util.telescope('live_grep', { cwd = false }), desc('grep'))
+-- map('n', '<leader>sG', Util.telescope('live_grep'),                  desc('grep (root dir)'))
 map('n', '<leader>sh', ':Telescope help_tags\n',                     desc('help pages'))
 map('n', '<leader>sH', ':Telescope highlights\n',                    desc('search highlight groups'))
 map('n', '<leader>sk', ':Telescope keymaps\n',                       desc('key maps'))
@@ -63,10 +63,10 @@ map('n', '<leader>sM', ':Telescope man_pages\n',                     desc('man p
 map('n', '<leader>sm', ':Telescope marks\n',                         desc('jump to mark'))
 map('n', '<leader>so', ':Telescope vim_options\n',                   desc('options'))
 map('n', '<leader>sR', ':Telescope resume\n',                        desc('resume'))
-map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('word (cwd)'))
-map('n', '<leader>sW', Util.telescope('grep_string', { word_match = '-w' }),              desc('word (root dir)'))
-map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('selection (cwd)'))
-map('v', '<leader>sW', Util.telescope('grep_string'),                                     desc('selection (root dir)'))
+map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('word'))
+-- map('n', '<leader>sW', Util.telescope('grep_string', { word_match = '-w' }),              desc('word (root dir)'))
+map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('selection'))
+-- map('v', '<leader>sW', Util.telescope('grep_string'),                                     desc('selection (root dir)'))
 
 -- Harpoon
 map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -88,7 +88,7 @@ _G.lsp_on_attach = function()
     map('n', '<leader>rn', ':lua vim.lsp.buf.rename()\n',          desc('LSP: smart rename'))
     map('n', '<leader>ca', ':lua vim.lsp.buf.code_action()\n',     desc('LSP: code action'))
     map('n', '<leader>rs', ':LspRestart\n',                        desc('LSP: restart language server'))
-    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()<CR>', desc('LSP: show diagnostics for line'))
+    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()<cr>', desc('LSP: show diagnostics for line'))
     map('n', '<leader>df', ':Telescope diagnostics bufnr=0\n',     desc('LSP: show diagnostics for buffer'))
     map('n', '<leader>da', ':Telescope diagnostics\n',             desc('LSP: show diagnostics for workspace'))
     map('n', '[d',         ':lua vim.diagnostic.goto_prev()\n',    desc('LSP: go to previous diagnostic'))
@@ -97,9 +97,9 @@ end
 
 -- Neo-tree
 map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
-map('n', '<leader>E', function()
-    require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
-end, desc('NeoTree: open current directory'))
+-- map('n', '<leader>E', function()
+--     require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
+-- end, desc('NeoTree: open current directory'))
 map('n', '<leader>ge', function()
     require("neo-tree.command").execute({ source = "git_status", toggle = true })
 end, desc('NeoTree: open git status'))
@@ -114,10 +114,11 @@ map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismi
 map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
 -- Git
-map('n', '<leader>gg', function() Util.terminal({'lazygit'}) end, desc('lazygit: Open (cwd)'))
-map('n', '<leader>gG', function() Util.terminal({'lazygit'}, {cwd = Util.root()}) end, desc('lazygit: Open (root dir)'))
-map('n', '<leader>gc', ':Telescope git_commits<CR>', desc('Git: commits'))
-map('n', '<leader>gs', ':Telescope git_status<CR>',  desc('Git: status'))
+-- map('n', '<leader>gg', function() Util.terminal({'lazygit'}) end, desc('lazygit: Open (cwd)'))
+-- map('n', '<leader>gG', function() Util.terminal({'lazygit'}, {cwd = Util.root()}) end, desc('lazygit: Open (root dir)'))
+map('n', '<leader>gg', '<cmd>Lazygit<cr>',               desc('lazygit: Open'))
+map('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', desc('Git: commits'))
+map('n', '<leader>gs', '<cmd>Telescope git_status<cr>',  desc('Git: status'))
 map('n', '<leader>ge', function()
     require('neo-tree.command').execute({ source = 'git_status', toggle = true })
 end, desc('Neotree: Git explorer'))
@@ -162,6 +163,14 @@ map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('
 map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: Restore Last Session'))
 map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: Don\'t Save Current Session'))
 
+-- Todo-comments
+map('n', ']t', function() require('todo-comments').jump_next() end,      desc('Next todo comment'))
+map('n', '[t', function() require('todo-comments').jump_prev() end,      desc('Previous todo comment'))
+map('n', '<leader>xt', '<cmd>TodoTrouble<cr>',                           desc('Trouble: Todo'))
+map('n', '<leader>xT', '<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>',   desc('Trouble: Todo/Fix/Fixme'))
+map('n', '<leader>st', '<cmd>TodoTelescope<cr>',                         desc('Todo'))
+map('n', '<leader>sT', '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>', desc('Todo/Fix/Fixme'))
+
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 
@@ -202,7 +211,7 @@ map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
 -- map(
 --     'n',
 --     '<leader>ur',
---     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>',
+--     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><cr>',
 --     { desc = 'Redraw / clear hlsearch / diff update' }
 -- )
 

@@ -24,6 +24,7 @@ return {
             ["<leader>w"] =     { name = "+windows" },
             ["<leader>d"] =     { name = "+diagnostics" },
             ["<leader>h"] =     { name = "+harpoon" },
+            ["<leader>sn"] =    { name = "+noice" },
             -- ["<leader>x"] = { name = "+diagnostics/quickfix" },
         },
     },

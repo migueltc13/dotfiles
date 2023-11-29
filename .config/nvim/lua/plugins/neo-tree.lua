@@ -24,14 +24,45 @@ return {
         sources = { "filesystem", "buffers", "git_status", "document_symbols" },
         open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
         filesystem = {
-            bind_to_cwd = false,
+            -- bind_to_cwd = false,
             follow_current_file = { enabled = true },
             use_libuv_file_watcher = true,
+            filtered_items = {
+                visible = true,
+                show_hidden_count = true,
+                hide_dotfiles = false,
+                hide_gitignored = false,
+                hide_by_name = {
+                    '.git',
+                    '.DS_Store',
+                    -- 'thumbs.db',
+                },
+            },
         },
         window = {
-            -- width = 30,
+            width = 30,
             mappings = {
                 ["<space>"] = "none",
+                ["O"] = {
+                    command = function(state)
+                        local node = state.tree:get_node()
+                        local filepath = node.path
+                        -- local osType = os.getenv("OS")
+
+                        local command = "xdg-open '" .. filepath .. "'"
+                        vim.cmd("!" .. command)
+
+                        -- if osType == "Windows_NT" then
+                        --     command = "start " .. filepath
+                        -- elseif osType == "Darwin" then
+                        --     command = "open " .. filepath
+                        -- else
+                        --     command = "xdg-open " .. filepath
+                        -- end
+                        -- os.execute(command)
+                    end,
+                    desc = "open_with_system_defaults",
+                },
             },
         },
         default_component_configs = {

@@ -57,11 +57,11 @@ end, {
 })
 
 -- Set completefunc for Persistent command
-vim.api.nvim_exec([[
+vim.api.nvim_command([[
   function! PersistentComplete(ArgLead, CmdLine, CursorPos)
     return join(["save", "load", "load_last"], "\n")
   endfunction
 
   set completefunc=PersistentComplete
   set completeopt=menu,menuone,noselect
-]], false)
+]])

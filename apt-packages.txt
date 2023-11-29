@@ -49,8 +49,6 @@ dmz-cursor-theme
 docker-compose
 docker.io
 docker
-dotnet-sdk-7.0
-dotnet7
 e2fsprogs
 efibootmgr
 eject
@@ -229,6 +227,7 @@ nikto
 ninja-build
 nmap
 npm
+nuget
 openjdk-17-jdk
 openprinting-ppds
 openvpn

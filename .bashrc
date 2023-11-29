@@ -8,7 +8,7 @@ HISTFILESIZE=10000
 # don't put duplicate lines
 HISTCONTROL=ignoredups
 # history time format
-HISTTIMEFORMAT="%d-%m-%Y %T "
+#HISTTIMEFORMAT="%d-%m-%Y %T "
 # append to the history file, don't overwrite it
 shopt -s histappend
 # immediately append to the history file

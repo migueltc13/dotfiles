@@ -7,10 +7,6 @@
 - [ ] Change vim-commentaty
 - - [ ] Find other plugins (better multi-line comments support)
 - - [ ] When entering a new line, the comment is not added
-- [ ] Add color block to the 80th column with: `:set colorcolumn=80`
-- [ ] NeoTree: explore (root dir) and (cwd) keymaps
 - [ ] https://github.com/folke/trouble.nvim
-- [ ] LazyGit: <leader>gg (root dir) and <leader>gG (cwd) keymaps
-- [ ] buffer keymaps
+- [x] buffer keymaps
 - [ ] vim-surround
-- [ ] keymaps
