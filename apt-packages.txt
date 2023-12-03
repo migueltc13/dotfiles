@@ -100,6 +100,7 @@ gnome-menus
 gnome-shell-extension-manager
 gnome-shell-extensions
 gnome-sushi
+gnome-themes-extra
 gnome-tweaks
 gobuster
 golang-go
@@ -118,6 +119,7 @@ gstreamer1.0-alsa
 gstreamer1.0-packagekit
 gstreamer1.0-plugins-base-apps
 gstreamer1.0-pulseaudio
+gtk2-engines-murrine
 gvfs-fuse
 gzip
 haguichi
@@ -163,6 +165,7 @@ libgjs0g
 libglib2.0-bin
 libgmp-dev
 libgraphicsmagick1-dev
+libgtk-3-dev
 libimage-exiftool-perl
 libjpeg62
 libkrb5-dev
@@ -278,6 +281,7 @@ rsyslog
 ruby-dev
 ruby
 samba
+sassc
 sensible-utils
 shim-signed
 smbclient
