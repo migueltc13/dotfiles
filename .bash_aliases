@@ -4,13 +4,12 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -F'
 
-# fzf Shortcuts
-alias f='find . -type f | fzf'
+# fzf aliases
+alias f='find . -type f | fzf --preview="batcat --color=always --style=rule {}"'
 alias d='find . -type d | fzf'
-alias b='bat $(find . -type f | fzf)'
-alias c='cd $(find . -type d | fzf)'
+alias b='bat $(find . -type f | fzf --preview="batcat --color=always --style=rule {}")'
 alias o='xdg-open $(find . | fzf)'
-alias n='nvim $(find . | fzf)'
+alias n='nvim $(find . | fzf --preview="batcat --color=always --style=rule {}")'
 
 # Shortcuts for Navigation
 alias up='cd ..'
