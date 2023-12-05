@@ -21,7 +21,6 @@ bash-doc
 bat
 bc
 binwalk
-bluez-cups
 bluez
 brltty
 bsdutils
@@ -36,7 +35,6 @@ cowsay
 cups-bsd
 cups-client
 cups-filters
-cups
 curl
 dash
 dconf-editor
@@ -85,7 +83,6 @@ fping
 freerdp2-x11
 fwupd-signed
 fwupd
-fzf
 gamemode
 gcc
 gettext
@@ -128,7 +125,6 @@ hashid
 hcxdumptool
 hcxtools
 hostname
-hplip
 htop
 hub
 hxtools
@@ -255,7 +251,6 @@ printer-driver-pnm2ppa
 printer-driver-ptouch
 printer-driver-pxljr
 printer-driver-sag-gdi
-printer-driver-splix
 procps
 proxychains4
 proxychains
