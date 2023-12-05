@@ -74,14 +74,14 @@ esac
 # sleep 10; alert
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Profile definitions
-[ -f ~/.bash_profile ] && source ~/.bash_profile
-
 # Alias definitions
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
 # Functions definitions
 [ -f ~/.bash_functions ] && source ~/.bash_functions
+
+# Keybinds definitions
+[ -f ~/.bash_keybinds ] && source ~/.bash_keybinds
 
 # fzf definitions
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -168,3 +168,38 @@ alias 'git?'='copilot_git-assist';
   };
 alias 'gh?'='copilot_gh-assist';
 alias 'wts'='copilot_what-the-shell';
+
+##
+# Colors
+##
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+
+    alias diff='diff --color=auto'
+fi
+
+# gcc colors
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+##
+# exa settings
+##
+# user and group
+# Old purple
+#export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
+# New yellow
+export EXA_COLORS="uu=33:un=35:gu=33:gn=35"
+# file types
+#export EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33>"
+# ToDo Permissions
+# date
+export EXA_COLORS="$EXA_COLORS:da=2;38;5;246"
+# icons spacing
+export EXA_ICON_SPACING=2
