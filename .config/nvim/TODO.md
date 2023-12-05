@@ -10,3 +10,4 @@
 - [ ] https://github.com/folke/trouble.nvim
 - [x] buffer keymaps
 - [ ] vim-surround
+- [ ] clean util functions

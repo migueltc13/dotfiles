@@ -33,7 +33,8 @@ map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 -- TODO https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua
 map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
 map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files' })
---map('n', '<leader>fF', Util.telescope('files'),        desc('Find Files (root dir)'))
+local function find_hidden_files() require("telescope.builtin").find_files({ hidden = true }) end
+map('n', '<leader>fF', find_hidden_files,              desc('telescope: find (hidden) files'))
 map('n', '<leader>fr', ':Telescope oldfiles\n',        desc('telescope: recent files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
