@@ -7,8 +7,6 @@ HISTSIZE=10000
 HISTFILESIZE=10000
 # don't put duplicate lines
 HISTCONTROL=ignoredups
-# history time format
-#HISTTIMEFORMAT="%d-%m-%Y %T "
 # append to the history file, don't overwrite it
 shopt -s histappend
 # immediately append to the history file
@@ -27,179 +25,44 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+# prompt definitions
+[ -f ~/.bash_prompt ] && source ~/.bash_prompt
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
+# colors definitions
+[ -f ~/.bash_colors ] && source ~/.bash_colors
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # PS1='\[\e[0;35m\]╭──┤\[\e[1;35m\]\u\[\e[0;35m\]├─┤\[\e[0;90m\]$(date +"%H:%M:%S")\[\e[0;35m\]├─┤\[\e[1;34m\]\w\[\e[0;35m\]│\[\e[0m\]\n\[\e[0;35m\]╰─\[\e[1;35m\]\$\[\e[0m\] '
-    PS1='\[\e[0;32m\]╭──┤\[\e[1;33m\]\u\[\e[0;32m\]├─┤\[\e[0;90m\]$(date +"%H:%M:%S")\[\e[0;32m\]├─┤\[\e\e[38;5;227m\w\[\e[0;32m\]│\[\e[0m\]\n\[\e[0;32m\]╰─\[\e[0;33m\]\$\[\e[0m\] '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# Add an "alert" alias for long running commands. Use like so:
-# sleep 10; alert
-alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions
+# aliases definitions
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
-# Functions definitions
+# functions definitions
 [ -f ~/.bash_functions ] && source ~/.bash_functions
 
-# Keybinds definitions
+# keybinds definitions
 [ -f ~/.bash_keybinds ] && source ~/.bash_keybinds
+
+# copilot cli definitions
+[ -f ~/.bash_copilot_cli ] && source ~/.bash_copilot_cli
 
 # fzf definitions
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
+# autojump definitions
+[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 
-# Autojump
-[[ -s /home/z0d1ac/.autojump/etc/profile.d/autojump.sh ]] && source /home/z0d1ac/.autojump/etc/profile.d/autojump.sh
-
-# Nodejs
+# nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 
-# Perl
-PATH="/home/z0d1ac/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/z0d1ac/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/z0d1ac/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/z0d1ac/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/z0d1ac/perl5"; export PERL_MM_OPT;
+# perl
+export PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"$HOME/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 
-# PATH
-export PATH="$PATH:/home/z0d1ac/.local/bin/"
+# PATH for local binaries
+export PATH="$HOME/.local/bin:$PATH"
 
-# GitHub Copilot cli
-#eval "$(github-copilot-cli alias -- "$0")"
-  copilot_what-the-shell () {
-    TMPFILE=$(mktemp);
-    trap 'rm -f $TMPFILE' EXIT;
-    if /usr/local/bin/github-copilot-cli what-the-shell "$@" --shellout $TMPFILE; then
-      if [ -e "$TMPFILE" ]; then
-        FIXED_CMD=$(cat $TMPFILE);
-        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
-        eval "$FIXED_CMD"
-      else
-        echo "Apologies! Extracting command failed"
-      fi
-    else
-      return 1
-    fi
-  };
-alias '??'='copilot_what-the-shell';
-
-  copilot_git-assist () {
-    TMPFILE=$(mktemp);
-    trap 'rm -f $TMPFILE' EXIT;
-    if /usr/local/bin/github-copilot-cli git-assist "$@" --shellout $TMPFILE; then
-      if [ -e "$TMPFILE" ]; then
-        FIXED_CMD=$(cat $TMPFILE);
-        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
-        eval "$FIXED_CMD"
-      else
-        echo "Apologies! Extracting command failed"
-      fi
-    else
-      return 1
-    fi
-  };
-alias 'git?'='copilot_git-assist';
-
-  copilot_gh-assist () {
-    TMPFILE=$(mktemp);
-    trap 'rm -f $TMPFILE' EXIT;
-    if /usr/local/bin/github-copilot-cli gh-assist "$@" --shellout $TMPFILE; then
-      if [ -e "$TMPFILE" ]; then
-        FIXED_CMD=$(cat $TMPFILE);
-        history -s $(history 1 | cut -d' ' -f4-); history -s "$FIXED_CMD";
-        eval "$FIXED_CMD"
-      else
-        echo "Apologies! Extracting command failed"
-      fi
-    else
-      return 1
-    fi
-  };
-alias 'gh?'='copilot_gh-assist';
-alias 'wts'='copilot_what-the-shell';
-
-##
-# Colors
-##
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-
-    alias diff='diff --color=auto'
-fi
-
-# gcc colors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-##
-# exa settings
-##
-# user and group
-# Old purple
-#export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
-# New yellow
-export EXA_COLORS="uu=33:un=35:gu=33:gn=35"
-# file types
-#export EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33>"
-# ToDo Permissions
-# date
-export EXA_COLORS="$EXA_COLORS:da=2;38;5;246"
-# icons spacing
-export EXA_ICON_SPACING=2
+# Clean duplicate entries in $PATH
+export PATH=$(echo -n $PATH | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)

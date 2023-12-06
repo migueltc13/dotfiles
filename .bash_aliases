@@ -102,5 +102,8 @@ alias unbzip2='bzip2 -d'                                    # Unzip a file with 
 # Hacker news on the terminal
 alias news='hnterm'
 
-# Edit hosts file and change ssh host key for target (TryHackMe, HackTheBox, etc.)
-alias hosts='sudo nano /etc/hosts; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t";'
+# Edit hosts file (and change ssh host key for target [TryHackMe, HackTheBox, ...])
+alias hosts='sudo nano /etc/hosts' # ; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t";'
+
+# Alert for long running commands. Usage: $ sleep 10; alert
+alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
