@@ -94,7 +94,8 @@ check "/tmp/snap-packages.txt" "snap-packages.txt"
 # TODO: More config files: like .Xresources, .nanorc, ...
 # TODO: apps
 
-sudo chown -R $USER .
+user=$USER
+sudo chown -R $user .
 
 if (( $changes_count == 0 )); then
   echo "No changes detected"
