@@ -2,6 +2,8 @@
 
 ## Overview
 
+![overview.gif](.github/img/overview.gif)
+
 This repository contains my personal dotfiles. It is intended to be used on
 Debian-based systems, but it should work on other Linux distributions as well.
 
