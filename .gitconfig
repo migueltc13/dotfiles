@@ -1,7 +1,7 @@
 [diff]
     colorMoved = default
 [user]
-	email = migueltc13@gmail.com
-	name = migueltc13
+    email = migueltc13@gmail.com
+    name = migueltc13
 [credential]
-	helper = store
+    helper = store
