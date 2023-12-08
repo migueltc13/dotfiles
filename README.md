@@ -7,33 +7,33 @@ Debian-based systems, but it should work on other Linux distributions as well.
 
 ### Packages
 
-- [apt-packages.txt]() - apt packages
-- [snap-packages.txt]() - snap packages
-<!-- TODO - [apt-packages-lite.txt]() - minimal apt packages -->
-<!-- TODO - [pip-packages.txt]() - pip packages -->
-<!-- TODO - [npm-packages.txt]() - npm packages -->
-<!-- TODO - [gem-packages.txt]() - gem packages -->
-<!-- TODO - [cargo-packages.txt]() - cargo packages -->
+- [apt-packages.txt](apt-packages.txt) - apt packages
+- [snap-packages.txt](snap-packages.txt) - snap packages
+- [apt-packages-lite.txt](apt-packages-lite.txt) - minimal apt packages
+<!-- TODO - [pip-packages.txt](pip-packages.txt) - pip packages -->
+<!-- TODO - [npm-packages.txt](npm-packages.txt) - npm packages -->
+<!-- TODO - [gem-packages.txt](gem-packages.txt) - gem packages -->
+<!-- TODO - [cargo-packages.txt](cargo-packages.txt) - cargo packages -->
 
 ### Bash configuration
 
-- [.bashrc]() - main bash config file
-- [.bash_prompt]() - bash prompt config
-- [.bash_colors]() - bash colors
-- [.bash_aliases]() - bash aliases
-- [.bash_functions]() - bash functions
-- [.bash_keybinds]() - bash keybinds
-- [.bash_copilot_cli]() - copilot cli config
-- [.bash_fzf]() - fzf config
-- [.profile]() - bash profile, used for login shells
+- [.bashrc](.bashrc) - main bash config file
+- [.bash_prompt](.bash_prompt) - bash prompt config
+- [.bash_colors](.bash_colors) - bash colors
+- [.bash_aliases](.bash_aliases) - bash aliases
+- [.bash_functions](.bash_functions) - bash functions
+- [.bash_keybinds](.bash_keybinds) - bash keybinds
+- [.bash_copilot_cli](.bash_copilot_cli) - copilot cli config
+- [.bash_fzf](.bash_fzf) - fzf config
+- [.profile](.profile) - bash profile, used for login shells
 
 ### Other configuration
 
 - [neovim](.config/nvim/) - neovim config
-- [.nanorc]() - nano config
+- [.nanorc](.nanorc) - nano config
 - [terminator](.config/terminator/config) - terminator config
-- [.Xresources]() - xterm config
-- [.gitconfig]() - git config
+- [.Xresources](.Xresources) - xterm config
+- [.gitconfig](.gitconfig) - git config
 
 ### usr/ directory
 
@@ -73,19 +73,19 @@ Cron job example:
 
 ### Terminal ascii animations
 
-Located in [Animations/]().
+Located in [Animations/](Animations/).
 
 ### Fonts
 
-Located in [fonts/]().
+Located in [fonts/](fonts/).
 
 - [Hack](fonts/Hack.zip) - Hack font
 - [Nerd Fonts Symbols](fonts/NerdFontsSymbolsOnly.zip) - Nerd Fonts symbols only
 
 ## Installation
 
-Interactive installation with [./install.sh]() script.
+Interactive installation with [./install.sh](./install.sh) script.
 
 ## Update
 
-Update with [./check_changes.sh]() script.
+Update with [./check_changes.sh](./check_changes.sh) script.
