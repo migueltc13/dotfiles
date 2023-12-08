@@ -1,7 +1,6 @@
 amberol
 audacity
 bare
-btop
 canonical-livepatch
 chromium
 code
@@ -15,7 +14,6 @@ cups
 discord
 dotnet-sdk
 firefox
-gh
 gnome-3-28-1804
 gnome-3-38-2004
 gnome-42-2204
@@ -36,8 +34,5 @@ snap-store
 snapd
 snapd-desktop-integration
 sublime-text
-tldr
 utorrent
 whatsie
-wine-platform-6-stable
-wine-platform-runtime
