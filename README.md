@@ -22,7 +22,7 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [.bash_colors](.bash_colors) - bash colors
 - [.bash_aliases](.bash_aliases) - bash aliases
 - [.bash_functions](.bash_functions) - bash functions
-- [.bash_keybindings](.bash_keybindings) - bash keybinds
+- [.bash_keybindings](.bash_keybindings) - bash keybindings
 - [.bash_copilot_cli](.bash_copilot_cli) - copilot cli config
 - [.bash_fzf](.bash_fzf) - fzf config
 - [.profile](.profile) - bash profile, used for login shells
