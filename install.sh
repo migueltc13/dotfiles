@@ -137,7 +137,7 @@ if [[ "$choice" =~ [yY] ]]; then
     read -s -n 1 -p "Do you want to install autojump? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing autojump...${N}"
-        git clone git://github.com/wting/autojump.git ~/autojump_tmp
+        git clone https://github.com/wting/autojump.git ~/autojump_tmp
         ~/autojump_tmp/install.py
         rm -rf ~/autojump_tmp
     else
