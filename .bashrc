@@ -38,7 +38,7 @@ shopt -s checkwinsize
 [ -f ~/.bash_functions ] && source ~/.bash_functions
 
 # keybinds definitions
-[ -f ~/.bash_keybinds ] && source ~/.bash_keybinds
+[ -f ~/.bash_keybindings ] && source ~/.bash_keybindings
 
 # copilot cli definitions
 [ -f ~/.bash_copilot_cli ] && source ~/.bash_copilot_cli
