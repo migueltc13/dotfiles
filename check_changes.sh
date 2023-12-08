@@ -3,7 +3,6 @@
 # Description: Check if any of the system files had changed,
 # if so prompt the user to copy changes to dotfiles directory.
 
-
 # Check if user is not root
 if (( $(id -u) == 0 )); then
   echo "$0: Do not run as root. Exiting..."
@@ -21,12 +20,6 @@ check () {
   FILE2=$2
   $diff -r $FILE2 $FILE1 1>/dev/null
   if (( $? != 0 )); then
-
-    # Check if copy target file is a directory
-    #if [ -d "$FILE2" ]; then
-    #    FILE2=$(dirname "$FILE2")
-    #fi
-
     echo "cp -r $FILE1 $FILE2"
 
     # Change menu
@@ -62,13 +55,17 @@ tail=$(which tail)
 less=$(which less)
 
 check "$HOME/.bashrc"                              ".bashrc"
+check "$HOME/.bash_prompt"                         ".bash_prompt"
+check "$HOME/.bash_colors"                         ".bash_colors"
 check "$HOME/.bash_aliases"                        ".bash_aliases"
 check "$HOME/.bash_functions"                      ".bash_functions"
 check "$HOME/.bash_keybinds"                       ".bash_keybinds"
+check "$HOME/.bash_copilot_cli"                    ".bash_copilot_cli"
+check "$HOME/.bash_fzf"                            ".bash_fzf"
 check "$HOME/.profile"                             ".profile"
 check "$HOME/.nanorc"                              ".nanorc"
 check "$HOME/.Xresources"                          ".Xresources"
-check "$HOME/.fzf.bash"                            ".fzf.bash"
+check "$HOME/.gitconfig"                           ".gitconfig"
 check "$HOME/.config/nvim/"                        ".config/nvim/"
 check "$HOME/.config/terminator/"                  ".config/terminator/"
 check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
@@ -76,8 +73,6 @@ check "$HOME/Animations/"                          "Animations/"
 check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
 # check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 check "/usr/local/bin"                             "usr/local/bin"
-
-# check "$HOME/.config/"                             ".config/"
 
 # apt-packages.txt
 $apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt
@@ -88,12 +83,8 @@ $snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap-packages.txt
 check "/tmp/snap-packages.txt" "snap-packages.txt"
 
 # TODO: /opt dir
-# TODO: ~/Git dir
-# TODO: animations
-# TODO: .config dir
-# TODO: More config files: like .Xresources, .nanorc, ...
-# TODO: apps
 
+# change owner to current user
 user=$USER
 sudo chown -R $user .
 
