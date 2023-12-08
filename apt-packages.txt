@@ -24,9 +24,9 @@ binwalk
 bluez
 brltty
 bsdutils
+btop
 ca-certificates
 cargo
-cewl
 cmake
 cmatrix
 composer
@@ -205,6 +205,7 @@ lua5.4
 luajit
 luarocks
 macchanger
+make
 mawk
 memtest86+
 mokutil
@@ -220,6 +221,7 @@ neofetch
 net-tools
 netbase
 netcat-openbsd
+netcat
 netplan.io
 network-manager-config-connectivity-ubuntu
 network-manager
@@ -275,8 +277,6 @@ rig
 ripgrep
 rsync
 rsyslog
-ruby-dev
-ruby
 samba
 sassc
 sensible-utils
@@ -294,6 +294,7 @@ sudo
 systemd-oomd
 terminator
 thefuck
+tldr
 traceroute
 tree
 tzdata
