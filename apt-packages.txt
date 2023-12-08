@@ -211,6 +211,7 @@ mokutil
 mount
 mutter-common
 mysql-server
+nano
 nautilus-sendto
 ncdu
 ncurses-base
@@ -319,6 +320,7 @@ vim
 vlc
 w3m
 wfuzz
+wget
 whatweb
 whiptail
 whois
