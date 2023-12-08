@@ -1,8 +1,10 @@
-# Dotfiles
+<h1 align="center">Dotfiles</h1>
+
+<div align="center">
+  <img src=".github/img/overview.gif" alt="overview.gif">
+</div>
 
 ## Overview
-
-![overview.gif](.github/img/overview.gif)
 
 This repository contains my personal dotfiles. It is intended to be used on
 Debian-based systems, but it should work on other Linux distributions as well.
