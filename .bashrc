@@ -44,7 +44,7 @@ shopt -s checkwinsize
 [ -f ~/.bash_copilot_cli ] && source ~/.bash_copilot_cli
 
 # fzf definitions
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.bash_fzf ] && source ~/.bash_fzf
 
 # autojump definitions
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
