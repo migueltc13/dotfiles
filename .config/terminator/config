@@ -11,38 +11,60 @@
   layout_launcher = ""
 [profiles]
   [[default]]
-    background_darkness = 0.9
+    background_darkness = 0.90
     background_type = transparent
-    cursor_color = "#aaaaaa"
-    font = Hack Nerd Font Mono 11
-    foreground_color = "#ffffff"
     scrollbar_position = hidden
     scrollback_lines = 50000
     scrollback_infinite = True
-    palette = "#000000:#ed333b:#08ff00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#e01b24:#29ff17:#ffff00:#1a5fb4:#ff00ff:#00ffff:#ffffff"
     use_system_font = False
+    font = Hack Nerd Font Mono 11
+    cursor_color = "#eeeeee"
+    foreground_color = "#eeeeee"
+    palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
   [[green]]
-    background_color = "#200000"
-    background_darkness = 0.9
+    background_darkness = 0.90
     background_type = transparent
-    cursor_color = "#aaaaaa"
-    font = Hack Nerd Font Mono 11
-    foreground_color = "#ffffff"
     scrollbar_position = hidden
     scrollback_lines = 50000
     scrollback_infinite = True
-    palette = "#000000:#cd0000:#00cd00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#ff0000:#00ff00:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
     use_system_font = False
-  [[black]]
-    cursor_color = "#aaaaaa"
     font = Hack Nerd Font Mono 11
-    scrollbar_position = hidden
-    use_system_font = False
+    cursor_color = "#eeeeee"
+    foreground_color = "#eeeeee"
+    palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
+    background_color = "#002000"
   [[red]]
-    cursor_color = "#aaaaaa"
-    font = Hack Nerd Font Mono 11
+    background_darkness = 0.90
+    background_type = transparent
     scrollbar_position = hidden
+    scrollback_lines = 50000
+    scrollback_infinite = True
     use_system_font = False
+    font = Hack Nerd Font Mono 11
+    cursor_color = "#eeeeee"
+    foreground_color = "#eeeeee"
+    palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
+    background_color = "#200000"
+  [[black]]
+    scrollbar_position = hidden
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    use_system_font = False
+    font = Hack Nerd Font Mono 11
+    cursor_color = "#eeeeee"
+    foreground_color = "#eeeeee"
+    palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
+  [[old]]
+    background_darkness = 0.90
+    background_type = transparent
+    scrollbar_position = hidden
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    use_system_font = False
+    font = Hack Nerd Font Mono 11
+    cursor_color = "#ffffff"
+    foreground_color = "#ffffff"
+    palette = "#000000:#ed333b:#08ff00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#e01b24:#29ff17:#ffff00:#1a5fb4:#ff00ff:#00ffff:#ffffff"
 [layouts]
   [[default]]
     [[[window0]]]
