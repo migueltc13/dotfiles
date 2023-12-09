@@ -36,6 +36,7 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [neovim](.config/nvim/) - neovim config
 - [.nanorc](.nanorc) - nano config
 - [terminator](.config/terminator/config) - terminator config
+- [batcat](.config/bat/config) - bat config
 - [.Xresources](.Xresources) - xterm config
 - [.gitconfig](.gitconfig) - git config
 
