@@ -296,6 +296,7 @@ systemd-oomd
 terminator
 thefuck
 tldr
+tmux
 traceroute
 tree
 tzdata
