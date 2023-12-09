@@ -4,7 +4,6 @@ bare
 canonical-livepatch
 chromium
 code
-color-picker
 core
 core18
 core20
