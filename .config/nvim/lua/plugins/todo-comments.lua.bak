@@ -1,0 +1,7 @@
+return {
+    "folke/todo-comments.nvim",
+    -- cmd = { "TodoTrouble", "TodoTelescope" },
+    -- event = { "BufRead", "BufNewFile" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = true,
+}

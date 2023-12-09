@@ -35,11 +35,11 @@ map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find fil
 map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files' })
 local function find_hidden_files() require("telescope.builtin").find_files({ hidden = true }) end
 map('n', '<leader>fF', find_hidden_files,              desc('telescope: find (hidden) files'))
-map('n', '<leader>fr', ':Telescope oldfiles\n',        desc('telescope: recent files'))
+map('n', '<leader>fp', ':Telescope oldfiles\n',        desc('telescope: previous files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
 map('n', '<leader>fh', ':Telescope help_tags\n',       desc('telescope: find help tags'))
-map('n', '<leader>fp', ':Telescope resume\n',          desc('telescope: resume previous picker'))
+map('n', '<leader>fr', ':Telescope resume\n',          desc('telescope: resume previous picker'))
 map('n', '<leader>fc', ':Telescope commands\n',        desc('telescope: commands'))
 map('n', '<leader>fa', ':Telescope autocommands\n',    desc('telescope: autocommands'))
 map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command history'))
@@ -47,27 +47,24 @@ map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: keymaps'
 map('n', '<leader>fs', ':Telescope notify\n',          desc('telescope: notifications'))
 
 -- Search
-map('n', '<leader>sr', ':Spectre\n',                                 desc('spectre: replace in files'))
-map('n', '<leader>s"', ':Telescope registers\n',                     desc('registers'))
-map('n', '<leader>sa', ':Telescope autocommands\n',                  desc('auto commands'))
-map('n', '<leader>sb', ':Telescope current_buffer_fuzzy_find\n',     desc('buffer'))
-map('n', '<leader>sc', ':Telescope command_history\n',               desc('command history'))
-map('n', '<leader>sC', ':Telescope commands\n',                      desc('commands'))
-map('n', '<leader>sd', ':Telescope diagnostics bufnr=0\n',           desc('document diagnostics'))
-map('n', '<leader>sD', ':Telescope diagnostics\n',                   desc('workspace diagnostics'))
-map('n', '<leader>sg', Util.telescope('live_grep', { cwd = false }), desc('grep'))
--- map('n', '<leader>sG', Util.telescope('live_grep'),                  desc('grep (root dir)'))
-map('n', '<leader>sh', ':Telescope help_tags\n',                     desc('help pages'))
-map('n', '<leader>sH', ':Telescope highlights\n',                    desc('search highlight groups'))
-map('n', '<leader>sk', ':Telescope keymaps\n',                       desc('key maps'))
-map('n', '<leader>sM', ':Telescope man_pages\n',                     desc('man pages'))
-map('n', '<leader>sm', ':Telescope marks\n',                         desc('jump to mark'))
-map('n', '<leader>so', ':Telescope vim_options\n',                   desc('options'))
-map('n', '<leader>sR', ':Telescope resume\n',                        desc('resume'))
-map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('word'))
--- map('n', '<leader>sW', Util.telescope('grep_string', { word_match = '-w' }),              desc('word (root dir)'))
-map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('selection'))
--- map('v', '<leader>sW', Util.telescope('grep_string'),                                     desc('selection (root dir)'))
+map('n', '<leader>sr', ':Spectre\n',                             desc('spectre: replace in files'))
+map('n', '<leader>s"', ':Telescope registers\n',                 desc('telescope: registers'))
+map('n', '<leader>sa', ':Telescope autocommands\n',              desc('telescope: auto commands'))
+map('n', '<leader>sb', ':Telescope current_buffer_fuzzy_find\n', desc('telescope: buffer'))
+map('n', '<leader>sc', ':Telescope command_history\n',           desc('telescope: command history'))
+map('n', '<leader>sC', ':Telescope commands\n',                  desc('telescope: commands'))
+map('n', '<leader>sd', ':Telescope diagnostics bufnr=0\n',       desc('telescope: document diagnostics'))
+map('n', '<leader>sD', ':Telescope diagnostics\n',               desc('telescope: workspace diagnostics'))
+map('n', '<leader>sg', ':Telescope live_grep\n',                 desc('telescope: live grep files'))
+map('n', '<leader>sh', ':Telescope help_tags\n',                 desc('telescope: help pages'))
+map('n', '<leader>sH', ':Telescope highlights\n',                desc('telescope: search highlight groups'))
+map('n', '<leader>sk', ':Telescope keymaps\n',                   desc('telescope: key maps'))
+map('n', '<leader>sM', ':Telescope man_pages\n',                 desc('telescope: man pages'))
+map('n', '<leader>sm', ':Telescope marks\n',                     desc('telescope: jump to mark'))
+map('n', '<leader>so', ':Telescope vim_options\n',               desc('telescope: options'))
+map('n', '<leader>sR', ':Telescope resume\n',                    desc('telescope: resume previous picker'))
+map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('telescope: grep word'))
+map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('telescope: grep selection'))
 
 -- Harpoon
 map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -98,9 +95,6 @@ end
 
 -- Neo-tree
 map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
--- map('n', '<leader>E', function()
---     require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
--- end, desc('NeoTree: open current directory'))
 map('n', '<leader>ge', function()
     require("neo-tree.command").execute({ source = "git_status", toggle = true })
 end, desc('NeoTree: open git status'))
@@ -115,8 +109,6 @@ map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismi
 map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
 -- Git
--- map('n', '<leader>gg', function() Util.terminal({'lazygit'}) end, desc('lazygit: Open (cwd)'))
--- map('n', '<leader>gG', function() Util.terminal({'lazygit'}, {cwd = Util.root()}) end, desc('lazygit: Open (root dir)'))
 map('n', '<leader>gg', '<cmd>Lazygit<cr>',               desc('lazygit: Open'))
 map('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', desc('Git: commits'))
 map('n', '<leader>gs', '<cmd>Telescope git_status<cr>',  desc('Git: status'))
@@ -184,7 +176,8 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 -- lua/plugins/treesitter-text-objects.lua
 
 -- Copy to the system clipboard (Ctrl + Shift + C)
-map({'n', 'x'}, '<C-C>', '"+y', desc('Copy to system clipboard'))
+map('x', '<C-C>', '"+y',                      desc('Copy to system clipboard'))
+map('n', '<C-C>', '<cmd>norm! V<cr>"+y<esc>', desc('Copy to system clipboard'))
 
 -- Allow moving selected line(s) of text
 map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
