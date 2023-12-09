@@ -40,7 +40,7 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [.Xresources](.Xresources) - xterm config
 - [.gitconfig](.gitconfig) - git config
 
-### usr/ directory
+### usr/local/ directory
 
 <!-- TODO add some scripts to .gitignore -->
 <!-- TODO enhance usr/local/lib/command-not-found script -->
