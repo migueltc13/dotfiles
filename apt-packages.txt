@@ -280,6 +280,7 @@ rsyslog
 samba
 sassc
 sensible-utils
+sharutils
 shim-signed
 smbclient
 snapd
