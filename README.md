@@ -33,10 +33,11 @@ Debian-based systems, but it should work on other Linux distributions as well.
 
 ### Other configuration
 
-- [neovim](.config/nvim/) - neovim config
+- [neovim](.config/nvim/) - neovim config dir
 - [.nanorc](.nanorc) - nano config
 - [terminator](.config/terminator/config) - terminator config
-- [batcat](.config/bat/config) - bat config
+- [batcat](.config/bat/) - bat config dir
+- [btop](.config/btop/) - btop config dir
 - [.Xresources](.Xresources) - xterm config
 - [.gitconfig](.gitconfig) - git config
 

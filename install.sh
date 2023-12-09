@@ -196,6 +196,16 @@ else
     echo -e "\n${R}.config/bat/ was not copied.${N}"
 fi
 
+# .config/btop/
+read -s -n 1 -p "Do you want to copy .config/btop/? [y/N] " choice
+if [[ "$choice" =~ [yY] ]]; then
+    echo -e "\n${G}Copying .config/btop/...${N}"
+    mkdir -p $HOME/.config/btop
+    cp -r .config/btop/* $HOME/.config/btop
+else
+    echo -e "\n${R}.config/btop/ was not copied.${N}"
+fi
+
 # Neovim and .config/nvim/
 # ask if user wants to install neovim appimage (REMINDER requires fuse to be installed)
 read -s -n 1 -p "Do you want to install neovim appimage? [y/N] " choice
