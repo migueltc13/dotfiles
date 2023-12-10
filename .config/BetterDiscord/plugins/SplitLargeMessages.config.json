@@ -5,7 +5,7 @@
 			"maxPages": 0
 		},
 		"general": {
-			"byNewlines": false
+			"byNewlines": true
 		}
 	}
 }
