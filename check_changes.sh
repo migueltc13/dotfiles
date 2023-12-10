@@ -69,12 +69,13 @@ check "$HOME/.gitconfig"                           ".gitconfig"
 check "$HOME/.config/nvim/"                        ".config/nvim/"
 check "$HOME/.config/terminator/"                  ".config/terminator/"
 check "$HOME/.config/bat/"                         ".config/bat/"
+check "$HOME/.config/BetterDiscord/"               ".config/BetterDiscord/"
 check "$HOME/.config/btop/"                         ".config/btop/"
 check "$HOME/.local/share/gnome-shell/extensions/" ".local/share/gnome-shell/extensions/"
 check "$HOME/Animations/"                          "Animations/"
 check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
 # check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
-check "/usr/local/bin"                             "usr/local/bin"
+# check "/usr/local/bin"                             "usr/local/bin"
 
 # apt-packages.txt
 $apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt

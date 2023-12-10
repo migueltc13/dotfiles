@@ -1,0 +1,12 @@
+{
+    "ReadAllNotificationsButton": true,
+    "BDFDB": false,
+    "ImageUtilities": true,
+    "Translator": true,
+    "FreeEmojis": true,
+    "FileViewer": true,
+    "BetterAnimations": true,
+    "AppNotifications": true,
+    "SplitLargeMessages": true,
+    "ZeresPluginLibrary": false
+}
