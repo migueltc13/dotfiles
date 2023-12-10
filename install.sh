@@ -99,7 +99,7 @@ if [[ "$choice" =~ [yY] ]]; then
     cp .bash_colors $HOME
     cp .bash_aliases $HOME
     cp .bash_functions $HOME
-    cp .bash_keybinds $HOME
+    cp .bash_keybindings $HOME
     # ask if user wants to copy .bash_copilot_cli
     read -s -n 1 -p "Do you want to copy .bash_copilot_cli? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
