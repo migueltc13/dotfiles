@@ -32,7 +32,7 @@ for arg in "$@"; do
 done
 
 # Check if user is root
-if (( $(id -u) == 0 && ! $root )); then
+if (( $(id -u) == 0 && $root == false )); then
     echo "$0: Do not run as root or use --root option. Exiting..."
     exit 1
 fi
