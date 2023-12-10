@@ -1,4 +1,5 @@
 [global_config]
+  title_hide_sizetext = True
   title_transmit_fg_color = "#7aff00"
   title_transmit_bg_color = "#131313"
   title_receive_fg_color = "#000000"
@@ -6,6 +7,8 @@
   title_inactive_fg_color = "#9a9996"
   title_inactive_bg_color = "#000000"
   suppress_multiple_term_dialog = True
+  title_use_system_font = False
+  title_font = Hack Nerd Font Mono 10
   invert_search = True
 [keybindings]
   layout_launcher = ""
