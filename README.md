@@ -41,13 +41,13 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [.Xresources](.Xresources) - xterm config
 - [.gitconfig](.gitconfig) - git config
 
-### usr/local/ directory
+### usr/ directory
 
 <!-- TODO add some scripts to .gitignore -->
-<!-- TODO enhance usr/local/lib/command-not-found script -->
+<!-- TODO enhance usr/lib/command-not-found script -->
 - [bin/](usr/local/bin/) - local scripts
-- [share/](usr/local/share/) - applications and respective icons
-- [lib/](usr/local/lib/) - command-not-found script (inspired by Kali Linux)
+- [share/](usr/share/) - applications and respective icons
+- [lib/](usr/lib/) - command-not-found script (inspired by Kali Linux)
 
 ### Gnome shell extensions
 
