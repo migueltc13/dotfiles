@@ -192,6 +192,8 @@ if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .config/bat/...${N}"
     mkdir -p $HOME/.config/bat
     cp -r .config/bat/* $HOME/.config/bat
+    # build bat cache (require to load custom themes)
+    bat cache --build || batcat cache --build || echo -e "${R}bat cache was not built${N}"
 else
     echo -e "\n${R}.config/bat/ was not copied.${N}"
 fi
