@@ -10,7 +10,6 @@ core20
 core22
 crackmapexec
 cups
-discord
 dotnet-sdk
 firefox
 gnome-3-28-1804
