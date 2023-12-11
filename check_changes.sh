@@ -76,6 +76,7 @@ check "$HOME/Animations/"                          "Animations/"
 check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
 # check "/usr/lib/command-not-found"                 "usr/lib/command-not-found"
 # check "/usr/local/bin"                             "usr/local/bin"
+# TODO: /opt dir
 
 # apt-packages.txt
 $apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt
@@ -85,14 +86,11 @@ check "/tmp/apt-packages.txt" "apt-packages.txt"
 $snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap-packages.txt
 check "/tmp/snap-packages.txt" "snap-packages.txt"
 
-# TODO: /opt dir
-
-# change owner to current user
-user=$USER
-sudo chown -R $user .
-
 if (( $changes_count == 0 )); then
   echo "No changes detected"
+else
+    # change owner to current user
+    sudo chown -R $USER .
 fi
 
 exit 0
