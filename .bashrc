@@ -75,5 +75,8 @@ export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 # PATH for local binaries
 export PATH="$HOME/.local/bin:$PATH"
 
+# PATH for go binaries
+export PATH="$HOME/go/bin:$PATH"
+
 # Clean duplicate entries in $PATH
 export PATH=$(echo -n $PATH | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
