@@ -176,6 +176,21 @@ else
     echo -e "\n${R}.Xresources was not copied.${N}"
 fi
 
+# .tmux.conf
+read -s -n 1 -p "Do you want to copy .tmux.conf? [y/N] " choice
+if [[ "$choice" =~ [yY] ]]; then
+    echo -e "\n${G}Copying .tmux.conf...${N}"
+    cp .tmux.conf $HOME
+    read -s -n 1 -p "Do you want to install gitmux? [y/N] " choice
+    if [[ "$choice" =~ [yY] ]]; then
+        echo -e "\n${G}Installing gitmux...${N}"
+        sudo apt install -y golang-go
+        go install github.com/arl/gitmux@latest
+    fi
+else
+    echo -e "\n${R}.tmux.conf was not copied.${N}"
+fi
+
 # .config/terminator/config
 read -s -n 1 -p "Do you want to copy .config/terminator/config? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
@@ -276,8 +291,11 @@ if [[ "$choice" =~ [yY] ]]; then
 else
     echo -e "\n${R}.local/share/gnome-shell/extensions/ was not copied.${N}"
 fi
-echo -e "${C}INFO${N}: manually enable extensions in gnome-shell-extensions and log out to see changes${N}"
+echo -e "${C}INFO${N}: manually enable extensions in gnome-shell-extensions${N}"
 # TODO save my current extensions settings into a file
+
+# Git config
+echo -e "${C}INFO${N}: manually copy git config file into your system (.gitconfig)"
 
 # Fonts
 echo -e "${C}INFO${N}: manually install fonts into your system (fonts/)"

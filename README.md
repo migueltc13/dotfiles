@@ -39,6 +39,7 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [batcat](.config/bat/) - bat config dir
 - [btop](.config/btop/) - btop config dir
 - [.Xresources](.Xresources) - xterm config
+- [.tmux.conf](.tmux.conf) - tmux config
 - [.gitconfig](.gitconfig) - git config
 
 ### usr/ directory
