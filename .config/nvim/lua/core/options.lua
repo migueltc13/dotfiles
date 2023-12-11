@@ -28,10 +28,10 @@ o.incsearch = true                 -- Enable search patterns highlighting
 -- o.ignorecase = true              -- Ignore case when searching
 -- o.smartcase = true               -- Ignore case when searching lowercase
 
--- Set undodir directory
-o.undodir = vim.fn.expand("~/.vim/undodir")
-o.undofile = true                  -- Enable undo file
-o.clipboard = "unnamed"            -- Clipboard (nvim/OS) settings
+-- Clipboard settings
+o.clipboard = "unnamed"
+o.undofile = true
+o.undodir = vim.fn.stdpath('state') .. '/undodir'
 
 -- Enable syntax highlighting
 vim.cmd('syntax enable')
