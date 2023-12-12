@@ -74,6 +74,9 @@ fi
 # Install snap packages
 read -s -n 1 -p "Do you want to install snap packages? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
+    sudo apt update -y &&
+        sudo apt upgrade -y &&
+        sudo apt install -y snapd
     echo -e "\n${G}Installing snap-packages.txt...${N}"
     for pkg in $(cat snap-packages.txt); do
         sudo snap install $pkg
