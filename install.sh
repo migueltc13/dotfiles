@@ -177,10 +177,13 @@ else
 fi
 
 # .tmux.conf
-read -s -n 1 -p "Do you want to copy .tmux.conf? [y/N] " choice
+read -s -n 1 -p "Do you want to install tmux and configure? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .tmux.conf...${N}"
     cp .tmux.conf $HOME
+    sudo apt install -y tmux
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &&
+        ~/.tmux/plugins/tpm/bin/install_plugins
     read -s -n 1 -p "Do you want to install gitmux? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing gitmux...${N}"
