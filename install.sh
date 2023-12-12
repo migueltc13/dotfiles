@@ -43,6 +43,11 @@ if [ "$(basename $(pwd))" != "dotfiles" ]; then
     exit 2
 fi
 
+# create .config directory
+if [ ! -d $HOME/.config ]; then
+    mkdir -p $HOME/.config
+fi
+
 # Requirements: git, curl, wget
 echo -e "${C}INFO${N}: Make sure you have git, curl and wget installed"
 read -s -n 1 -p "Do you want to install them? [y/N] " choice
