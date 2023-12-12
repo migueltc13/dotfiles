@@ -12,5 +12,5 @@ fi
 # fi
 
 lemonade server -allow 127.0.0.1 --line-ending 'CR' &>/dev/null &
-ssh -R 2489:127.0.0.1:2489 $1
+ssh -R 2489:127.0.0.1:2489 $@
 killall lemonade
