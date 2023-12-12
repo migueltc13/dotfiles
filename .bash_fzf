@@ -1,16 +1,16 @@
 # Setup fzf
 # ---------
-if [[ ! "$PATH" == *$HOME/.fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}$HOME/.fzf/bin"
+if [[ ! "$PATH" == */home/z0d1ac/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/z0d1ac/.fzf/bin"
 fi
 
 # Auto-completion
 # ---------------
-source "$HOME/.fzf/shell/completion.bash"
+source "/home/z0d1ac/.fzf/shell/completion.bash"
 
 # Key bindings
 # ------------
-source "$HOME/.fzf/shell/key-bindings.bash"
+source "/home/z0d1ac/.fzf/shell/key-bindings.bash"
 
 # Env variables
 # -------------
