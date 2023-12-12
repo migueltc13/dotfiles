@@ -57,6 +57,7 @@ return {
         require('lualine').setup {
             options = {
                 icons_enabled = true,
+                disabled_filetypes = { 'neo-tree' },
                 -- theme = 'auto',
                 theme = M.theme(),
             },
