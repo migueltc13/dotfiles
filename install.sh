@@ -239,6 +239,9 @@ fi
 # ask if user wants to install neovim appimage (REMINDER requires fuse to be installed)
 read -s -n 1 -p "Do you want to install neovim appimage? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
+    sudo apt update -y &&
+        sudo apt upgrade -y &&
+        sudo apt install -y fuse
     echo "Versions available:"
     echo " 1) latest stable (recommended)"
     echo " 2) latest nightly"
@@ -276,7 +279,9 @@ if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .config/nvim/...${N}"
     mkdir -p $HOME/.config/nvim
     cp -r .config/nvim/* $HOME/.config/nvim
-    echo -e "${C}INFO${N}: make sure to install dependencies like ripgrep and fd-find"
+    sudo apt update -y &&
+        sudo apt upgrade -y &&
+        sudo apt install -y fd-find ripgrep
     echo -e "${C}INFO${N}: make sure to run :checkhealth in nvim to check for errors"
 else
     echo -e "\n${R}.config/nvim/ was not copied.${N}"
