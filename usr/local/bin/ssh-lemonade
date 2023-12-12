@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <user@host>"
+    # echo "Alternative: $0 kill"
+    exit 1
+fi
+
+# if [ "$1" == "kill" ]; then
+#     killall lemonade
+#     exit 0
+# fi
+
+lemonade server -allow 127.0.0.1 --line-ending 'CR' &>/dev/null &
+ssh -R 2489:127.0.0.1:2489 $1
+killall lemonade
