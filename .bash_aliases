@@ -19,6 +19,7 @@ alias up4='cd ../../../..'
 alias up5='cd ../../../../..'
 
 # Tools
+alias t='tmux a || tmux'                                    # Attach to tmux session or create a new one
 alias j="$HOME/.autojump/bin/autojump"                      # Autojump for fast navigation
 alias lll='ranger'                                          # Ranger visual file manager
 alias ncdu='ncdu -q --color=dark'                           # NCurses Disk Usage
@@ -107,3 +108,6 @@ alias hosts='sudo nano /etc/hosts' # ; ssh-keygen -f "$HOME/.ssh/known_hosts" -R
 
 # Alert for long running commands. Usage: $ sleep 10; alert
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Project li4
+alias li4='ssh-lemonade root@li4'
