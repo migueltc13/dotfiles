@@ -19,7 +19,7 @@ alias up4='cd ../../../..'
 alias up5='cd ../../../../..'
 
 # Tools
-alias j='/home/z0d1ac/.autojump/bin/autojump'               # Autojump for fast navigation
+alias j="$HOME/.autojump/bin/autojump"                      # Autojump for fast navigation
 alias lll='ranger'                                          # Ranger visual file manager
 alias ncdu='ncdu -q --color=dark'                           # NCurses Disk Usage
 alias xclip='xclip -i -selection clipboard'                 # Copy to clipboard with xclip

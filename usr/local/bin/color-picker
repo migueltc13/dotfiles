@@ -1,2 +1,2 @@
 #!/bin/bash
-firefox 'file:///home/z0d1ac/Git/scripts/color-picker/index.html' &>/dev/null
+firefox "file://$HOME/Git/scripts/color-picker/index.html" &>/dev/null
