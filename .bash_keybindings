@@ -5,4 +5,4 @@ bind '"\C-h": backward-kill-word'
 bind '"\C-p": "\C-e\C-u xclip -selection clipboard <<EOTFF\n\C-y\nEOTFF\n"'
 
 # Alt+L: clear screen
-bind '"\el": "\C-k\C-uclear\n\C-y"'
+bind '"\el": "\C-k\C-uclear\n"'
