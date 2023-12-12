@@ -186,6 +186,7 @@ if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing gitmux...${N}"
         sudo apt install -y golang-go
         go install github.com/arl/gitmux@latest
+        cp .config/.gitmux.conf $HOME/.config/
     fi
 else
     echo -e "\n${R}.tmux.conf was not copied.${N}"

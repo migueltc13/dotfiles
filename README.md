@@ -40,6 +40,7 @@ Debian-based systems, but it should work on other Linux distributions as well.
 - [btop](.config/btop/) - btop config dir
 - [.Xresources](.Xresources) - xterm config
 - [.tmux.conf](.tmux.conf) - tmux config
+- [.gitmux.conf](.config/gitmux.conf) - gitmux config
 - [.gitconfig](.gitconfig) - git config
 
 ### usr/ directory
