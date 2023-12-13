@@ -1,0 +1,136 @@
+#!/bin/bash
+
+languages=(
+    "bash"      "c"         "cpp"       "csharp"
+    "elixir"    "go"        "haskell"   "java"
+    "julia"     "latex"     "lua"       "perl"
+    "php"       "python"    "r"         "ruby"
+    "rust"      "swift"     "js"        "ts"
+    "vim"       "sql"
+)
+
+core_utils=(
+    "cat"       "tee"       "diff"      "patch"
+    "head"      "tail"      "less"      "more"
+    "grep"      "sed"       "awk"       "tr"
+    "sort"      "uniq"      "cut"       "fmt"
+    "xargs"     "find"      "mv"        "exa"
+    "comm"      "wc"        "paste"     "join"
+    "curl"      "wget"      "git"       "rsync"
+    "ftp"       "scp"       "ssh"       "ssh_keygen"
+)
+
+function show_help() {
+less <<EOF
+Usage:
+
+    $ curl cheat.sh/TOPIC       show cheat sheet on the TOPIC
+    $ curl cheat.sh/TOPIC/SUB   show cheat sheet on the SUB topic in TOPIC
+    $ curl cheat.sh/~KEYWORD    search cheat sheets for KEYWORD
+
+Options:
+
+    ?OPTIONS
+
+    q                  quiet mode, don't show github/twitter buttons
+    T                  text only, no ANSI sequences
+    style=STYLE        color style
+
+    c                  do not comment text, do not shift code (QUERY+ only)
+    C                  do not comment text, shift code (QUERY+ only)
+    Q                  code only, don't show text (QUERY+ only)
+
+Options can be combined together in this way:
+
+    curl 'cheat.sh/for?qT&style=bw'
+
+(when using & in shell, don't forget to specify the quotes or escape & with \)
+
+Special pages:
+
+    :help               this page
+    :list               list all cheat sheets
+    :post               how to post new cheat sheet
+    :cht.sh             shell client (cht.sh)
+    :bash_completion    bash function for tab completion
+    :styles             list of color styles
+    :styles-demo        show color styles usage examples
+    :random             fetches a random cheat sheet
+
+Shell client:
+
+    $ curl https://cht.sh/:cht.sh > ~/bin/cht.sh
+    $ chmod +x ~/bin/cht.sh
+    $ cht.sh python :learn
+    $ cht.sh --shell
+
+Tab completion:
+
+    $ mkdir -p ~/.bash.d/
+    $ curl cheat.sh/:bash_completion > ~/.bash.d/cht.sh
+    $ . ~/.bash.d/cht.sh
+    $ echo '. ~/.bash.d/cht.sh' >> ~/.bashrc
+
+Editor integration:
+
+    :emacs              see the page for the Emacs configuration
+    :vim                see the page for the Vim configuration
+
+Search:
+
+    /~snapshot          look for "snapshot" in the first level cheat sheets
+    /~ssh~passphrase    several keywords can be combined together using ~
+    /scala/~closure     look for "closure" in scala cheat sheets
+    /~snapshot/r        look for "snapshot" in all cheat sheets recursively
+
+You can use special search options after the closing slash:
+
+    /~shot/bi           case insensitive (i), word boundaries (b)
+
+List of search options:
+
+    b   word boundaries
+    i   case insensitive search
+    r   recursive
+
+Programming languages topics:
+
+Each programming language topic has the following subtopics:
+
+    hello               hello world + how to start the program
+    :learn              big cheat sheet for learning language from scratch
+    :list               list of topics
+    :random             fetches a random cheat sheet belonging to the topic
+EOF
+}
+
+function main(){
+    selected=$(printf '%s\n' "${languages[@]}" "${core_utils[@]}" "keyword" "help" | \
+        fzf --prompt="$0 > " \
+            --preview="curl -s cht.sh/{}/:list" \
+            --preview-window=right:75%)
+    if [[ -z "$selected" ]]; then
+        exit 0
+    else
+        if [[ "$selected" == "help" ]]; then
+            show_help
+            main
+        fi
+        if [[ "$selected" == "keyword" ]]; then
+            read -p "keyword: " keyword
+            keyword=$(echo "$keyword" | tr ' ' '~')
+            curl -s "cht.sh/~$keyword"
+            exit 0
+        fi
+        read -p "query: " query
+        query=$(echo $query | tr ' ' '+')
+        if [[ "${languages[@]}" =~ "${selected}" ]]; then
+            curl -s "cht.sh/$selected/$query"
+        else
+            curl -s "cht.sh/$selected~$query"
+        fi
+    fi
+    exit 0
+}
+
+main
