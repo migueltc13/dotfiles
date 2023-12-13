@@ -30,7 +30,6 @@ map("n", "<leader>ut", function() if vim.b.ts_highlight then vim.treesitter.stop
 map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Telescope
--- TODO https://github.com/LazyVim/LazyVim/blob/68ff818a5bb7549f90b05e412b76fe448f605ffb/lua/lazyvim/plugins/editor.lua
 map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
 map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files' })
 local function find_hidden_files() require("telescope.builtin").find_files({ hidden = true }) end
@@ -157,12 +156,12 @@ map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('
 map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: Don\'t Save Current Session'))
 
 -- Todo-comments
-map('n', ']t', function() require('todo-comments').jump_next() end,      desc('Next todo comment'))
-map('n', '[t', function() require('todo-comments').jump_prev() end,      desc('Previous todo comment'))
-map('n', '<leader>xt', '<cmd>TodoTrouble<cr>',                           desc('Trouble: Todo'))
-map('n', '<leader>xT', '<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>',   desc('Trouble: Todo/Fix/Fixme'))
-map('n', '<leader>st', '<cmd>TodoTelescope<cr>',                         desc('Todo'))
-map('n', '<leader>sT', '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>', desc('Todo/Fix/Fixme'))
+-- map('n', ']t', function() require('todo-comments').jump_next() end,      desc('Next todo comment'))
+-- map('n', '[t', function() require('todo-comments').jump_prev() end,      desc('Previous todo comment'))
+-- map('n', '<leader>xt', '<cmd>TodoTrouble<cr>',                           desc('Trouble: Todo'))
+-- map('n', '<leader>xT', '<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>',   desc('Trouble: Todo/Fix/Fixme'))
+-- map('n', '<leader>st', '<cmd>TodoTelescope<cr>',                         desc('Todo'))
+-- map('n', '<leader>sT', '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>', desc('Todo/Fix/Fixme'))
 
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
@@ -176,8 +175,8 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 -- lua/plugins/treesitter-text-objects.lua
 
 -- Copy to the system clipboard (Ctrl + Shift + C)
-map('x', '<C-C>', '"+y',                      desc('Copy to system clipboard'))
-map('n', '<C-C>', '<cmd>norm! V<cr>"+y<esc>', desc('Copy to system clipboard'))
+map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
+map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
 
 -- Allow moving selected line(s) of text
 map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
