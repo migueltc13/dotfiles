@@ -106,7 +106,7 @@ EOF
 
 function main(){
     selected=$(printf '%s\n' "${languages[@]}" "${core_utils[@]}" "keyword" "help" | \
-        fzf --prompt="$0 > " \
+        fzf --prompt="cht > " \
             --preview="curl -s cht.sh/{}/:list" \
             --preview-window=right:75%)
     if [[ -z "$selected" ]]; then
