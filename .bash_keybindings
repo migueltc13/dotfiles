@@ -2,7 +2,10 @@
 bind '"\C-h": backward-kill-word'
 
 # Ctrl+p: Copy current line to clipboard (xclip)
-bind '"\C-p": "\C-e\C-u xclip -selection clipboard <<EOTFF\n\C-y\nEOTFF\n"'
+bind '"\C-p": "\C-e\C-uxclip -selection clipboard <<EOTFF\n\C-y\nEOTFF\n"'
 
-# Alt+L: clear screen
+# Alt+l: clear screen
 bind '"\el": "\C-k\C-uclear\n"'
+
+# Alt+h: run cht
+bind '"\eh": "\C-k\C-ucht\n"'
