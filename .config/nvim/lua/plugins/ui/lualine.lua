@@ -53,8 +53,9 @@ return {
     },
     config = function()
         local lazy_status = require("lazy.status") -- to configure lazy pending updates count
+        local ui = require("util.ui") -- to configure status notify
 
-        require('lualine').setup {
+        require("lualine").setup({
             options = {
                 icons_enabled = true,
                 disabled_filetypes = { 'neo-tree' },
@@ -75,6 +76,10 @@ return {
                         cond = lazy_status.has_updates,
                         color = { fg = '#ff9e64' },
                     },
+                    {
+                        ui.curr_notify_icon,
+                        cond = ui.cond_status_notify,
+                    },
                     { "encoding" },
                     { "fileformat" },
                     { "filetype" }
@@ -84,6 +89,6 @@ return {
                 lualine_c = { { 'filename', file_status = false } },
                 lualine_x = {}, -- default: { 'location' }
             },
-        }
+        })
     end,
 }
