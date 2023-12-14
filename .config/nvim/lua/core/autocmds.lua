@@ -4,6 +4,9 @@ vim.cmd([[autocmd VimLeavePre * Neotree close]])
 -- Transparent background for which-key
 vim.cmd([[autocmd ColorScheme * hi WhichKeyFloat guibg=NONE ctermbg=NONE]])
 
+-- Disable auto commenting new lines
+vim.cmd [[autocmd FileType * set formatoptions-=ro]]
+
 local function augroup(name)
     return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 end
