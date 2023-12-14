@@ -102,7 +102,8 @@ map('n', '<leader>be', function()
 end, desc('NeoTree: open buffers'))
 
 -- Nvim-Notify
-map('n', '<leader>un', ':lua require("notify").dismiss()\n', desc('notify: dismiss all notifications'))
+local toggle_notify = require("util.ui").toggle_notify
+map('n', '<leader>un', toggle_notify, desc('notify: dismiss all notifications'))
 
 -- UndoTree
 map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
@@ -140,9 +141,8 @@ map('t', '<Esc>',      '<C-\\><C-n>',                        desc('toggleterm: e
 map('t', '<C-q>',      '<C-\\><C-n>:q\n',                    desc('toggleterm: quit'))
 
 -- Copilot
-map('n', '<leader>cs', ':Copilot status\n',  desc('copilot: status'))
-map('n', '<leader>ce', ':Copilot enable\n',  desc('copilot: enable'))
-map('n', '<leader>cd', ':Copilot disable\n', desc('copilot: disable'))
+local toggle_copilot = require("util.ui").toggle_copilot
+map('n', '<leader>cc', toggle_copilot,  desc('copilot: toggle'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
