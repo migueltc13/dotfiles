@@ -197,7 +197,6 @@ libu2f-udev
 libwmf0.2-7-gtk
 libzstd-dev
 lighttpd
-linux-generic-hwe-22.04
 locales
 login
 lolcat
