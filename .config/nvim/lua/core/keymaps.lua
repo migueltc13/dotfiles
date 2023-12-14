@@ -155,14 +155,6 @@ map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('
 map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: Restore Last Session'))
 map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: Don\'t Save Current Session'))
 
--- Todo-comments
--- map('n', ']t', function() require('todo-comments').jump_next() end,      desc('Next todo comment'))
--- map('n', '[t', function() require('todo-comments').jump_prev() end,      desc('Previous todo comment'))
--- map('n', '<leader>xt', '<cmd>TodoTrouble<cr>',                           desc('Trouble: Todo'))
--- map('n', '<leader>xT', '<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>',   desc('Trouble: Todo/Fix/Fixme'))
--- map('n', '<leader>st', '<cmd>TodoTelescope<cr>',                         desc('Todo'))
--- map('n', '<leader>sT', '<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>', desc('Todo/Fix/Fixme'))
-
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 
