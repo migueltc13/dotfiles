@@ -1,8 +1,7 @@
 # ls aliases
 alias ls='exa --group-directories-first --icons'
 alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -F'
+alias l='ls -lF'
 
 # fzf aliases
 alias f='find . -type f | fzf --preview="batcat --color=always --style=rule {}"'
