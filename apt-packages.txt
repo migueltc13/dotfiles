@@ -2,6 +2,7 @@ acpi-support
 adduser
 aircrack-ng
 alsa-base
+alsa-ucm-conf
 alsa-utils
 anacron
 apparmor
@@ -197,6 +198,7 @@ libu2f-udev
 libwmf0.2-7-gtk
 libzstd-dev
 lighttpd
+linux-generic-hwe-22.04
 locales
 login
 lolcat
@@ -263,6 +265,7 @@ pulseaudio
 putty-tools
 python2
 python3-pip
+python3-update-manager
 python3.10-venv
 python3
 qpdf
@@ -292,6 +295,7 @@ squid
 sshpass
 steghide
 sudo
+systemd-hwe-hwdb
 systemd-oomd
 terminator
 thefuck
@@ -315,6 +319,8 @@ udev
 ueberzugpp
 unrar
 unzip
+update-manager-core
+update-manager
 usrmerge
 util-linux
 vim-runtime
