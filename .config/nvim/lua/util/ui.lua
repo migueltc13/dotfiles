@@ -64,9 +64,11 @@ end
 function M.toggle_copilot()
     if vim.g.copilot == true then
         vim.g.copilot = false
+        vim.cmd("Copilot disable")
         vim.notify("Copilot disabled", 3, { title = "copilot", icon = M.copilot_icons.off })
     else
         vim.g.copilot = true
+        vim.cmd("Copilot enable")
         vim.notify("Copilot enabled", 3, { title = "copilot", icon = M.copilot_icons.on })
     end
 end
