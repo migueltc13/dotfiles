@@ -11,10 +11,10 @@ Debian-based systems, but it should work on other Linux distributions as well.
 
 ### Packages
 
-- [apt-packages.txt](apt-packages.txt) - apt packages
-- [snap-packages.txt](snap-packages.txt) - snap packages
-- [apt-packages-lite.txt](apt-packages-lite.txt) - minimal apt packages
-<!-- TODO - [pip-packages.txt](pip-packages.txt) - pip packages -->
+- [apt-lite.txt](packages/apt-lite.txt) - minimal apt packages
+- [apt.txt](packages/apt.txt) - apt packages
+- [snap.txt](packages/snap.txt) - snap packages
+- [pip.txt](packages/pip.txt) - pip packages
 <!-- TODO - [npm-packages.txt](npm-packages.txt) - npm packages -->
 <!-- TODO - [gem-packages.txt](gem-packages.txt) - gem packages -->
 <!-- TODO - [cargo-packages.txt](cargo-packages.txt) - cargo packages -->

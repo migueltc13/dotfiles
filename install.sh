@@ -72,10 +72,10 @@ fi
 read -s -n 1 -p "Do you want to install apt packages? [y/(l)ite/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Installing apt packages...${N}"
-    sudo apt install -y $(cat apt-packages.txt)
+    sudo apt install -y $(cat packages/apt.txt)
 elif [[ "$choice" =~ [lL] ]]; then
     echo -e "\n${G}Installing apt packages (lite)...${N}"
-    sudo apt install -y $(cat apt-packages-lite.txt)
+    sudo apt install -y $(cat packages/apt-lite.txt)
 else
     echo -e "\n${R}Apt packages were not installed.${N}"
 fi
@@ -83,9 +83,12 @@ fi
 # Install snap packages
 read -s -n 1 -p "Do you want to install snap packages? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    sudo apt install -y snap snapd
-    echo -e "\n${G}Installing snap-packages.txt...${N}"
-    for pkg in $(cat snap-packages.txt); do
+    if ! command -v snap &> /dev/null; then
+        echo -e "\n${G}Couldn't find snap. Installing it...${N}"
+        sudo apt install -y snap snapd
+    fi
+    echo -e "\n${G}Installing snap packages...${N}"
+    for pkg in $(cat packages/snap.txt); do
         sudo snap install $pkg
         if [ $? != 0 ]; then
             sudo snap install --classic $pkg
@@ -95,8 +98,18 @@ else
     echo -e "\n${R}Snap packages were not installed.${N}"
 fi
 
-# Install other packages TODO
-# pip-packages, ...
+# Install pip packages
+read -s -n 1 -p "Do you want to install pip packages? [y/N] " choice
+if [[ "$choice" =~ [yY] ]]; then
+    if ! command -v pip &> /dev/null; then
+        echo -e "\n${G}Couldn't find pip. Installing it...${N}"
+        sudo apt install -y python3-pip
+    fi
+    echo -e "\n${G}Installing pip packages...${N}"
+    pip install -r packages/pip.txt
+else
+    echo -e "\n${R}Pip packages were not installed.${N}"
+fi
 
 # Copy bash config files
 echo -e "${Y}WARNING${N}: This will overwrite your current bash config files."

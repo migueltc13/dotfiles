@@ -81,12 +81,16 @@ check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
 # TODO: /opt dir
 
 # apt-packages.txt
-$apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt-packages.txt
-check "/tmp/apt-packages.txt" "apt-packages.txt"
+$apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt.txt
+check "/tmp/apt.txt" "packages/apt.txt"
 
 # snap-packages.txt
-$snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap-packages.txt
-check "/tmp/snap-packages.txt" "snap-packages.txt"
+$snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap.txt
+check "/tmp/snap.txt" "packages/snap.txt"
+
+# pip-packages.txt
+pip list --format=freeze 1> /tmp/pip.txt
+check "/tmp/pip.txt" "packages/pip.txt"
 
 if (( $changes_count == 0 )); then
   echo "No changes detected"

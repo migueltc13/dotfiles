@@ -286,6 +286,7 @@ sensible-utils
 sharutils
 shim-signed
 smbclient
+snap
 snapd
 socat
 speech-dispatcher
