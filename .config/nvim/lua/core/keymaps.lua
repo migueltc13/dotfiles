@@ -1,39 +1,38 @@
--- for conciseness
-local Util = require("util")
 local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
-local function desc(description)
+local opts = { noremap = true, silent = true, remap = false }
+local function desc(description, options)
     opts.desc = description
+    if options then
+        for k, v in pairs(options) do
+            opts[k] = v
+        end
+    end
     return opts
 end
 
--- UI toggle options
-map('n', '<leader>uc', ':Colors\n',                                  desc('Change colorscheme'))
-map('n', '<leader>us', function() Util.toggle('spell') end,          desc('Toggle spelling'))
-map('n', '<leader>uw', function() Util.toggle('wrap') end,           desc('Toggle word wrap'))
-map('n', '<leader>uL', function() Util.toggle('relativenumber') end, desc('Toggle relative line numbers'))
-map('n', '<leader>ul', function() Util.toggle.number() end,          desc('Toggle line numbers'))
-map('n', '<leader>uf', function() Util.format.toggle() end,          desc('Toggle auto format (global)'))
-map('n', '<leader>uF', function() Util.format.toggle(true) end,      desc('Toggle auto format (buffer)'))
-map('n', '<leader>ud', function() Util.toggle.diagnostics() end,     desc('Toggle diagnostics (buffer)'))
-local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
-map("n", "<leader>uC", function() Util.toggle("conceallevel", false, {0, conceallevel}) end,
-    desc("Toggle Conceal"))
-if vim.lsp.inlay_hint then
-    map("n", "<leader>uh", function() vim.lsp.inlay_hint(0, nil) end,
-    desc("Toggle Inlay Hints"))
-end
-map("n", "<leader>ut", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end,
-    desc("Toggle Treesitter Highlight"))
+local Ui         = require("util.ui")
+local Toggle     = require("util.toggle")
+local Telescope  = require("util.telescope")
+local Neotree    = require("util.neo-tree")
+local Noice      = require("util.noice")
+local ToggleTerm = require("util.toggleterm")
 
--- Lazy
-map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
+-- UI toggle options
+map('n', '<leader>uc', ':Colors\n',         desc('Change colorscheme'))
+map('n', '<leader>us', Toggle.spell,        desc('Toggle spelling'))
+map('n', '<leader>uw', Toggle.wrap,         desc('Toggle word wrap'))
+map('n', '<leader>ur', Toggle.rnu,          desc('Toggle relative line numbers'))
+map('n', '<leader>ul', Toggle.numbers,      desc('Toggle line numbers'))
+map('n', '<leader>ud', Toggle.diagnostics,  desc('Toggle diagnostics (buffer)'))
+map('n', '<leader>uC', Toggle.conceallevel, desc('Toggle conceal'))
+map('n', '<leader>uh', Toggle.inlay_hint,   desc('Toggle inlay hints'))
+map('n', '<leader>ut', Toggle.treesitter,   desc('Toggle treesitter highlighting'))
+map('n', '<leader>un', Ui.toggle_notify,    desc('Toggle notifications'))
 
 -- Telescope
 map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
-map('n', '<leader> ',  '<leader>ff', { remap = true, desc = 'telescope: find files' })
-local function find_hidden_files() require("telescope.builtin").find_files({ hidden = true }) end
-map('n', '<leader>fF', find_hidden_files,              desc('telescope: find (hidden) files'))
+map('n', '<leader> ',  '<leader>ff',                   desc('telescope: find files', { remap = true }))
+map('n', '<leader>fF', Telescope.find_hidden_files,    desc('telescope: find (hidden) files'))
 map('n', '<leader>fp', ':Telescope oldfiles\n',        desc('telescope: previous files'))
 map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
@@ -62,8 +61,8 @@ map('n', '<leader>sM', ':Telescope man_pages\n',                 desc('telescope
 map('n', '<leader>sm', ':Telescope marks\n',                     desc('telescope: jump to mark'))
 map('n', '<leader>so', ':Telescope vim_options\n',               desc('telescope: options'))
 map('n', '<leader>sR', ':Telescope resume\n',                    desc('telescope: resume previous picker'))
-map('n', '<leader>sw', Util.telescope('grep_string', { cwd = false, word_match = '-w' }), desc('telescope: grep word'))
-map('v', '<leader>sw', Util.telescope('grep_string', { cwd = false }),                    desc('telescope: grep selection'))
+map('n', '<leader>sw', Telescope.grep_word,                      desc('telescope: grep word'))
+map('v', '<leader>sw', Telescope.grep_selection,                 desc('telescope: grep selection'))
 
 -- Harpoon
 map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -92,57 +91,40 @@ _G.lsp_on_attach = function()
     map('n', ']d',         ':lua vim.diagnostic.goto_next()\n',    desc('LSP: go to next diagnostic'))
 end
 
--- Neo-tree
-map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
-map('n', '<leader>ge', function()
-    require("neo-tree.command").execute({ source = "git_status", toggle = true })
-end, desc('NeoTree: open git status'))
-map('n', '<leader>be', function()
-    require("neo-tree.command").execute({ source = "buffers", toggle = true })
-end, desc('NeoTree: open buffers'))
-
--- Nvim-Notify
-local toggle_notify = require("util.ui").toggle_notify
-map('n', '<leader>un', toggle_notify, desc('notify: dismiss all notifications'))
-
--- UndoTree
-map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
-
--- Git
-map('n', '<leader>gg', '<cmd>Lazygit<cr>',               desc('lazygit: Open'))
-map('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', desc('Git: commits'))
-map('n', '<leader>gs', '<cmd>Telescope git_status<cr>',  desc('Git: status'))
-map('n', '<leader>ge', function()
-    require('neo-tree.command').execute({ source = 'git_status', toggle = true })
-end, desc('Neotree: Git explorer'))
-
--- Vim-maximizer
-map('n', '<leader>m', ':MaximizerToggle\n', desc('vim-maximizer: toggle'))
-
--- Noice
-map('c', '<S-Enter>', function() require("noice").redirect(vim.fn.getcmdline()) end, desc('Redirect Cmdline'))
-map('n', '<leader>snl', function() require("noice").cmd("last") end,                 desc("Noice Last Message"))
-map('n', '<leader>snh', function() require("noice").cmd("history") end,              desc("Noice History"))
-map('n', '<leader>sna', function() require("noice").cmd("all") end,                  desc("Noice All"))
-map('n', '<leader>snd', function() require("noice").cmd("dismiss") end,              desc("Dismiss All"))
-map({'i', 'n', 's'}, "<c-f>", function() if not require("noice.lsp").scroll(4) then return "<c-f>" end end,  desc("Scroll forward"))
-map({'i', 'n', 's'}, "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, desc("Scroll backward"))
-
 -- ToggleTerm
-function G_open_vertical_term()
-    local w = vim.api.nvim_win_get_width(vim.api.nvim_get_current_win()) / 2
-    vim.cmd('ToggleTerm direction=vertical size=' .. tostring(w > 50 and w or 50))
-end
+map('n', '<leader>te', ToggleTerm.open_vertical_term,        desc('toggleterm: open vertical'))
 map('n', '<leader>to', ':ToggleTerm direction=horizontal\n', desc('toggleterm: open horizontal'))
-map('n', '<leader>te', ':lua G_open_vertical_term()\n',      desc('toggleterm: open vertical'))
 map('n', '<leader>tf', ':ToggleTerm direction=float\n',      desc('toggleterm: open float'))
 map('n', '<leader>tt', ':ToggleTerm direction=tab\n',        desc('toggleterm: open tab'))
 map('t', '<Esc>',      '<C-\\><C-n>',                        desc('toggleterm: enter normal mode'))
 map('t', '<C-q>',      '<C-\\><C-n>:q\n',                    desc('toggleterm: quit'))
 
+-- Noice
+map('c', '<S-Enter>',   Noice.redirect_cmdline, desc('redirect cmdline'))
+map('n', '<leader>snl', Noice.last_message,     desc('noice last message'))
+map('n', '<leader>snh', Noice.history,          desc('noice history'))
+map('n', '<leader>sna', Noice.all,              desc('noice all'))
+map('n', '<leader>snd', Noice.dismiss_all,      desc('dismiss all'))
+map({'i', 'n', 's'}, '<c-f>', function() Noice.scroll_forward('<c-f>')  end, desc('Scroll forward'))
+map({'i', 'n', 's'}, '<c-b>', function() Noice.scroll_backward('<c-b>') end, desc('Scroll backward'))
+
+-- Persistence.nvim
+map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('persistence: restore session'))
+map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: restore last session'))
+map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: don\'t save session'))
+
+-- Neo-tree
+map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
+map('n', '<leader>be', Neotree.buffers,    desc('NeoTree: open buffers'))
+map('n', '<leader>ge', Neotree.git_status, desc('NeoTree: open git status'))
+
+-- Git
+map('n', '<leader>gg', '<cmd>Lazygit<cr>',               desc('lazygit: open'))
+map('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', desc('Git: commits'))
+map('n', '<leader>gs', '<cmd>Telescope git_status<cr>',  desc('Git: status'))
+
 -- Copilot
-local toggle_copilot = require("util.ui").toggle_copilot
-map('n', '<leader>cc', toggle_copilot,  desc('copilot: toggle'))
+map('n', '<leader>cc', Ui.toggle_copilot,  desc('copilot: toggle'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
@@ -150,10 +132,14 @@ map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggl
 -- Mason
 map('n', '<leader>cm', ':Mason\n', desc('mason: open'))
 
--- Persistence.nvim
-map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('persistence: Restore Session'))
-map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: Restore Last Session'))
-map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: Don\'t Save Current Session'))
+-- UndoTree
+map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
+
+-- Vim-maximizer
+map('n', '<leader>m', ':MaximizerToggle\n', desc('vim-maximizer: toggle'))
+
+-- Lazy
+map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
@@ -164,7 +150,6 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
 -- lua/plugins/nvim-cmp.lua
 -- lua/plugins/telescope.lua
 -- lua/plugins/treesitter.lua
--- lua/plugins/treesitter-text-objects.lua
 
 -- Copy to the system clipboard (Ctrl + Shift + C)
 map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
