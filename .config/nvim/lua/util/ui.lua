@@ -1,12 +1,12 @@
----@class util.ui.opts
+-- ---@class util.ui
+-- ---@overload fun(builtin:string, opts?:util.ui.opts)
+-- local M = setmetatable({}, {
+--     __call = function(m, ...)
+--         return m.ui(...)
+--     end,
+-- })
 
----@class util.ui
----@overload fun(builtin:string, opts?:util.ui.opts)
-local M = setmetatable({}, {
-    __call = function(m, ...)
-        return m.ui(...)
-    end,
-})
+local M = {}
 
 -- nvim-notify
 
@@ -15,14 +15,20 @@ M.notify_icons = {
     off = "☾",
 }
 
--- Used in ../plugins/ui/nvim-notify.lua
-function M.init_status_notify()
-    vim.g.status_notify = true
-end
+vim.g.status_notify = true
 
 -- Used in ../plugins/ui/lualine.lua
 function M.cond_status_notify()
     return vim.g.status_notify == false
+end
+
+-- Used in ../plugins/ui/lualine.lua
+function M.curr_notify_icon()
+    if vim.g.status_notify == true then
+        return M.notify_icons.on
+    else
+        return M.notify_icons.off
+    end
 end
 
 -- Used in ../core/keymaps.lua
@@ -39,15 +45,6 @@ function M.toggle_notify()
     end
 end
 
--- Used in ../plugins/ui/lualine.lua
-function M.curr_notify_icon()
-    if vim.g.status_notify == true then
-        return M.notify_icons.on
-    else
-        return M.notify_icons.off
-    end
-end
-
 -- copilot
 
 M.copilot_icons = {
@@ -55,19 +52,15 @@ M.copilot_icons = {
     off = "🚫"
 }
 
--- Used in ../plugins/copilot.lua
-function M.init_copilot()
-    vim.g.copilot = true
-end
+local copilot_status = true
 
--- Used in ../core/keymaps.lua
 function M.toggle_copilot()
-    if vim.g.copilot == true then
-        vim.g.copilot = false
+    if copilot_status == true then
+        copilot_status = false
         vim.cmd("Copilot disable")
         vim.notify("Copilot disabled", 3, { title = "copilot", icon = M.copilot_icons.off })
     else
-        vim.g.copilot = true
+        copilot_status = true
         vim.cmd("Copilot enable")
         vim.notify("Copilot enabled", 3, { title = "copilot", icon = M.copilot_icons.on })
     end
