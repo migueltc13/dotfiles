@@ -56,14 +56,14 @@ return {
             config = {
                 header = vim.split(logo, '\n'),
                 center = {
-                    { action = 'Telescope find_files',                             desc = ' Find file',       icon = ' ', key = 'f' },
-                    { action = 'ene | startinsert',                                desc = ' New file',        icon = ' ', key = 'n' },
-                    { action = 'Telescope oldfiles',                               desc = ' Recent files',    icon = ' ', key = 'r' },
-                    { action = 'Telescope live_grep',                              desc = ' Find text',       icon = ' ', key = 'g' },
-                    { action = 'lua require("persistence").load()',                desc = ' Restore Session', icon = ' ', key = 's' },
-                    { action = 'Lazy',                                             desc = ' Lazy',            icon = ' ', key = 'l' },
-                    { action = 'lua require("util").telescope.config_files()()',   desc = ' Config',          icon = ' ', key = 'c' },
-                    { action = 'qa',                                               desc = ' Quit',            icon = ' ', key = 'q' },
+                    { action = 'Telescope find_files',                 desc = ' Find file',       icon = ' ', key = 'f' },
+                    { action = 'ene | startinsert',                    desc = ' New file',        icon = ' ', key = 'n' },
+                    { action = 'Telescope oldfiles',                   desc = ' Recent files',    icon = ' ', key = 'r' },
+                    { action = 'Telescope live_grep',                  desc = ' Find text',       icon = ' ', key = 'g' },
+                    { action = require("persistence").load,            desc = ' Restore Session', icon = ' ', key = 's' },
+                    { action = 'Lazy',                                 desc = ' Lazy',            icon = ' ', key = 'l' },
+                    { action = require("util.telescope").config_files, desc = ' Config',          icon = ' ', key = 'c' },
+                    { action = 'qa',                                   desc = ' Quit',            icon = ' ', key = 'q' },
                 },
                 footer = function()
                     local stats = require('lazy').stats()
