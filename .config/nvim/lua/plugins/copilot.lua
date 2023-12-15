@@ -51,7 +51,5 @@ return {
         vim.cmd("silent! delcommand CopilotDetach")
         vim.cmd("silent! delcommand CopilotPanel")
         vim.cmd("silent! delcommand CopilotStop")
-        -- Monitor copilot status
-        require("util.ui").init_copilot()
     end,
 }

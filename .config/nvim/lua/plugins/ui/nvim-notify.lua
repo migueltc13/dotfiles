@@ -16,7 +16,5 @@ return {
             end,
         })
         vim.notify = require("notify")
-        -- init notify status (used in lualine)
-        require("util.ui").init_status_notify()
     end,
 }
