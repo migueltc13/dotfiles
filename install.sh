@@ -43,35 +43,39 @@ if [ "$(basename $(pwd))" != "dotfiles" ]; then
     exit 2
 fi
 
+# Update and upgrade system
+echo -e "${G}Updating and upgrading system...${N}"
+sudo apt update -y && sudo apt upgrade -y
+
 # create .config directory
 if [ ! -d $HOME/.config ]; then
     mkdir -p $HOME/.config
 fi
 
 # Requirements: git, curl, wget
-echo -e "${C}INFO${N}: Make sure you have git, curl and wget installed"
-read -s -n 1 -p "Do you want to install them? [y/N] " choice
-if [[ "$choice" =~ [yY] ]]; then
-    echo -e "\n${G}Installing git, curl and wget...${N}"
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y git curl wget
-else
-    echo -e "\n${R}git, curl and wget were not installed.${N}"
+if ! command -v git &> /dev/null; then
+    echo -e "${G}Couldn't find git. Installing it...${N}"
+    sudo apt install -y git
+fi
+
+if ! command -v curl &> /dev/null; then
+    echo -e "${G}Couldn't find curl. Installing it...${N}"
+    sudo apt install -y curl
+fi
+
+if ! command -v wget &> /dev/null; then
+    echo -e "${G}Couldn't find wget. Installing it...${N}"
+    sudo apt install -y wget
 fi
 
 # Install apt packages
 read -s -n 1 -p "Do you want to install apt packages? [y/(l)ite/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Installing apt packages...${N}"
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y $(cat apt-packages.txt)
+    sudo apt install -y $(cat apt-packages.txt)
 elif [[ "$choice" =~ [lL] ]]; then
     echo -e "\n${G}Installing apt packages (lite)...${N}"
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y $(cat apt-packages-lite.txt)
+    sudo apt install -y $(cat apt-packages-lite.txt)
 else
     echo -e "\n${R}Apt packages were not installed.${N}"
 fi
@@ -79,9 +83,7 @@ fi
 # Install snap packages
 read -s -n 1 -p "Do you want to install snap packages? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y snapd
+    sudo apt install -y snap snapd
     echo -e "\n${G}Installing snap-packages.txt...${N}"
     for pkg in $(cat snap-packages.txt); do
         sudo snap install $pkg
@@ -113,8 +115,12 @@ if [[ "$choice" =~ [yY] ]]; then
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Copying .bash_copilot_cli...${N}"
         cp .bash_copilot_cli $HOME
-        read -s -n 1 -p "Do you want to install copilot cli? (requires npm) [y/N] " choice
+        read -s -n 1 -p "Do you want to install copilot cli? [y/N] " choice
         if [[ "$choice" =~ [yY] ]]; then
+            if ! command -v npm &> /dev/null; then
+                echo -e "\n${G}Couldn't find npm. Installing it...${N}"
+                sudo apt install -y npm
+            fi
             echo -e "\n${G}Installing copilot cli...${N}"
             npm install -g @githubnext/github-copilot-cli
         else
@@ -124,7 +130,7 @@ if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${R}.bash_copilot_cli was not copied.${N}"
     fi
     # ask if user wants to install fzf and copy .bash_fzf
-    read -s -n 1 -p "Do you want to install fzf? (requires git) [y/N] " choice
+    read -s -n 1 -p "Do you want to install fzf? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing fzf...${N}"
         git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -235,13 +241,11 @@ else
     echo -e "\n${R}.config/btop/ was not copied.${N}"
 fi
 
-# Neovim and .config/nvim/
-# ask if user wants to install neovim appimage (REMINDER requires fuse to be installed)
+# Neovim appimage
 read -s -n 1 -p "Do you want to install neovim appimage? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y fuse
+    echo -e "\n${G}Installing neovim appimage dependencies (fuse)...${N}"
+    sudo apt install -y fuse
     echo "Versions available:"
     echo " 1) latest stable (recommended)"
     echo " 2) latest nightly"
@@ -274,14 +278,14 @@ else
     echo -e "\n${R}Neovim appimage was not installed.${N}"
 fi
 
+# .config/nvim/
 read -s -n 1 -p "Do you want to copy .config/nvim/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .config/nvim/...${N}"
     mkdir -p $HOME/.config/nvim
     cp -r .config/nvim/* $HOME/.config/nvim
-    sudo apt update -y &&
-        sudo apt upgrade -y &&
-        sudo apt install -y fd-find ripgrep
+    echo -e "\n${G}Installing fd-find and ripgrep required by telescope...${N}"
+    sudo apt install -y fd-find ripgrep
     echo -e "${C}INFO${N}: make sure to run :checkhealth in nvim to check for errors"
 else
     echo -e "\n${R}.config/nvim/ was not copied.${N}"
@@ -292,7 +296,7 @@ read -s -n 1 -p "Do you want to install nvm? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Installing nvm...${N}"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    echo "Install lastest nodejs LTS version with:"
+    echo "After resourcing .bashrc. Install lastest nodejs LTS version with:"
     echo "nvm install --lts && nvm use --lts"
 else
     echo -e "\n${R}nvm was not installed.${N}"
