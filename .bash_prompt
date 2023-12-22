@@ -24,12 +24,37 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    # PS1='\[\e[0;35m\]╭──┤\[\e[1;35m\]\u\[\e[0;35m\]├─┤\[\e[3;38;5;246m\]$(date +"%H:%M:%S")\[\e[0;35m\]├─┤\[\e[1;34m\]\w\[\e[0;35m\]│\[\e[0m\]\n\[\e[0;35m\]╰─\[\e[1;35m\]\$\[\e[0m\] '
-    # PS1='\[\e[0;32m\]╭──┤\[\e[1;33m\]\u\[\e[0;32m\]├─┤\[\e[3;38;5;246m\]$(date +"%H:%M:%S")\[\e[0;32m\]├─┤\[\e\e[38;5;227m\w\[\e[0;32m\]│\[\e[0m\]\n\[\e[0;32m\]╰─\[\e[0;33m\]\$\[\e[0m\] '
-    PS1='\[\e[0;32m\]╭──┤\[\e[1;33m\]\u\[\e[0;32m\]├─┤\[\e[3;38;5;246m\]$(date +"%H:%M:%S")\[\e[0;32m\]├─┤\[\e\e[38;5;227m\w\[\e[0;32m\]│\[\e[0m\]\n\[\e[0;32m\]╰─\[\e[0;32m\]▶\[\e[0m\] '
-    # title bar
-    PS1="\[\e]0;\u@\h: \w   \a\]$PS1"
+
+    _reset="\[\e[0m\]"
+
+    # green theme
+    _l="\[\e[0;32m\]"  # line
+    _user="\[\e[1;33m\]"
+    _time="\[\e[3;38;5;246m\]"
+    _path="\[\e[38;5;227m\]"
+
+    # purple theme
+    # _line="\[\e[0;35m\]"
+    # _user="\[\e[1;35m\]"
+
+    # commands
+    _time_cmd="${_time}\$(date +\"%H:%M:%S\")"
+    _git_cmd="\$(__git_ps1 \"\e[3;36m⎇  %s\")"
+
+    # dynamic prompt: error color + git branch
+    set_prompt_color() {
+        if [ $? -eq 0 ]; then PC="\[\e[0;32m\]"; else PC="\[\e[0;31m\]"; fi
+        if [ -z "$(__git_ps1)" ]; then
+            _gitl="${_l}│"
+        else
+            _gitl="${_l}├─┤${_git_cmd}${_l}│"
+        fi
+        PS1="${_l}╭──┤${_user}\u${_l}├─┤${_time_cmd}${_l}├─┤${_path}\w${_gitl}\n${_l}╰─${PC}▶\[\033[00m\] "
+        PS1="\[\e]0;\u@\h: \w   \a\]$PS1" # set window title
+    }
+    export PROMPT_COMMAND="set_prompt_color;$PROMPT_COMMAND"
+
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '  # default
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
