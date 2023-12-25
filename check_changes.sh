@@ -18,7 +18,7 @@ fi
 check () {
   FILE1=$1
   FILE2=$2
-  if ! $diff -r "$FILE2" "$FILE1" 1>/dev/null; then
+  if ! diff -r "$FILE2" "$FILE1" 1>/dev/null; then
     echo "cp -r $FILE1 $FILE2"
 
     # Change menu
@@ -29,7 +29,7 @@ check () {
       sudo cp -r "$FILE1" "$FILE2"
     elif [[ "$choice" =~ [dD] ]]; then
       #GIT_PAGER="less -FRX" $diff -r --color=always $2 $1 | $less -x 4 -R
-      $diff -r --color=always "$2" "$1" | $less -R -x 4
+      diff -r --color=always "$2" "$1" | less -R -x 4
       # Clear previous output lines
       tput el; echo -ne "\r"; tput cuu1; tput el; echo -ne "\r"
       check "$1" "$2"
@@ -43,15 +43,6 @@ check () {
 
 # File changes counter
 changes_count=0
-
-# Full path commands
-diff=$(which diff)
-grep=$(which grep)
-cut=$(which cut)
-apt=$(which apt)
-snap=$(which snap)
-tail=$(which tail)
-less=$(which less)
 
 check "$HOME/.bashrc"                              ".bashrc"
 check "$HOME/.bash_prompt"                         ".bash_prompt"
@@ -80,11 +71,11 @@ check "$HOME/Pictures/Wallpapers/"                 "Pictures/Wallpapers/"
 # TODO: /opt dir
 
 # apt-packages.txt
-$apt list --installed 2>/dev/null | $grep '\[installed\]' | $cut -d'/' -f1 1> /tmp/apt.txt
+apt list --installed 2>/dev/null | grep '\[installed\]' | cut -d'/' -f1 1> /tmp/apt.txt
 check "/tmp/apt.txt" "packages/apt.txt"
 
 # snap-packages.txt
-$snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap.txt
+snap list | tail -n +2 | cut -d' ' -f1 1> /tmp/snap.txt
 check "/tmp/snap.txt" "packages/snap.txt"
 
 # pip-packages.txt
