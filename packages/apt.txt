@@ -284,6 +284,7 @@ samba
 sassc
 sensible-utils
 sharutils
+shellcheck
 shim-signed
 smbclient
 snap
