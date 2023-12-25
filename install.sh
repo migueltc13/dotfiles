@@ -297,8 +297,8 @@ if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .config/nvim/...${N}"
     mkdir -p $HOME/.config/nvim
     cp -r .config/nvim/* $HOME/.config/nvim
-    echo -e "\n${G}Installing fd-find and ripgrep required by telescope...${N}"
-    sudo apt install -y fd-find ripgrep
+    echo -e "\n${G}Installing fd-find, ripgrep and shellcheck...${N}"
+    sudo apt install -y fd-find ripgreps shellcheck
     echo -e "${C}INFO${N}: make sure to run :checkhealth in nvim to check for errors"
 else
     echo -e "\n${R}.config/nvim/ was not copied.${N}"
