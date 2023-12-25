@@ -10,7 +10,7 @@ if (( $(id -u) == 0 )); then
 fi
 
 # Check current directory
-if [ "$(basename $(pwd))" != "dotfiles" ]; then
+if [ "$(basename "$(pwd)")" != "dotfiles" ]; then
   echo "$0: Run in \"dotfiles\" directory. Exiting..."
   exit 2
 fi
@@ -18,22 +18,21 @@ fi
 check () {
   FILE1=$1
   FILE2=$2
-  $diff -r $FILE2 $FILE1 1>/dev/null
-  if (( $? != 0 )); then
+  if ! $diff -r "$FILE2" "$FILE1" 1>/dev/null; then
     echo "cp -r $FILE1 $FILE2"
 
     # Change menu
-    read -s -n 1 -p "Do you want to copy these changes? [y/N/(d)iff] " choice
+    read -r -s -n 1 -p "Do you want to copy these changes? [y/N/(d)iff] " choice
     if [[ "$choice" =~ [yY] ]]; then
       echo -e "\nCopying changes..."
-      sudo rm -rf $FILE2
-      sudo cp -r $FILE1 $FILE2
+      sudo rm -rf "$FILE2"
+      sudo cp -r "$FILE1" "$FILE2"
     elif [[ "$choice" =~ [dD] ]]; then
       #GIT_PAGER="less -FRX" $diff -r --color=always $2 $1 | $less -x 4 -R
-      $diff -r --color=always $2 $1 | $less -R -x 4
+      $diff -r --color=always "$2" "$1" | $less -R -x 4
       # Clear previous output lines
       tput el; echo -ne "\r"; tput cuu1; tput el; echo -ne "\r"
-      check $1 $2
+      check "$1" "$2"
     else
       echo -e "\nChanges were not copied."
     fi
@@ -89,14 +88,14 @@ $snap list | $tail -n +2 | $cut -d' ' -f1 1> /tmp/snap.txt
 check "/tmp/snap.txt" "packages/snap.txt"
 
 # pip-packages.txt
-pip list --format=freeze 1> /tmp/pip.txt
+pip list --format=freeze | cut -d '=' -f 1 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
 
-if (( $changes_count == 0 )); then
+if (( changes_count == 0 )); then
   echo "No changes detected"
 else
     # change owner to current user
-    sudo chown -R $USER .
+    sudo chown -R "$USER" .
 fi
 
 exit 0
