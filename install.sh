@@ -341,7 +341,7 @@ fi
 read -r -s -n 1 -p "Do you want to copy .config/nvim/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Installing fd-find, ripgrep and shellcheck...${N}"
-    sudo apt install -y fd-find ripgreps shellcheck &>/dev/null
+    sudo apt install -y fd-find ripgrep shellcheck &>/dev/null
     check_success
     echo -e "\n${G}Copying .config/nvim/...${N}"
     rm -rf "$HOME"/.config/nvim
