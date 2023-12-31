@@ -19,7 +19,6 @@ alias up5='cd ../../../../..'
 
 # Tools
 alias t='tmux a || tmux'                                    # Attach to tmux session or create a new one
-alias j="$HOME/.autojump/bin/autojump"                      # Autojump for fast navigation
 alias lll='ranger'                                          # Ranger visual file manager
 alias ncdu='ncdu -q --color=dark'                           # NCurses Disk Usage
 alias xclip='xclip -i -selection clipboard'                 # Copy to clipboard with xclip
