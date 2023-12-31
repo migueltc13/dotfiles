@@ -10,12 +10,11 @@ local function desc(description, options)
     return opts
 end
 
-local Ui         = require("util.ui")
 local Toggle     = require("util.toggle")
-local Telescope  = require("util.telescope")
-local Neotree    = require("util.neo-tree")
-local Noice      = require("util.noice")
-local ToggleTerm = require("util.toggleterm")
+local Telescope  = require("util.Telescope")
+local Neotree    = require("util.NeoTree")
+local Noice      = require("util.Noice")
+local ToggleTerm = require("util.ToggleTerm")
 
 -- UI toggle options
 map('n', '<leader>uc', ':Colors\n',         desc('Change colorscheme'))
@@ -27,7 +26,8 @@ map('n', '<leader>ud', Toggle.diagnostics,  desc('Toggle diagnostics (buffer)'))
 map('n', '<leader>uC', Toggle.conceallevel, desc('Toggle conceal'))
 map('n', '<leader>uh', Toggle.inlay_hint,   desc('Toggle inlay hints'))
 map('n', '<leader>ut', Toggle.treesitter,   desc('Toggle treesitter highlighting'))
-map('n', '<leader>un', Ui.toggle_notify,    desc('Toggle notifications'))
+map('n', '<leader>un', Toggle.notify,       desc('Toggle notifications'))
+map('n', '<leader>uz', ':ZenMode\n',        desc('Toggle zen mode')) -- Zen-mode
 
 -- Telescope
 map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
@@ -85,8 +85,8 @@ _G.lsp_on_attach = function()
     map('n', '<leader>ca', ':lua vim.lsp.buf.code_action()\n',     desc('LSP: code action'))
     map('n', '<leader>rs', ':LspRestart\n',                        desc('LSP: restart language server'))
     map('n', '<leader>dl', ':lua vim.diagnostic.open_float()<cr>', desc('LSP: show diagnostics for line'))
-    map('n', '<leader>df', ':Telescope diagnostics bufnr=0\n',     desc('LSP: show diagnostics for buffer'))
-    map('n', '<leader>da', ':Telescope diagnostics\n',             desc('LSP: show diagnostics for workspace'))
+    map('n', '<leader>db', ':Telescope diagnostics bufnr=0\n',     desc('LSP: show diagnostics for buffer'))
+    map('n', '<leader>dw', ':Telescope diagnostics\n',             desc('LSP: show diagnostics for workspace'))
     map('n', '[d',         ':lua vim.diagnostic.goto_prev()\n',    desc('LSP: go to previous diagnostic'))
     map('n', ']d',         ':lua vim.diagnostic.goto_next()\n',    desc('LSP: go to next diagnostic'))
 end
@@ -108,10 +108,17 @@ map('n', '<leader>snd', Noice.dismiss_all,      desc('dismiss all'))
 map({'i', 'n', 's'}, '<c-f>', function() Noice.scroll_forward('<c-f>')  end, desc('Scroll forward'))
 map({'i', 'n', 's'}, '<c-b>', function() Noice.scroll_backward('<c-b>') end, desc('Scroll backward'))
 
+-- Debugger
+map('n', '<leader>dt', ':lua require("dapui").toggle()\n',             desc('DAP: toggle ui'))
+map('n', '<leader>dr', ':lua require("dapui").open({reset = true})\n', desc('DAP: reset'))
+map('n', '<leader>dc', ':DapContinue\n',                               desc('DAP: continue'))
+map('n', '<leader>d ', ':DapToggleBreakpoint\n',                       desc('DAP: toggle breakpoint'))
+
 -- Persistence.nvim
-map('n', '<leader>qs', ':lua require("persistence").load()\n',            desc('persistence: restore session'))
-map('n', '<leader>ql', ':lua require("persistence").load({last=true})\n', desc('persistence: restore last session'))
-map('n', '<leader>qd', ':lua require("persistence").stop()\n',            desc('persistence: don\'t save session'))
+map('n', '<leader>q ', ':Persistence load\n',      desc('persistence: restore session'))
+map('n', '<leader>ql', ':Persistence load_last\n', desc('persistence: restore last session'))
+map('n', '<leader>qs', ':Persistence save\n',      desc('persistence: save current session'))
+map('n', '<leader>qd', ':Persistence stop\n',      desc('persistence: don\'t save session'))
 
 -- Neo-tree
 map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
@@ -119,12 +126,13 @@ map('n', '<leader>be', Neotree.buffers,    desc('NeoTree: open buffers'))
 map('n', '<leader>ge', Neotree.git_status, desc('NeoTree: open git status'))
 
 -- Git
-map('n', '<leader>gg', '<cmd>Lazygit<cr>',               desc('lazygit: open'))
-map('n', '<leader>gc', '<cmd>Telescope git_commits<cr>', desc('Git: commits'))
-map('n', '<leader>gs', '<cmd>Telescope git_status<cr>',  desc('Git: status'))
+map('n', '<leader>gg', ':LazyGit\n',               desc('lazygit: open'))
+map('n', '<leader>gc', ':Telescope git_commits\n', desc('Git: commits'))
+map('n', '<leader>gs', ':Telescope git_status\n',  desc('Git: status'))
 
 -- Copilot
-map('n', '<leader>cc', Ui.toggle_copilot,  desc('copilot: toggle'))
+map('n', '<leader>cc', Toggle.copilot,      desc('copilot: toggle'))
+map('n', '<leader>cs', ':Copilot status\n', desc('copilot: status'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
@@ -136,20 +144,20 @@ map('n', '<leader>cm', ':Mason\n', desc('mason: open'))
 map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 
 -- Vim-maximizer
-map('n', '<leader>m', ':MaximizerToggle\n', desc('vim-maximizer: toggle'))
+map('n', '<leader>m', ':MaximizerToggle!\n', desc('vim-maximizer: toggle'))
 
 -- Lazy
 map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Which-key
-map('n', '<leader>k', ':WhichKey\n', desc('which-key: show help'))
+map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
 
--- Other plugins maps definitions
--- lua/plugins/git/gitsigns.lua
--- lua/plugins/copilot.lua
--- lua/plugins/nvim-cmp.lua
--- lua/plugins/telescope.lua
--- lua/plugins/treesitter.lua
+-- Other plugins keymaps definitions
+-- ../plugins/ai/copilot.lua
+-- ../plugins/editor/nvim-cmp.lua
+-- ../plugins/editor/nvim-treesitter.lua
+-- ../plugins/editor/comment-nvim.lua
+-- ../plugins/git/gitsigns.lua
 
 -- Copy to the system clipboard (Ctrl + Shift + C)
 map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
@@ -174,20 +182,9 @@ map('v', '>', '>gv')
 -- highlights under cursor
 map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
 
--- Clear search with <esc>
--- map({ 'i', 'n' }, '<esc>', '<cmd>noh<cr><esc>', { desc = 'Escape and clear hlsearch' })
-
--- Clear search, diff update and redraw
--- map(
---     'n',
---     '<leader>ur',
---     '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><cr>',
---     { desc = 'Redraw / clear hlsearch / diff update' }
--- )
-
 -- File operations
-map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-map({ 'i', 'x', 'n', 's' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
+map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
 map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
 
 -- Move to window using the <ctrl> hjkl keys
@@ -210,9 +207,11 @@ map('n', '<leader>|', '<C-w>v',  { desc = 'Split window right', remap = true })
 
 -- Switch windows
 map('n', '<leader>ww', '<C-w>w', { desc = 'Other window', remap = true })
+map('n', '<leader>wx', '<C-w>x', { desc = 'Exchange windows', remap = true })
 
--- Delete windows
-map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
+-- Close windows
+map('n', '<leader>wq', '<C-w>c', { desc = 'Close window', remap = true })
+map('n', '<leader>wo', '<C-w>o', { desc = 'Close other windows', remap = true })
 
 -- Tabs
 map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     { desc = 'Last tab' })
@@ -220,15 +219,12 @@ map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    { desc = 'First tab' })
 map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     { desc = 'Next tab' })
 map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', { desc = 'Previous tab' })
 map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      { desc = 'New tab' })
-map('n', '<leader><tab>d',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
+map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
 
 -- Buffers
 map('n', '<S-h>',      '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
 map('n', '<S-l>',      '<cmd>bnext<cr>',     { desc = 'Next buffer' })
-map('n', '[b',         '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
-map('n', ']b',         '<cmd>bnext<cr>',     { desc = 'Next buffer' })
 map('n', '<leader>bb', '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
-map('n', '<leader>`',  '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
 
--- Quit all buffers
-map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all buffers' })
+-- Quit all
+map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all' })
