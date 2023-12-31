@@ -137,6 +137,9 @@ map('n', '<leader>cs', ':Copilot status\n', desc('copilot: status'))
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
 
+-- Todo (defined in commands.lua)
+map('n', '<leader>ct', ':Todo\n', desc('Todo: open'))
+
 -- Mason
 map('n', '<leader>cm', ':Mason\n', desc('mason: open'))
 
