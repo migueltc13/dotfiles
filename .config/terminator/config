@@ -57,16 +57,17 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
-  [[old]]
-    background_darkness = 0.9
+  [[_OBS]]
+    background_darkness = 0.8
     background_type = transparent
-    cursor_color = "#ffffff"
+    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
-    foreground_color = "#ffffff"
+    foreground_color = "#eeeeee"
+    show_titlebar = False
     scrollbar_position = hidden
     scrollback_lines = 50000
     scrollback_infinite = True
-    palette = "#000000:#ed333b:#08ff00:#cdcd00:#3584e4:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#e01b24:#29ff17:#ffff00:#1a5fb4:#ff00ff:#00ffff:#ffffff"
+    palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
 [layouts]
   [[default]]
