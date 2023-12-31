@@ -196,9 +196,11 @@ if [[ "$choice" =~ [yY] ]]; then
             check_success
         fi
         echo -e "\n${G}Installing autojump...${N}"
-        git clone https://github.com/wting/autojump.git ~/autojump_tmp &&
-            ~/autojump_tmp/install.py
-        rm -rf ~/autojump_tmp
+        git clone https://github.com/wting/autojump.git ~/autojump_tmp &>/dev/null &&
+            cd ~/autojump_tmp/ &&
+            ./install.py &>/dev/null &&
+            rm -rf /autojump_tmp ||
+            echo -e "${R}autojump installation failed${N}"
     else
         echo -e "\n${R}autojump was not installed${N}"
     fi
