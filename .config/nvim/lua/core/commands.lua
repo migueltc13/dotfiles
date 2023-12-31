@@ -30,38 +30,89 @@ vim.api.nvim_create_user_command("Autocommands", function()
     vim.cmd("Telescope autocommands")
 end, {})
 
--- Persistent sessions
-vim.api.nvim_create_user_command("Persistent", function(args)
-    -- Close neotree before loading session
-    local neotree_close = true
-    local neotree_close_function = function ()
-        if neotree_close then vim.cmd("Neotree close") end
+-- Persistence sessions
+vim.api.nvim_create_user_command("Persistence", function(args)
+
+    -- Noification with vim.notify
+    local lvl = vim.log.levels
+    local function notify(msg, level)
+        vim.notify(msg, level, { title = "Persistence" })
     end
 
     local default = "load"
-    local option = args[1] or default
+    local option = args.args == "" and default or args.args
+
     if option == "save" then
+        vim.cmd("silent! Neotree close") -- Close neotree before saving/loading session
         vim.cmd("lua require('persistence').save()")
+        notify("Session saved", lvl.INFO)
+
     elseif option == "load" then
-        neotree_close_function()
+        vim.cmd("silent! Neotree close") -- Close neotree before saving/loading session
         vim.cmd("lua require('persistence').load()")
+        notify("Loaded session", lvl.INFO)
+
     elseif option == "load_last" then
-        neotree_close_function()
+        vim.cmd("silent! Neotree close") -- Close neotree before saving/loading session
         vim.cmd("lua require('persistence').load({last=true})")
+        notify("Loaded last session", lvl.INFO)
+
+    elseif option == "stop" then
+        vim.cmd("lua require('persistence').stop()")
+        notify("Persistence stopped", lvl.INFO)
+
+    elseif option == "start" then
+        vim.cmd("lua require('persistence').start()")
+        notify("Persistence started", lvl.INFO)
+
+    elseif option == "list" then
+        local path = vim.fn.stdpath('state') .. '/sessions/'
+        -- print the list of sessions in a readable format
+        local sessions = ""
+        for i, session in ipairs(require('persistence').list()) do
+            session = string.gsub(session, path, '')
+            session = string.gsub(session, '%%', '/')
+            sessions = sessions .. (i .. "\t" .. session .. "\n")
+        end
+        notify("Saved sessions path: " .. path .. "\n\n" .. sessions, lvl.INFO)
     else
-        print("Invalid option for Persistent command")
+        notify("Invalid option for `Persistence` command", lvl.ERROR)
     end
 end, {
     nargs = "?", -- Set nargs to "?" to allow an optional argument
-    complete = "custom,PersistentComplete" -- Custom completion
+    complete = "custom,PersistenceComplete" -- Custom completion
 })
 
--- Set completefunc for Persistent command
+-- Set completefunc for Persistence command
 vim.api.nvim_command([[
-  function! PersistentComplete(ArgLead, CmdLine, CursorPos)
-    return join(["save", "load", "load_last"], "\n")
+  function! PersistenceComplete(ArgLead, CmdLine, CursorPos)
+    return join(["load", "load_last", "save", "start", "stop", "list"], "\n")
   endfunction
 
-  set completefunc=PersistentComplete
+  set completefunc=PersistenceComplete
   set completeopt=menu,menuone,noselect
 ]])
+
+-- Todo
+vim.api.nvim_create_user_command("Todo", function()
+    -- Keywords to search for
+    local keywords = {
+        "TODO",
+        "HACK",
+        "NOTE", "INFO",
+        "WARN", "WARNING",  "XXX",
+        "TEST", "TESTING",  "PASSED",       "FAILED",
+        "PERF", "OPTIM",    "PERFORMANCE",  "OPTIMIZE",
+        "FIX",  "FIXME",    "BUG",          "FIXIT",    "ISSUE",
+    }
+
+    -- Convert keywords to regex
+    local regex = table.concat(keywords, "|")
+
+    -- Search for keywords in the current workspace
+    require("telescope.builtin").grep_string({
+        prompt_title = "Todo Telescope",
+        search = regex,
+        cwd = false,
+    })
+end, {})
