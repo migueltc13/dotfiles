@@ -1,6 +1,6 @@
 return {
     "jpmcb/nvim-llama",
-    event = "VeryLazy",
+    cmd = "Llama",
     config = function()
         require("nvim-llama").setup({
             -- See plugin debugging logs
