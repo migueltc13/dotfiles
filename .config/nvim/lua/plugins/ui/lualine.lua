@@ -53,7 +53,7 @@ return {
     },
     config = function()
         local lazy_status = require("lazy.status") -- to configure lazy pending updates count
-        local ui = require("util.ui") -- to configure status notify
+        local toggle = require("util.toggle") -- to configure status notify
 
         require("lualine").setup({
             options = {
@@ -77,8 +77,8 @@ return {
                         color = { fg = '#ff9e64' },
                     },
                     {
-                        ui.curr_notify_icon,
-                        cond = ui.cond_status_notify,
+                        toggle.curr_notify_icon,
+                        cond = toggle.cond_status_notify,
                     },
                     { "encoding" },
                     { "fileformat" },

@@ -1,6 +1,5 @@
 return {
     "folke/noice.nvim",
-    event = "VeryLazy",
     dependencies = {
         { "MunifTanjim/nui.nvim", lazy = true },
         "rcarriga/nvim-notify",
@@ -9,7 +8,7 @@ return {
         require("noice").setup({
             cmdline = {
                 format = {
-                    filter = { title = " Bash " },
+                    filter = { title = " Shell " },
                 },
             },
             lsp = {
