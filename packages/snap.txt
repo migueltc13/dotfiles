@@ -26,6 +26,7 @@ onionshare
 qt5-core20
 qt515-core20
 radare2
+screenkey
 searchsploit
 seclists
 snap-store

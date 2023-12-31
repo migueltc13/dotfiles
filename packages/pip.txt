@@ -37,6 +37,7 @@ configobj
 cryptography
 cupshelpers
 dbus-python
+debugpy
 decorator
 defer
 Deprecated
@@ -89,6 +90,7 @@ Mako
 Markdown
 markdownify
 MarkupSafe
+meson
 monotonic
 more-itertools
 msgpack
@@ -144,6 +146,7 @@ pyte
 python-apt
 python-dateutil
 python-debian
+python-distutils-extra
 python-dotenv
 python-rapidjson
 pytz
@@ -157,6 +160,7 @@ requests-futures
 requests-toolbelt
 retrying
 rich
+screenkey
 SecretStorage
 selenium
 setuptools
