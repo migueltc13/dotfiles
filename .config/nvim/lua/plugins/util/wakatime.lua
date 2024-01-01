@@ -1,6 +1,6 @@
 return {
     "wakatime/vim-wakatime",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     cmd = {
         "WakaTimeApiKey",
         "WakaTimeCliLocation",

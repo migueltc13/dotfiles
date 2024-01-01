@@ -1,6 +1,6 @@
 return {
     "norcalli/nvim-colorizer.lua",
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     config = function()
         require("colorizer").setup()
     end,

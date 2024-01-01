@@ -12,7 +12,7 @@ return {
         "MasonUninstallAll",
         "MasonUpdate",
     },
-    event = { "BufReadPre", "BufNewFile" },
+    event = "LazyFile",
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
