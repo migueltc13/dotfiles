@@ -1,5 +1,4 @@
-local M = {}
-M.theme = function()
+local function lualine_theme()
     local colors = {
         white = "#e6e6e6",
         darkgray = "#16161d",
@@ -48,6 +47,7 @@ end
 
 return {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
     dependencies = {
         { 'nvim-tree/nvim-web-devicons', opt = true },
     },
@@ -58,9 +58,10 @@ return {
         require("lualine").setup({
             options = {
                 icons_enabled = true,
-                disabled_filetypes = { 'neo-tree' },
+                global_status = true,
+                disabled_filetypes = { 'neo-tree', 'dashboard' },
+                theme = lualine_theme(),
                 -- theme = 'auto',
-                theme = M.theme(),
             },
             sections = {
                 lualine_c = {
