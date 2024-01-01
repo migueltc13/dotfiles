@@ -4,16 +4,16 @@ function M.find_hidden_files()
     require("telescope.builtin").find_files({ hidden = true })
 end
 
+function M.config_files()
+    return require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+end
+
 function M.grep_word()
-    require("telescope.builtin").grep_string({ cwd = false, word_match = "-w", })
+    require("telescope.builtin").grep_string({ word_match = "-w", })
 end
 
 function M.grep_selection()
-    require("telescope.builtin").grep_string({ cwd = false, })
-end
-
-function M.config_files()
-    return require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+    require("telescope.builtin").grep_string()
 end
 
 function M.find_todos()
@@ -36,7 +36,6 @@ function M.find_todos()
         prompt_title = "Find Todo's",
         search = regex,
         blob = true,
-        cwd = false,
     })
 end
 
