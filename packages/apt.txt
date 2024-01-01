@@ -154,6 +154,7 @@ gstreamer1.0-packagekit
 gstreamer1.0-plugins-base-apps
 gstreamer1.0-pulseaudio
 gtk2-engines-murrine
+gtypist
 gzip
 haguichi
 hashcat
