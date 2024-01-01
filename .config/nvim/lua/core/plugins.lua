@@ -13,6 +13,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Add LazyFile event to load plugins
+require("util.plugin").setup()
+
 require("lazy").setup(
 {
     { import = "plugins.ai" },
