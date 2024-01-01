@@ -78,5 +78,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # PATH for go binaries
 export PATH="$HOME/go/bin:$PATH"
 
+# PATH for custom scripts
+export PATH="$HOME/scripts:$PATH"
+
 # Clean duplicate entries in $PATH
-export PATH=$(echo -n $PATH | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
+export PATH=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
