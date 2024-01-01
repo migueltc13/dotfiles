@@ -1,7 +1,12 @@
 return {
     'nvimdev/dashboard-nvim',
     cmd = 'Dashboard',
-    event = 'VimEnter',
+    lazy = true,
+    init = function()
+        if vim.fn.argc(-1) == 0 then
+            require('dashboard')
+        end
+    end,
     opts = function()
         local logo1 = [[
  /$$   /$$ /$$$$$$$$  /$$$$$$  /$$    /$$ /$$$$$$ /$$      /$$
