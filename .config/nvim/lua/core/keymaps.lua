@@ -10,11 +10,12 @@ local function desc(description, options)
     return opts
 end
 
-local Toggle     = require("util.toggle")
-local Telescope  = require("util.Telescope")
 local Neotree    = require("util.NeoTree")
 local Noice      = require("util.Noice")
+local Telescope  = require("util.Telescope")
 local ToggleTerm = require("util.ToggleTerm")
+local Misc       = require("util.misc")
+local Toggle     = require("util.toggle")
 
 -- UI toggle options
 map('n', '<leader>uc', ':Colors\n',         desc('Change colorscheme'))
@@ -162,7 +163,7 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
 -- ../plugins/editor/comment-nvim.lua
 -- ../plugins/git/gitsigns.lua
 
--- Copy to the system clipboard (Ctrl + Shift + C)
+-- Copy to the system clipboard (Ctrl + C)
 map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
 map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
 
@@ -189,6 +190,9 @@ map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
 map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
 map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
 map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
+
+-- Select all text in the buffer (also creates mark 'A')
+map('n', '<C-a>', Misc.select_all, { desc = 'Select all' })
 
 -- Move to window using the <ctrl> hjkl keys
 map('n', '<C-h>', '<C-w>h', { desc = 'Go to the left window', remap = true })
