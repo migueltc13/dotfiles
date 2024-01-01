@@ -1,2 +1,0 @@
-#!/bin/bash
-firefox "file://$HOME/Git/scripts/color-picker/index.html" &>/dev/null

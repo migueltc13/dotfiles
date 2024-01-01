@@ -1,0 +1,8 @@
+For CTF's:
+- cheapwatch
+- vpn-ip
+- htb
+- thm
+- kingwatch
+- rs
+- pyserver
