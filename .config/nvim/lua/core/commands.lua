@@ -92,27 +92,3 @@ vim.api.nvim_command([[
   set completefunc=PersistenceComplete
   set completeopt=menu,menuone,noselect
 ]])
-
--- Todo
-vim.api.nvim_create_user_command("Todo", function()
-    -- Keywords to search for
-    local keywords = {
-        "TODO",
-        "HACK",
-        "NOTE", "INFO",
-        "WARN", "WARNING",  "XXX",
-        "TEST", "TESTING",  "PASSED",       "FAILED",
-        "PERF", "OPTIM",    "PERFORMANCE",  "OPTIMIZE",
-        "FIX",  "FIXME",    "BUG",          "FIXIT",    "ISSUE",
-    }
-
-    -- Convert keywords to regex
-    local regex = table.concat(keywords, "|")
-
-    -- Search for keywords in the current workspace
-    require("telescope.builtin").grep_string({
-        prompt_title = "Todo Telescope",
-        search = regex,
-        cwd = false,
-    })
-end, {})

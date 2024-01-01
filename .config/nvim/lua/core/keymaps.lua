@@ -44,6 +44,7 @@ map('n', '<leader>fa', ':Telescope autocommands\n',    desc('telescope: autocomm
 map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command history'))
 map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: keymaps'))
 map('n', '<leader>fs', ':Telescope notify\n',          desc('telescope: notifications'))
+map('n', '<leader>ft', Telescope.find_todos,           desc('telescope: find todo\'s'))
 
 -- Search
 map('n', '<leader>sr', ':Spectre\n',                             desc('spectre: replace in files'))
@@ -137,9 +138,6 @@ map('n', '<leader>cs', ':Copilot status\n', desc('copilot: status'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
-
--- Todo (defined in commands.lua)
-map('n', '<leader>ct', ':Todo\n', desc('Todo: open'))
 
 -- Mason
 map('n', '<leader>cm', ':Mason\n', desc('mason: open'))
