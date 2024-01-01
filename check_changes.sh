@@ -85,8 +85,8 @@ check "/tmp/pip.txt" "packages/pip.txt"
 if (( changes_count == 0 )); then
   echo "No changes detected"
 else
-    # change owner to current user
-    sudo chown -R "$USER" .
+    # change owner and group to current user
+    sudo chown -R "$USER":"$USER" .
 fi
 
 exit 0
