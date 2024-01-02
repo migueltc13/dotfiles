@@ -170,66 +170,74 @@ map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
 map('x', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
 
 -- Keep cursor centered when paging up/down
-map('n', '<C-d>', '<C-d>zz', opts)
-map('n', '<C-u>', '<C-u>zz', opts)
+map('n', '<C-d>', '<C-d>zz', desc('Page down', { remap = true }))
+map('n', '<C-u>', '<C-u>zz', desc('Page up',   { remap = true }))
 
 -- Keep cursor centered when searching
-map('n', 'n', 'nzzzv', opts)
-map('n', 'N', 'Nzzzv', opts)
+map('n', 'n', 'nzzzv', desc('Search next',     { remap = true }))
+map('n', 'N', 'Nzzzv', desc('Search previous', { remap = true }))
 
 -- better indenting
-map('v', '<', '<gv')
-map('v', '>', '>gv')
+map('v', '<', '<gv', desc('Indent left',  { remap = true }))
+map('v', '>', '>gv', desc('Indent right', { remap = true }))
 
 -- highlights under cursor
-map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
+map('n', '<leader>ui', vim.show_pos, desc('Inspect Pos'))
 
 -- File operations
-map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
-map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', { desc = 'Save file and quit' })
-map('n', '<leader>fn', '<cmd>enew<cr>', { desc = 'New File' })
+map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>',  desc('Save file'))
+map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', desc('Save file and quit'))
+map('n', '<leader>fn', '<cmd>enew<cr>',             desc('New File'))
 
--- Select all text in the buffer (also creates mark 'A')
-map('n', '<C-a>', Misc.select_all, { desc = 'Select all' })
-
--- Move to window using the <ctrl> hjkl keys
-map('n', '<C-h>', '<C-w>h', { desc = 'Go to the left window', remap = true })
-map('n', '<C-j>', '<C-w>j', { desc = 'Go to the lower window', remap = true })
-map('n', '<C-k>', '<C-w>k', { desc = 'Go to the upper window', remap = true })
-map('n', '<C-l>', '<C-w>l', { desc = 'Go to the right window', remap = true })
-
--- Resize windows using <alt> hjkl keys
-map('n', '<A-k>', '<cmd>resize +2<cr>',          { desc = 'Increase window height' })
-map('n', '<A-j>', '<cmd>resize -2<cr>',          { desc = 'Decrease window height' })
-map('n', '<A-h>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease window width' })
-map('n', '<A-l>', '<cmd>vertical resize +2<cr>', { desc = 'Increase window width' })
-
--- Split windows
-map('n', '<leader>w-', '<C-w>s', { desc = 'Split window below', remap = true })
-map('n', '<leader>w|', '<C-w>v', { desc = 'Split window right', remap = true })
-map('n', '<leader>-', '<C-w>s',  { desc = 'Split window below', remap = true })
-map('n', '<leader>|', '<C-w>v',  { desc = 'Split window right', remap = true })
-
--- Switch windows
-map('n', '<leader>ww', '<C-w>w', { desc = 'Other window', remap = true })
-map('n', '<leader>wx', '<C-w>x', { desc = 'Exchange windows', remap = true })
-
--- Close windows
-map('n', '<leader>wq', '<C-w>c', { desc = 'Close window', remap = true })
-map('n', '<leader>wo', '<C-w>o', { desc = 'Close other windows', remap = true })
-
--- Tabs
-map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     { desc = 'Last tab' })
-map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    { desc = 'First tab' })
-map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     { desc = 'Next tab' })
-map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', { desc = 'Previous tab' })
-map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      { desc = 'New tab' })
-map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    { desc = 'Close tab' })
-
--- Buffers
-map('n', '<S-h>',      '<cmd>bprevious<cr>', { desc = 'Prev buffer' })
-map('n', '<S-l>',      '<cmd>bnext<cr>',     { desc = 'Next buffer' })
-map('n', '<leader>bb', '<cmd>e #<cr>',       { desc = 'Switch to Other Buffer' })
+-- Select all text in the buffer
+map('n', '<C-a>', Misc.select_all, desc('Select all'))
 
 -- Quit all
-map('n', '<leader>qq', '<cmd>qa<cr>', { desc = 'Quit all' })
+map('n', '<leader>qq', '<cmd>qa<cr>', desc('Quit all'))
+
+-- Buffers
+map('n', '<S-h>',      '<cmd>bprevious<cr>', desc('Prev buffer'))
+map('n', '<S-l>',      '<cmd>bnext<cr>',     desc('Next buffer'))
+map('n', '<leader>bb', '<cmd>e #<cr>',       desc('Switch buffer [<C-^>]'))
+map('n', '<leader>bq', '<cmd>q<cr>',         desc('Quit buffer'))
+map('n', '<leader>bd', '<cmd>bd<cr>',        desc('Delete buffer'))
+
+-- Move between windows using the <ctrl> hjkl keys
+map('n', '<C-h>', '<C-w>h', desc('Go to the left window',  { remap = true }))
+map('n', '<C-j>', '<C-w>j', desc('Go to the lower window', { remap = true }))
+map('n', '<C-k>', '<C-w>k', desc('Go to the upper window', { remap = true }))
+map('n', '<C-l>', '<C-w>l', desc('Go to the right window', { remap = true }))
+
+-- Resize windows using <alt> hjkl keys
+map('n', '<A-k>', '<cmd>resize +4<cr>',      desc('Increase window height'))
+map('n', '<A-j>', '<cmd>resize -4<cr>',      desc('Decrease window height'))
+map('n', '<A-h>', '<cmd>vert resize -4<cr>', desc('Decrease window width'))
+map('n', '<A-l>', '<cmd>vert resize +4<cr>', desc('Increase window width'))
+
+-- Split windows
+map('n', '<leader>w|', '<C-w>v', desc('Split window right',  { remap = true }))
+map('n', '<leader>w-', '<C-w>s', desc('Split window below',  { remap = true }))
+map('n', '<leader>-',  '<C-w>s', desc('Split window below',  { remap = true }))
+map('n', '<leader>|',  '<C-w>v', desc('Split window right',  { remap = true }))
+
+-- Switch windows
+map('n', '<leader>ww', '<C-w>w', desc('Other window',        { remap = true }))
+map('n', '<leader>wx', '<C-w>x', desc('Exchange windows',    { remap = true }))
+
+-- Close windows
+map('n', '<leader>wd', '<C-w>d', desc('Delete window',       { remap = true }))
+map('n', '<leader>wc', '<C-w>c', desc('Close window',        { remap = true }))
+map('n', '<leader>wo', '<C-w>o', desc('Close other windows', { remap = true }))
+
+-- Tabs
+map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      desc('New tab'))
+map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    desc('Close tab'))
+map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     desc('Last tab'))
+map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    desc('First tab'))
+map('n', '<tab>',                '<cmd>tabnext<cr>',     desc('Next tab'))
+map('n', '<S-tab>',              '<cmd>tabprevious<cr>', desc('Previous tab'))
+map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     desc('Next tab [<tab>]'))
+map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', desc('Previous tab [<S-tab>]'))
+for i = 1, 8 do
+map('n', '<leader><tab>' .. i, '<cmd>' .. i .. 'tabnext<cr>', desc('Go to tab ' .. i))
+end
