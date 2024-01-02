@@ -108,4 +108,4 @@ alias hosts='sudo nano /etc/hosts' # ; ssh-keygen -f "$HOME/.ssh/known_hosts" -R
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Project li4
-alias li4='ssh-lemonade -t root@li4 "tmux a || tmux && bash"'
+alias li4='ssh-lemonade -t li4 "tmux a || tmux && bash"'
