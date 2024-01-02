@@ -4,7 +4,7 @@ mcd() {
     echo "Usage: $0 <dir>"
     return 1
   fi
-  mkdir -p "$1" && cd "$1"
+  mkdir -p "$1" && cd "$1" || return $?
 }
 
 # Perform basic calculations
@@ -14,10 +14,19 @@ calc() {
 
 # Add file(s) and commit them
 gac() {
-  git add $@ && git commit -m "Add $*"
+  git add "$@" && git commit -m "Add $*"
 }
+
 guc() {
-    git add $@ && git commit -m "Update $*"
+  git add "$@" && git commit -m "Update $*"
+}
+
+grc() {
+  if [ $# -ne 2 ]; then
+    echo "Usage: grc <file_to_rm> <file_to_add>"
+    return 1
+  fi
+  git rm "$1" && git add "$2" && git commit -m "Rename $1 to $2" || return $?
 }
 
 # Get a raw link from a github link
