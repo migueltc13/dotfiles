@@ -1,7 +1,7 @@
 return {
     "folke/which-key.nvim",
+    event = "VeryLazy",
     cmd = "WhichKey",
-    keys = { "<space>" },
     opts = {
         window = {
             border = "rounded",
