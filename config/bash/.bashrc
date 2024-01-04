@@ -37,25 +37,25 @@ fi
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # prompt definitions
-[ -f ~/.bash_prompt ] && source ~/.bash_prompt
+[ -f ~/.bash/prompt.sh ] && source ~/.bash/prompt.sh
 
 # colors definitions
-[ -f ~/.bash_colors ] && source ~/.bash_colors
+[ -f ~/.bash/colors.sh ] && source ~/.bash/colors.sh
 
 # aliases definitions
-[ -f ~/.bash_aliases ] && source ~/.bash_aliases
+[ -f ~/.bash/aliases.sh ] && source ~/.bash/aliases.sh
 
 # functions definitions
-[ -f ~/.bash_functions ] && source ~/.bash_functions
+[ -f ~/.bash/functions.sh ] && source ~/.bash/functions.sh
 
 # keybinds definitions
-[ -f ~/.bash_keybindings ] && source ~/.bash_keybindings
+[ -f ~/.bash/keybindings.sh ] && source ~/.bash/keybindings.sh
 
 # copilot cli definitions
-[ -f ~/.bash_copilot_cli ] && source ~/.bash_copilot_cli
+[ -f ~/.bash/copilot_cli.sh ] && source ~/.bash/copilot_cli.sh
 
 # fzf definitions
-[ -f ~/.bash_fzf ] && source ~/.bash_fzf
+[ -f ~/.bash/fzf.sh ] && source ~/.bash/fzf.sh
 
 # autojump definitions
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh

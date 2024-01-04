@@ -6,71 +6,122 @@
 
 ## Overview
 
-This repository contains my personal dotfiles. It is intended to be used on
-Debian-based systems, but it should work on other Linux distributions as well.
+This repository contains my personal dotfiles,
+designed for full use on Ubuntu (Debian-based),
+with most of the features also functioning on other Linux distributions.
+
+---
+
+### Installation
+
+Interactive installation with [bin/install.sh]() script.
+
+```bash
+git clone https://github.com/migueltc13/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+bin/install.sh
+```
+
+### Update
+
+Interactive update with [bin/update.sh]() script.
+
+```bash
+cd ~/dotfiles
+bin/update.sh
+```
+
+---
 
 ### Packages
 
-- [apt-lite.txt](packages/apt-lite.txt) - minimal apt packages
+Package lists, located in [packages/](./packages/).
+
 - [apt.txt](packages/apt.txt) - apt packages
+- [apt-lite.txt](packages/apt-lite.txt) - minimal apt packages
 - [snap.txt](packages/snap.txt) - snap packages
 - [pip.txt](packages/pip.txt) - pip packages
 <!-- TODO - [npm-packages.txt](npm-packages.txt) - npm packages -->
 <!-- TODO - [gem-packages.txt](gem-packages.txt) - gem packages -->
 <!-- TODO - [cargo-packages.txt](cargo-packages.txt) - cargo packages -->
 
-### Bash configuration
+---
 
-- [.bashrc](.bashrc) - main bash config file
-- [.bash_prompt](.bash_prompt) - bash prompt config
-- [.bash_colors](.bash_colors) - bash colors
-- [.bash_aliases](.bash_aliases) - bash aliases
-- [.bash_functions](.bash_functions) - bash functions
-- [.bash_keybindings](.bash_keybindings) - bash keybindings
-- [.bash_copilot_cli](.bash_copilot_cli) - copilot cli config
-- [.bash_fzf](.bash_fzf) - fzf config
-- [.profile](.profile) - bash profile, used for login shells
+### config
 
-### Other configuration
+Configuration files, located in [config/](./config/).
 
-- [neovim](.config/nvim/) - neovim config dir
-- [.nanorc](.nanorc) - nano config
-- [terminator](.config/terminator/config) - terminator config
-- [batcat](.config/bat/) - bat config dir
-- [btop](.config/btop/) - btop config dir
-- [.Xresources](.Xresources) - xterm config
-- [.tmux.conf](.tmux.conf) - tmux config
-- [.gitmux.conf](.config/gitmux.conf) - gitmux config
-- [.gitconfig](.gitconfig) - git config
+#### Bash
 
-### usr/ directory
+- [.profile](./config/bash/.profile) - bash profile, used for login shells
+- [.bashrc](./config/bash/.bashrc) - main bash config file
+- [.bash/prompt.sh](./config/bash/.bash/prompt.sh) - prompt
+- [.bash/colors.sh](./config/bash/.bash/colors.sh) - colors
+- [.bash/aliases.sh](./config/bash/.bash/aliases.sh) - aliases
+- [.bash/functions.sh](./config/bash/.bash/functions.sh) - functions
+- [.bash/keybindings.sh](./config/bash/.bash/keybindings.sh) - keybindings
+- [.bash/copilot_cli.sh](./config/bash/.bash/copilot_cli.sh) - copilot cli config
+- [.bash/fzf.sh](./config/bash/.bash/fzf.sh) - fzf config
 
-<!-- TODO add some scripts to .gitignore -->
-<!-- TODO enhance usr/lib/command-not-found script -->
-- [bin/](usr/local/bin/) - local scripts
-- [share/](usr/share/) - applications and respective icons
-- [lib/](usr/lib/) - command-not-found script (inspired by Kali Linux)
+#### Neovim
 
-### Gnome shell extensions
+- [nvim/](./config/nvim/) - neovim config dir
 
-Located in [.local/share/gnome-shell/extensions/]().
+#### Tmux
 
-- [activities-text@z0d1ac](.local/share/gnome-shell/extensions/activities-text@z0d1ac)
-- [blur-my-shell@aunetx](.local/share/gnome-shell/extensions/blur-my-shell@aunetx)
-- [clipboard-indicator@tudmotu.com](.local/share/gnome-shell/extensions/clipboard-indicator@tudmotu.com)
-- [CoverflowAltTab@palatis.blogspot.com](.local/share/gnome-shell/extensions/CoverflowAltTab@palatis.blogspot.com)
-- [custom-accent-colors@demiskp](.local/share/gnome-shell/extensions/custom-accent-colors@demiskp)
-- [gsconnect@andyholmes.github.io](.local/share/gnome-shell/extensions/gsconnect@andyholmes.github.io)
-- [hidetopbar@mathieu.bidon.ca](.local/share/gnome-shell/extensions/hidetopbar@mathieu.bidon.ca)
-- [lockkeys@fawtytoo](.local/share/gnome-shell/extensions/lockkeys@fawtytoo)
+- [tmux/](./config/tmux/) - tmux config dir
 
-### Wallpapers
+#### Bat
 
-Located in [Pictures/Wallpapers/]().
+- [bat/](./config/bat/) - bat config dir
 
-- [wallpaper.sh](Pictures/Wallpapers/wallpaper.sh) - script to randomly change wallpaper, used within a cron job
-- [wallpaper.log](Pictures/Wallpapers/wallpaper.log) - log file for `wallpaper.sh` output
-- [wallpaper.png](Pictures/Wallpapers/wallpaper.png) - current wallpaper symlinked
+#### Btop
+
+- [btop/](./config/btop/) - btop config dir
+
+#### Nano
+
+- [nano/.nanorc](./config/nano/.nanorc) - nano config file
+
+#### Terminator
+
+- [terminator/config](./config/terminator/config) - terminator config file
+
+#### XTerm
+
+- [xterm/.Xresources](./config/xterm/.Xresources) - xterm config file
+
+#### Git
+
+- [git/.gitconfig](./config/git/.gitconfig) - git config file
+
+---
+
+### misc
+
+Miscellaneous files, located in [misc/](./misc/).
+
+#### Applications and Icons
+
+Applications located in [misc/applications/](./misc/applications/).
+
+Icons located in [misc/icons/](./misc/icons/).
+
+#### Fonts
+
+Located in [misc/fonts/](./misc/fonts/).
+
+- [Hack](./misc/fonts/Hack.zip) - Hack font
+- [Nerd Fonts Symbols](./misc/fonts/NerdFontsSymbolsOnly.zip) - Nerd Fonts symbols only
+
+#### Wallpapers
+
+Located in [misc/wallpapers/](./misc/wallpapers/).
+
+- [wallpapers](./misc/wallpapers/wallpapers/) - wallpapers dir
+- [wallpaper.sh](./misc/wallpapers/wallpaper.sh) - script to randomly change wallpaper, used within a cron job
+- [wallpaper.log](./misc/wallpapers/wallpaper.log) - log file for `wallpaper.sh` output
+- [wallpaper.png](./misc/wallpapers/wallpaper.png) - current wallpaper symlinked
 
 Cron job example:
 
@@ -79,21 +130,36 @@ Cron job example:
 0 * * * *   $HOME/Pictures/Wallpapers/wallpaper.sh &> $HOME/Wallpapers/wallpaper.log
 ```
 
-### Terminal ascii animations
+#### Animations (ascii)
 
-Located in [Animations/](Animations/).
+Located in [misc/animations/](./misc/animations/).
 
-### Fonts
+#### Gnome shell extensions
 
-Located in [fonts/](fonts/).
+Located in [misc/gnome-extensions/](./misc/gnome-extensions/).
 
-- [Hack](fonts/Hack.zip) - Hack font
-- [Nerd Fonts Symbols](fonts/NerdFontsSymbolsOnly.zip) - Nerd Fonts symbols only
+- [activities-text@z0d1ac](./misc/gnome-extensions/activities-text@z0d1ac)
+- [blur-my-shell@aunetx](./misc/gnome-extensions/blur-my-shell@aunetx)
+- [clipboard-indicator@tudmotu.com](./misc/gnome-extensions/clipboard-indicator@tudmotu.com)
+- [CoverflowAltTab@palatis.blogspot.com](./misc/gnome-extensions/CoverflowAltTab@palatis.blogspot.com)
+- [custom-accent-colors@demiskp](./misc/gnome-extensions/custom-accent-colors@demiskp)
+- [gsconnect@andyholmes.github.io](./misc/gnome-extensions/gsconnect@andyholmes.github.io)
+- [hidetopbar@mathieu.bidon.ca](./misc/gnome-extensions/hidetopbar@mathieu.bidon.ca)
+- [lockkeys@fawtytoo](./misc/gnome-extensions/lockkeys@fawtytoo)
+- [notification-banner-reloaded@marcinjakubowski.github.com](./misc/gnome-extensions/notification-banner-reloaded@marcinjakubowski.github.com/)
 
-## Installation
+#### Bin
 
-Interactive installation with [./install.sh](./install.sh) script.
+Located in [misc/bin/](./misc/bin/).
 
-## Update
+> Scripts from /usr/local/bin
 
-Update with [./check_changes.sh](./check_changes.sh) script.
+<!--
+#### command-not-found
+
+Located in [misc/command-not-found/](./misc/command-not-found/).
+
+Inspired by Kali Linux command-not-found script, suggests packages to install
+when a command is not found.
+-->
+<!-- TODO enhance usr/lib/command-not-found script -->

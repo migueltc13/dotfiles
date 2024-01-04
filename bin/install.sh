@@ -53,7 +53,7 @@ if [ "$(basename "$(pwd)")" != "dotfiles" ]; then
 fi
 
 # Check connection to internet
-if ! ping -c 1 google.com &>/dev/null; then
+if ! ping -4 -c 1 google.com &>/dev/null; then
     echo -e "${R}No internet connection. Exiting...${N}"
     exit 3
 fi
@@ -127,32 +127,33 @@ echo -e "${C}INFO${N}: Make sure you make a backup now"
 read -r -s -n 1 -p "Do you want to copy bash config files? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying bash config files...${N}"
-    cp .bashrc "$HOME"
-    # ask if user wants to copy .bash_prompt
-    read -r -s -n 1 -p "Do you want to copy .bash_prompt? [y/N] " choice
+    cp config/bash/.bashrc "$HOME"
+    # ask if user wants to copy .bash/prompt.sh
+    read -r -s -n 1 -p "Do you want to copy .bash/prompt.sh? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
-        echo -e "\n${G}Copying .bash_prompt...${N}"
-        cp .bash_prompt "$HOME"
+        echo -e "\n${G}Copying .bash/prompt.sh...${N}"
+        cp config/bash/.bash/prompt.sh "$HOME/.bash/"
     else
-        echo -e "\n${R}.bash_prompt was not copied.${N}"
+        echo -e "\n${R}.bash/prompt.sh was not copied.${N}"
     fi
-    cp .bash_colors "$HOME"
-    cp .bash_aliases "$HOME"
-    cp .bash_functions "$HOME"
-    # ask if user wants to copy .bash_keybindings
-    read -r -s -n 1 -p "Do you want to copy .bash_keybindings? [y/N] " choice
+    cp config/bash/.bash/colors "$HOME/.bash/"
+    cp config/bash/.bash/aliases "$HOME/.bash/"
+    cp config/bash/.bash/functions "$HOME/.bash/"
+    # ask if user wants to copy .bash/keybindings.sh
+    read -r -s -n 1 -p "Do you want to copy .bash/keybindings.sh? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
-        echo -e "\n${G}Copying .bash_keybindings...${N}"
-        cp .bash_keybindings "$HOME"
+        echo -e "\n${G}Copying .bash/keybindings.sh...${N}"
+        cp config/bash/.bash/keybindings.sh "$HOME/.bash/"
     else
-        echo -e "\n${R}.bash_keybindings was not copied.${N}"
+        echo -e "\n${R}.bash/keybindings.sh was not copied.${N}"
     fi
-    # ask if user wants to copy .bash_copilot_cli
-    read -r -s -n 1 -p "Do you want to copy .bash_copilot_cli? [y/N] " choice
+    # ask if user wants to copy .bash/copilot_cli.sh
+    read -r -s -n 1 -p "Do you want to copy .bash/copilot_cli.sh? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
-        echo -e "\n${G}Copying .bash_copilot_cli...${N}"
-        cp .bash_copilot_cli "$HOME"
-        read -r -s -n 1 -p "Do you want to install copilot cli? [y/N] " choice
+        echo -e "\n${G}Copying .bash/copilot_cli.sh...${N}"
+        cp config/bash/.bash/copilot_cli.sh "$HOME/.bash/"
+        # ask if user wants to install copilot cli
+        read -r -s -n 1 -p "Do you want to install copilot cli? (via npm) [y/N] " choice
         if [[ "$choice" =~ [yY] ]]; then
             if ! command -v npm &> /dev/null; then
                 echo -e "\n${G}Couldn't find npm. Installing it...${N}"
@@ -166,28 +167,35 @@ if [[ "$choice" =~ [yY] ]]; then
             echo -e "\n${R}copilot cli was not installed${N}"
         fi
     else
-        echo -e "\n${R}.bash_copilot_cli was not copied.${N}"
+        echo -e "\n${R}.bash/copilot_cli.sh was not copied.${N}"
     fi
-    # ask if user wants to install fzf and copy .bash_fzf
-    read -r -s -n 1 -p "Do you want to install fzf? [y/N] " choice
+    # ask if user wants to copy .bash/fzf.sh
+    read -r -s -n 1 -p "Do you want to copy .bash/fzf.sh? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
-        echo -e "\n${G}Installing fzf...${N}"
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&
-            ~/.fzf/install
-        echo -e "\n${G}Copying .bash_fzf...${N}"
-        cp .bash_fzf "$HOME"
-        echo -e "\n${G}Removing .fzf.bash...${N}"
-        rm "$HOME"/.fzf.bash
-        # Remove the last line of .bashrc if it is the fzf source line recently added
-        if [[ "$(tail -n 1 "$HOME"/.bashrc)" == *".fzf.bash"* ]]; then
-            echo -e "\n${G}Removing fzf source line from .bashrc...${N}"
-            sed -i '$ d' "$HOME"/.bashrc
+        echo -e "\n${G}Copying .bash/fzf.sh...${N}"
+        cp config/bash/.bash/fzf.sh "$HOME/.bash/"
+        # ask if user wants to install fzf
+        read -r -s -n 1 -p "Do you want to install fzf (via git)? [y/N] " choice
+        if [[ "$choice" =~ [yY] ]]; then
+            echo -e "\n${G}Installing fzf...${N}"
+            git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&
+                ~/.fzf/install ||
+                echo -e "${R}fzf installation failed${N}"
+            echo -e "\n${G}Removing ~/.fzf.bash...${N}"
+            rm "$HOME"/.fzf.bash
+            # Remove the last line of .bashrc if it is the fzf source line recently added
+            if [[ "$(tail -n 1 "$HOME"/.bashrc)" == *".fzf.bash"* ]]; then
+                echo -e "\n${G}Removing fzf source line from .bashrc...${N}"
+                sed -i '$ d' "$HOME"/.bashrc
+            fi
+        else
+            echo -e "\n${R}fzf was not installed${N}"
         fi
     else
-        echo -e "\n${R}fzf was not installed${N}"
+        echo -e "\n${R}.bash/fzf.sh was not copied.${N}"
     fi
     # ask if user wants to install autojump
-    read -r -s -n 1 -p "Do you want to install autojump? [y/N] " choice
+    read -r -s -n 1 -p "Do you want to install autojump (via git)? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing autojump requirements...${N}"
         if ! command -v python3 &> /dev/null; then
@@ -208,7 +216,7 @@ if [[ "$choice" =~ [yY] ]]; then
     read -r -s -n 1 -p "Do you want to copy .profile? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Copying .profile...${N}"
-        cp .profile "$HOME"
+        cp config/bash/.profile "$HOME"
     else
         echo -e "\n${R}.profile was not copied.${N}"
     fi
@@ -223,7 +231,7 @@ echo -e "${C}INFO${N}: Make sure you make a backup as you go from now on"
 read -r -s -n 1 -p "Do you want to copy .gitconfig? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .gitconfig...${N}"
-    cp .gitconfig "$HOME"
+    cp config/git/.gitconfig "$HOME"
     echo -e "\n${C}INFO${N}: This contains my personal information. Make sure to change it.${N}"
     echo -e "${Y}WARNING${N}: This is using credential helper which stores your github token in plain text."
 else
@@ -234,7 +242,7 @@ fi
 read -r -s -n 1 -p "Do you want to copy .nanorc? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .nanorc...${N}"
-    cp .nanorc "$HOME"
+    cp config/nano/.nanorc "$HOME"
 else
     echo -e "\n${R}.nanorc was not copied.${N}"
 fi
@@ -243,65 +251,81 @@ fi
 read -r -s -n 1 -p "Do you want to copy .Xresources? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .Xresources...${N}"
-    cp .Xresources "$HOME"
+    cp config/xterm/.Xresources "$HOME"
 else
     echo -e "\n${R}.Xresources was not copied.${N}"
 fi
 
 # .tmux.conf
-read -r -s -n 1 -p "Do you want to install tmux and configure? [y/N] " choice
+read -r -s -n 1 -p "Do you want to copy .tmux.conf? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Copying .tmux.conf...${N}"
-    cp .tmux.conf "$HOME"
-    echo -e "\n${G}Installing tmux and plugins...${N}"
-    sudo apt install -y tmux &>/dev/null
-    check_success
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &&
-        ~/.tmux/plugins/tpm/bin/install_plugins
+    cp config/tmux/.tmux.conf "$HOME"
+
+    read -r -s -n 1 -p "Do you want to install tmux and plugins? [y/N] " choice
+    if [[ "$choice" =~ [yY] ]]; then
+        echo -e "\n${G}Installing tmux and plugins...${N}"
+        sudo apt install -y tmux &>/dev/null
+        check_success
+        echo -e "\n${G}Installing tmux plugins...${N}"
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &&
+            ~/.tmux/plugins/tpm/bin/install_plugins
+        echo -e "${C}INFO${N}: tmux plugins were installed"
+    else
+        echo -e "\n${R}tmux and plugins were not installed.${N}"
+    fi
+
     read -r -s -n 1 -p "Do you want to install gitmux? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
         echo -e "\n${G}Installing gitmux...${N}"
-        sudo apt install -y golang-go &>/dev/null
-        check_success
+        if ! command -v go &> /dev/null; then
+            echo -e "\n${G}Couldn't find go. Installing it...${N}"
+            sudo apt install -y golang-go &>/dev/null
+            check_success
+        fi
         go install github.com/arl/gitmux@latest
         check_success
-        cp .config/.gitmux.conf "$HOME"/.config/
+        echo -e "${C}INFO${N}: gitmux was installed"
+        cp config/tmux/.gitmux.conf ".config/$HOME"
+        echo -e "${C}INFO${N}: gitmux config file was copied to ~/.config/.gitmux.conf"
+    else
+        echo -e "\n${R}gitmux was not installed.${N}"
     fi
 else
     echo -e "\n${R}.tmux.conf was not copied.${N}"
 fi
 
-# .config/terminator/config
-read -r -s -n 1 -p "Do you want to copy .config/terminator/config? [y/N] " choice
+# config/terminator/config
+read -r -s -n 1 -p "Do you want to copy config/terminator/config? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    echo -e "\n${G}Copying .config/terminator/config...${N}"
-    mkdir -p "$HOME"/.config/terminator
-    cp .config/terminator/config "$HOME"/.config/terminator
+    echo -e "\n${G}Copying config/terminator/config...${N}"
+    mkdir -p "$HOME"/.config/terminator/
+    cp config/terminator/config "$HOME"/.config/terminator/
 else
-    echo -e "\n${R}.config/terminator/config was not copied.${N}"
+    echo -e "\n${R}config/terminator/config was not copied.${N}"
 fi
 
-# .config/bat/
-read -r -s -n 1 -p "Do you want to copy .config/bat/? [y/N] " choice
+# config/bat/
+read -r -s -n 1 -p "Do you want to copy config/bat/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    echo -e "\n${G}Copying .config/bat/...${N}"
-    mkdir -p "$HOME"/.config/bat
-    cp -r .config/bat/* "$HOME"/.config/bat
+    echo -e "\n${G}Copying config/bat/...${N}"
+    mkdir -p "$HOME"/.config/bat/
+    cp -r config/bat/* "$HOME"/.config/bat/
     # build bat cache (require to load custom themes)
     bat cache --build &>/dev/null || batcat cache --build &>/dev/null
     check_success
 else
-    echo -e "\n${R}.config/bat/ was not copied.${N}"
+    echo -e "\n${R}config/bat/ was not copied.${N}"
 fi
 
-# .config/btop/
-read -r -s -n 1 -p "Do you want to copy .config/btop/? [y/N] " choice
+# config/btop/
+read -r -s -n 1 -p "Do you want to copy config/btop/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    echo -e "\n${G}Copying .config/btop/...${N}"
-    mkdir -p "$HOME"/.config/btop
-    cp -r .config/btop/* "$HOME"/.config/btop
+    echo -e "\n${G}Copying config/btop/...${N}"
+    mkdir -p "$HOME"/.config/btop/
+    cp -r config/btop/* "$HOME"/.config/btop/
 else
-    echo -e "\n${R}.config/btop/ was not copied.${N}"
+    echo -e "\n${R}config/btop/ was not copied.${N}"
 fi
 
 # Neovim appimage
@@ -311,7 +335,7 @@ if [[ "$choice" =~ [yY] ]]; then
     sudo apt install -y fuse &>/dev/null
     check_success
     echo "Versions available:"
-    echo " 1) latest stable (recommended)"
+    echo " 1) latest stable"
     echo " 2) latest nightly"
     echo " 3) v0.9.4"
     read -r -s -n 1 -p "Choose version: " choice
@@ -339,18 +363,18 @@ else
     echo -e "\n${R}Neovim appimage was not installed.${N}"
 fi
 
-# .config/nvim/
-read -r -s -n 1 -p "Do you want to copy .config/nvim/? [y/N] " choice
+# config/nvim/
+read -r -s -n 1 -p "Do you want to copy config/nvim/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "\n${G}Installing fd-find, ripgrep and shellcheck...${N}"
     sudo apt install -y fd-find ripgrep shellcheck &>/dev/null
     check_success
-    echo -e "\n${G}Copying .config/nvim/...${N}"
-    rm -rf "$HOME"/.config/nvim
-    cp -r .config/nvim/ "$HOME"/.config/
-    echo -e "${C}INFO${N}: make sure to run :checkhealth in nvim to check for errors"
+    echo -e "\n${G}Copying config/nvim/...${N}"
+    rm -rf "$HOME"/.config/nvim/
+    cp -r config/nvim/ "$HOME"/.config/
+    echo -e "${C}INFO${N}: make sure to run :checkhealth in nvim to check for errors / missing dependencies"
 else
-    echo -e "\n${R}.config/nvim/ was not copied.${N}"
+    echo -e "\n${R}config/nvim/ was not copied.${N}"
 fi
 
 # Install nvm for nodejs
@@ -365,34 +389,39 @@ else
     echo -e "${C}INFO${N}: You may want to remove nvm exports from .bashrc"
 fi
 
-# Gnome shell extensions
-read -r -s -n 1 -p "Do you want to copy .local/share/gnome-shell/extensions/? [y/N] " choice
+### miscellanous
+
+# Gnome extensions
+read -r -s -n 1 -p "Do you want to copy misc/gnome-extensions/? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
-    echo -e "\n${G}Copying .local/share/gnome-shell/extensions/...${N}"
-    mkdir -p "$HOME"/.local/share/gnome-shell/extensions
-    cp -r .local/share/gnome-shell/extensions/* "$HOME"/.local/share/gnome-shell/extensions
+    echo -e "\n${G}Copying misc/gnome-extensions/...${N}"
+    mkdir -p "$HOME"/.local/share/gnome-shell/extensions/
+    cp -r misc/gnome-extensions/* "$HOME"/.local/share/gnome-shell/extensions/
+    echo -e "${C}INFO${N}: manually enable extensions in gnome-shell-extensions${N}"
+    echo -e "${C}INFO${N}: manually configure extensions settings${N}"
+    # TODO save my current extensions settings into a file
 else
-    echo -e "\n${R}.local/share/gnome-shell/extensions/ was not copied.${N}"
+    echo -e "\n${R}misc/gnome-extensions/ was not copied.${N}"
 fi
-echo -e "${C}INFO${N}: manually enable extensions in gnome-shell-extensions${N}"
-# TODO save my current extensions settings into a file
 
 # Fonts
-echo -e "${C}INFO${N}: manually install fonts into your system (fonts/)"
+echo -e "${C}INFO${N}: manually install fonts into your system (misc/fonts/)"
 
 # Wallpapers
-echo -e "${C}INFO${N}: manually copy wallpapers into your system (Pictures/Wallpapers/)"
+echo -e "${C}INFO${N}: manually copy wallpapers into your system (misc/wallpapers/ -> ~/Pictures/Wallpapers/)"
 
 # Animations
-echo -e "${C}INFO${N}: manually copy script animations into your system (Animations/)"
+echo -e "${C}INFO${N}: manually copy script animations into your system (misc/animations/ -> ~/Animations/)"
 
-# usr/local/bin
-echo -e "${C}INFO${N}: manually copy scripts into your system (usr/local/bin/)"
-
-# usr/share/applications and icons
-echo -e "${C}INFO${N}: manually copy .desktop files into your system (usr/share/applications/)"
-echo -e "${C}INFO${N}: manually copy icons into your system (usr/share/icons/)"
+# /usr/share/applications and /usr/share/icons
+echo -e "${C}INFO${N}: manually copy .desktop files into your system (misc/applications/ -> /usr/share/applications/)"
+echo -e "${C}INFO${N}: manually copy icons into your system (misc/icons/ -> /usr/share/icons/)"
 echo -e "${C}INFO${N}: manually run: ${G}\$ sudo update-desktop-database${N}"
 
-# usr/lib/command-not-found
-echo -e "${C}INFO${N}: manually copy usr/lib/command-not-found to enable it"
+# /usr/local/bin
+echo -e "${C}INFO${N}: manually copy scripts into your system (misc/bin/)"
+
+# /usr/lib/command-not-found
+echo -e "${C}INFO${N}: manually copy misc/command-not-found/command-not-found to /usr/lib/command-not-found"
+
+exit 0
