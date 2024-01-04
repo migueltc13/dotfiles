@@ -50,6 +50,7 @@ deja-dup
 diffutils
 dirb
 dirmngr
+distro-info-data
 dmz-cursor-theme
 docker-compose
 docker.io
@@ -322,6 +323,7 @@ python3-gi-cairo
 python3-gi
 python3-pip
 python3-setuptools
+python3-software-properties
 python3-update-manager
 python3.10-venv
 python3
@@ -352,6 +354,7 @@ smbclient
 snap
 snapd
 socat
+software-properties-common
 software-properties-gtk
 speech-dispatcher
 speedtest-cli
@@ -366,8 +369,6 @@ systemd-hwe-hwdb
 systemd-oomd
 terminator
 thefuck
-thunderbird-gnome-support
-thunderbird
 tldr
 tmux
 totem
