@@ -16,7 +16,10 @@ function M.grep_selection()
     require("telescope.builtin").grep_string()
 end
 
-function M.find_todos()
+---@param opts table @options for the search
+---@class TodoOptions
+---@field cf boolean @If true, only search in the current file.
+function M.todos(opts)
     -- Keywords to search for
     local keywords = {
         "TODO",
@@ -31,12 +34,23 @@ function M.find_todos()
     -- Convert keywords to regex
     local regex = table.concat(keywords, "|")
 
+    -- Get current file
+    local curr_file = nil
+    if opts.cf then
+        curr_file = vim.fn.expand("%:p")
+    end
+
     -- Search for keywords in the current workspace
     require("telescope.builtin").grep_string({
         prompt_title = "Find Todo's",
         search = regex,
         blob = true,
+        search_dirs = { curr_file },
     })
+end
+
+function M.todos_current_file()
+    M.todos({ cf = true })
 end
 
 return M
