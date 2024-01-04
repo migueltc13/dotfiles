@@ -62,6 +62,7 @@ Configuration files, located in [config/](./config/).
 - [.bash/keybindings.sh](./config/bash/.bash/keybindings.sh) - keybindings
 - [.bash/copilot_cli.sh](./config/bash/.bash/copilot_cli.sh) - copilot cli config
 - [.bash/fzf.sh](./config/bash/.bash/fzf.sh) - fzf config
+- [.bash/custom.sh](./config/bash/.bash/custom.sh) - custom config for specific machine (not tracked)
 
 #### Neovim
 

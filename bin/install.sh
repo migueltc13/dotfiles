@@ -126,6 +126,7 @@ echo -e "${Y}WARNING${N}: This will overwrite your current bash config files."
 echo -e "${C}INFO${N}: Make sure you make a backup now"
 read -r -s -n 1 -p "Do you want to copy bash config files? [y/N] " choice
 if [[ "$choice" =~ [yY] ]]; then
+    mkdir -p "$HOME"/.bash
     echo -e "\n${G}Copying bash config files...${N}"
     cp config/bash/.bashrc "$HOME"
     # ask if user wants to copy .bash/prompt.sh
@@ -220,6 +221,8 @@ if [[ "$choice" =~ [yY] ]]; then
     else
         echo -e "\n${R}.profile was not copied.${N}"
     fi
+
+    touch "$HOME"/.bash/custom.sh
 else
     echo -e "\n${R}Bash config files were not copied.${N}"
 fi
