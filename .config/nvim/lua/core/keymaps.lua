@@ -10,10 +10,9 @@ local function desc(description, options)
     return opts
 end
 
+local Ts         = require("util.Telescope")
 local Neotree    = require("util.NeoTree")
 local Noice      = require("util.Noice")
-local Telescope  = require("util.Telescope")
-local ToggleTerm = require("util.ToggleTerm")
 local Misc       = require("util.misc")
 local Toggle     = require("util.toggle")
 
@@ -31,20 +30,21 @@ map('n', '<leader>un', Toggle.notify,       desc('Toggle notifications'))
 map('n', '<leader>uz', ':ZenMode\n',        desc('Toggle zen mode')) -- Zen-mode
 
 -- Telescope
-map('n', '<leader>ff', ':Telescope find_files\n',      desc('telescope: find files'))
-map('n', '<leader> ',  '<leader>ff',                   desc('telescope: find files', { remap = true }))
-map('n', '<leader>fF', Telescope.find_hidden_files,    desc('telescope: find (hidden) files'))
-map('n', '<leader>fp', ':Telescope oldfiles\n',        desc('telescope: previous files'))
-map('n', '<leader>fg', ':Telescope live_grep\n',       desc('telescope: live grep files'))
-map('n', '<leader>fb', ':Telescope buffers\n',         desc('telescope: find buffers'))
-map('n', '<leader>fh', ':Telescope help_tags\n',       desc('telescope: find help tags'))
-map('n', '<leader>fr', ':Telescope resume\n',          desc('telescope: resume previous picker'))
-map('n', '<leader>fc', ':Telescope commands\n',        desc('telescope: commands'))
-map('n', '<leader>fa', ':Telescope autocommands\n',    desc('telescope: autocommands'))
-map('n', '<leader>:',  ':Telescope command_history\n', desc('telescope: command history'))
-map('n', '<leader>fk', ':Telescope keymaps\n',         desc('telescope: keymaps'))
-map('n', '<leader>fs', ':Telescope notify\n',          desc('telescope: notifications'))
-map('n', '<leader>ft', Telescope.find_todos,           desc('telescope: find todo\'s'))
+map('n', '<leader>ff',  ':Telescope find_files\n',      desc('telescope: find files'))
+map('n', '<leader> ',   '<leader>ff',                   desc('telescope: find files', { remap = true }))
+map('n', '<leader>fF',  Ts.find_hidden_files,           desc('telescope: find (hidden) files'))
+map('n', '<leader>fp',  ':Telescope oldfiles\n',        desc('telescope: previous files'))
+map('n', '<leader>fg',  ':Telescope live_grep\n',       desc('telescope: live grep files'))
+map('n', '<leader>fb',  ':Telescope buffers\n',         desc('telescope: find buffers'))
+map('n', '<leader>fh',  ':Telescope help_tags\n',       desc('telescope: find help tags'))
+map('n', '<leader>fr',  ':Telescope resume\n',          desc('telescope: resume previous picker'))
+map('n', '<leader>fc',  ':Telescope commands\n',        desc('telescope: commands'))
+map('n', '<leader>fa',  ':Telescope autocommands\n',    desc('telescope: autocommands'))
+map('n', '<leader>:',   ':Telescope command_history\n', desc('telescope: command history'))
+map('n', '<leader>fk',  ':Telescope keymaps\n',         desc('telescope: keymaps'))
+map('n', '<leader>fs',  ':Telescope notify\n',          desc('telescope: notifications'))
+map('n', '<leader>ftw', Ts.todos,                       desc('telescope: find todo\'s in workspace'))
+map('n', '<leader>ftb', Ts.todos_current_file,          desc('telescope: find todo\'s in buffer'))
 
 -- Search
 map('n', '<leader>sr', ':Spectre\n',                             desc('spectre: replace in files'))
@@ -63,8 +63,8 @@ map('n', '<leader>sM', ':Telescope man_pages\n',                 desc('telescope
 map('n', '<leader>sm', ':Telescope marks\n',                     desc('telescope: jump to mark'))
 map('n', '<leader>so', ':Telescope vim_options\n',               desc('telescope: options'))
 map('n', '<leader>sR', ':Telescope resume\n',                    desc('telescope: resume previous picker'))
-map('n', '<leader>sw', Telescope.grep_word,                      desc('telescope: grep word'))
-map('v', '<leader>sw', Telescope.grep_selection,                 desc('telescope: grep selection'))
+map('n', '<leader>sw', Ts.grep_word,                             desc('telescope: grep word'))
+map('v', '<leader>sw', Ts.grep_selection,                        desc('telescope: grep selection'))
 
 -- Harpoon
 map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -93,14 +93,6 @@ _G.lsp_on_attach = function()
     map('n', ']d',         ':lua vim.diagnostic.goto_next()\n',    desc('LSP: go to next diagnostic'))
 end
 
--- ToggleTerm
-map('n', '<leader>te', ToggleTerm.open_vertical_term,        desc('toggleterm: open vertical'))
-map('n', '<leader>to', ':ToggleTerm direction=horizontal\n', desc('toggleterm: open horizontal'))
-map('n', '<leader>tf', ':ToggleTerm direction=float\n',      desc('toggleterm: open float'))
-map('n', '<leader>tt', ':ToggleTerm direction=tab\n',        desc('toggleterm: open tab'))
-map('t', '<Esc>',      '<C-\\><C-n>',                        desc('toggleterm: enter normal mode'))
-map('t', '<C-q>',      '<C-\\><C-n>:q\n',                    desc('toggleterm: quit'))
-
 -- Noice
 map('c', '<S-Enter>',   Noice.redirect_cmdline, desc('redirect cmdline'))
 map('n', '<leader>snl', Noice.last_message,     desc('noice last message'))
@@ -109,6 +101,15 @@ map('n', '<leader>sna', Noice.all,              desc('noice all'))
 map('n', '<leader>snd', Noice.dismiss_all,      desc('dismiss all'))
 map({'i', 'n', 's'}, '<c-f>', function() Noice.scroll_forward('<c-f>')  end, desc('Scroll forward'))
 map({'i', 'n', 's'}, '<c-b>', function() Noice.scroll_backward('<c-b>') end, desc('Scroll backward'))
+
+-- Terminal
+map('n', '<leader>tt',     ':ToggleTerm\n',                      desc('toggleterm: open terminal'))
+map('n', '<leader>te',     ':ToggleTerm direction=vertical\n',   desc('toggleterm: open vertical'))
+map('n', '<leader>to',     ':ToggleTerm direction=horizontal\n', desc('toggleterm: open horizontal'))
+map('n', '<leader>tf',     ':ToggleTerm direction=float\n',      desc('toggleterm: open float'))
+map('n', '<leader>t<tab>', ':ToggleTerm direction=tab\n',        desc('toggleterm: open tab'))
+map('t', '<Esc>',          '<C-\\><C-n>',                        desc('toggleterm: enter normal mode'))
+map('t', '<C-q>',          '<C-\\><C-n>:q\n',                    desc('toggleterm: quit'))
 
 -- Debugger
 map('n', '<leader>dt', ':lua require("dapui").toggle()\n',             desc('DAP: toggle ui'))
