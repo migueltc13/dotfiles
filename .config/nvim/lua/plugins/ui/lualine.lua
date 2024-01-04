@@ -42,6 +42,11 @@ local function lualine_theme()
             b = { fg = colors.white, bg = colors.outerbg },
             c = { fg = colors.white, bg = colors.innerbg },
         },
+        terminal = {
+            a = { fg = colors.darkgray, bg = colors.insert, gui = "bold" },
+            b = { fg = colors.white, bg = colors.outerbg },
+            c = { fg = colors.white, bg = colors.innerbg },
+        },
     }
 end
 
