@@ -10,9 +10,7 @@ This repository contains my personal dotfiles,
 designed for full use on Ubuntu (Debian-based),
 with most of the features also functioning on other Linux distributions.
 
-<div align="center">
-    <div src=".github/img/line.gif">
-</div>
+---
 
 ### Installation
 
@@ -33,9 +31,7 @@ cd ~/dotfiles
 bin/update.sh
 ```
 
-<div align="center">
-    <div src=".github/img/line.gif">
-</div>
+---
 
 ### Packages
 
@@ -49,9 +45,7 @@ Package lists, located in [packages/](./packages/).
 <!-- TODO - [gem-packages.txt](gem-packages.txt) - gem packages -->
 <!-- TODO - [cargo-packages.txt](cargo-packages.txt) - cargo packages -->
 
-<div align="center">
-    <div src=".github/img/line.gif">
-</div>
+---
 
 ### config
 
@@ -101,9 +95,7 @@ Configuration files, located in [config/](./config/).
 
 - [git/.gitconfig](./config/git/.gitconfig) - git config file
 
-<div align="center">
-    <div src=".github/img/line.gif">
-</div>
+---
 
 ### misc
 
