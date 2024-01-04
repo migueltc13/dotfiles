@@ -37,9 +37,12 @@ return {
                     'thumbs.db',
                 },
             },
+            -- hijack_netrw_behavior = "open_current",
         },
         window = {
+            position = "left", -- "current"
             width = 30,
+            -- auto_expand_width = true,
             mappings = {
                 ["<space>"] = "none",
                 ["O"] = {
@@ -49,11 +52,8 @@ return {
             },
         },
         default_component_configs = {
-            indent = {
-                with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
-                expander_collapsed = "",
-                expander_expanded = "",
-                expander_highlight = "NeoTreeExpander",
+            symlink_target = {
+                enabled = true,
             },
         },
     },
