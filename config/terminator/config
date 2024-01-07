@@ -11,6 +11,10 @@
   title_font = Hack Nerd Font Mono 10
   invert_search = True
 [keybindings]
+  page_up_half = <Primary><Shift>u
+  page_down_half = <Primary><Shift>d
+  insert_number = ""
+  insert_padded = ""
   layout_launcher = ""
 [profiles]
   [[default]]
