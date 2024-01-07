@@ -33,6 +33,7 @@ return {
                 hide_gitignored = false,
                 hide_by_name = {
                     '.git',
+                    '.gitignore',
                     '.DS_Store',
                     'thumbs.db',
                 },
