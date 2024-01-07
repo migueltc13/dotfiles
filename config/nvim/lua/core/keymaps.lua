@@ -10,14 +10,15 @@ local function desc(description, options)
     return opts
 end
 
-local Ts         = require("util.Telescope")
-local Neotree    = require("util.NeoTree")
-local Noice      = require("util.Noice")
-local Misc       = require("util.misc")
-local Toggle     = require("util.toggle")
+local Ts      = require("util.Telescope")
+local Neotree = require("util.NeoTree")
+local Noice   = require("util.Noice")
+local Misc    = require("util.misc")
+local Toggle  = require("util.toggle")
+local Colors  = require("util.colorscheme")
 
 -- UI toggle options
-map('n', '<leader>uc', ':Colors\n',         desc('Change colorscheme'))
+map('n', '<leader>uc', Colors.change,       desc('Change colorscheme'))
 map('n', '<leader>us', Toggle.spell,        desc('Toggle spelling'))
 map('n', '<leader>uw', Toggle.wrap,         desc('Toggle word wrap'))
 map('n', '<leader>ur', Toggle.rnu,          desc('Toggle relative line numbers'))
@@ -27,7 +28,7 @@ map('n', '<leader>uC', Toggle.conceallevel, desc('Toggle conceal'))
 map('n', '<leader>uh', Toggle.inlay_hint,   desc('Toggle inlay hints'))
 map('n', '<leader>ut', Toggle.treesitter,   desc('Toggle treesitter highlighting'))
 map('n', '<leader>un', Toggle.notify,       desc('Toggle notifications'))
-map('n', '<leader>uz', ':ZenMode\n',        desc('Toggle zen mode')) -- Zen-mode
+map('n', '<leader>uz', ':ZenMode\n',        desc('Toggle zen mode'))
 
 -- Telescope
 map('n', '<leader>ff',  ':Telescope find_files\n',      desc('telescope: find files'))
@@ -42,9 +43,10 @@ map('n', '<leader>fc',  ':Telescope commands\n',        desc('telescope: command
 map('n', '<leader>fa',  ':Telescope autocommands\n',    desc('telescope: autocommands'))
 map('n', '<leader>:',   ':Telescope command_history\n', desc('telescope: command history'))
 map('n', '<leader>fk',  ':Telescope keymaps\n',         desc('telescope: keymaps'))
-map('n', '<leader>fs',  ':Telescope notify\n',          desc('telescope: notifications'))
+map('n', '<leader>fn',  ':Telescope notify\n',          desc('telescope: notifications'))
 map('n', '<leader>ftw', Ts.todos,                       desc('telescope: find todo\'s in workspace'))
 map('n', '<leader>ftb', Ts.todos_current_file,          desc('telescope: find todo\'s in buffer'))
+map('n', '<leader>cf',  Ts.config_files,                desc('telescope: config files'))
 
 -- Search
 map('n', '<leader>sr', ':Spectre\n',                             desc('spectre: replace in files'))
@@ -161,10 +163,7 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
 -- ../plugins/editor/nvim-treesitter.lua
 -- ../plugins/editor/comment-nvim.lua
 -- ../plugins/git/gitsigns.lua
-
--- Copy to the system clipboard (Ctrl + C)
-map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
-map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
+-- ../plugins/util/telescope.lua
 
 -- Allow moving selected line(s) of text
 map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
@@ -188,7 +187,14 @@ map('n', '<leader>ui', vim.show_pos, desc('Inspect Pos'))
 -- File operations
 map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>',  desc('Save file'))
 map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', desc('Save file and quit'))
-map('n', '<leader>fn', '<cmd>enew<cr>',             desc('New File'))
+map('n', '<leader>n', '<cmd>enew<cr>',              desc('New File'))
+
+-- Copy to the system clipboard (Ctrl + C)
+map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
+map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
+
+-- Delete word before cursor
+map({ 'i', 'c' }, '<C-H>', '<C-w>', { desc = 'Delete word before cursor', remap = true })
 
 -- Select all text in the buffer
 map('n', '<C-a>', Misc.select_all, desc('Select all'))
@@ -232,7 +238,7 @@ map('n', '<leader>wo', '<C-w>o', desc('Close other windows', { remap = true }))
 
 -- Tabs
 map('n', '<leader><tab>n',       '<cmd>tabnew<cr>',      desc('New tab'))
-map('n', '<leader><tab>q',       '<cmd>tabclose<cr>',    desc('Close tab'))
+map('n', '<leader><tab>c',       '<cmd>tabclose<cr>',    desc('Close tab'))
 map('n', '<leader><tab>l',       '<cmd>tablast<cr>',     desc('Last tab'))
 map('n', '<leader><tab>f',       '<cmd>tabfirst<cr>',    desc('First tab'))
 map('n', '<tab>',                '<cmd>tabnext<cr>',     desc('Next tab'))
