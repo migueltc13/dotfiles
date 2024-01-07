@@ -34,7 +34,7 @@ if [ "$color_prompt" = yes ]; then
     _path="\[\e[38;5;227m\]"
 
     # purple theme
-    # _line="\[\e[0;35m\]"
+    # _l="\[\e[0;35m\]"
     # _user="\[\e[1;35m\]"
 
     # commands
@@ -43,7 +43,16 @@ if [ "$color_prompt" = yes ]; then
 
     # dynamic prompt: error color + git branch
     set_prompt_color() {
-        if [ $? -eq 0 ]; then PC="\[\e[0;32m\]"; else PC="\[\e[0;31m\]"; fi
+        local status=$?
+        if [ $status -eq 0 ]; then
+            PC="\[\e[0;32m\]";
+        else
+            if [ $status -eq 130 ]; then
+                PC="\[\e[0;33m\]";
+            else
+                PC="\[\e[0;31m\]";
+            fi
+        fi
         if [ -z "$(__git_ps1)" ]; then
             _gitl="${_l}│"
         else
