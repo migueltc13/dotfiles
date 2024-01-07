@@ -18,7 +18,7 @@
   layout_launcher = ""
 [profiles]
   [[default]]
-    background_darkness = 0.9
+    background_darkness = 0.8
     background_type = transparent
     cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
@@ -30,7 +30,7 @@
     use_system_font = False
   [[green]]
     background_color = "#002000"
-    background_darkness = 0.9
+    background_darkness = 0.8
     background_type = transparent
     cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
@@ -42,7 +42,7 @@
     use_system_font = False
   [[red]]
     background_color = "#200000"
-    background_darkness = 0.9
+    background_darkness = 0.8
     background_type = transparent
     cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
