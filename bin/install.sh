@@ -36,27 +36,35 @@ function check_command() {
     else
         local pkg=$2
     fi
-    if ! command -v "$1" &> /dev/null; then
+    if ! command -v "$1" &>/dev/null; then
         echo -e "${G}Couldn't find $1. Installing it...${N}"
-        sudo apt install -y "$pkg" &>/dev/null
+        eval "sudo apt install -y $pkg $debug"
         check_success
     fi
 }
 
-# Parse arguments
+# Default values
 root=false
+debug="&>/dev/null"
+
+# Parse arguments
 for arg in "$@"; do
     case $arg in
-        --root)
+        -r|--root)
             root=true
+            shift
+            ;;
+        -d|--debug)
+            debug=""
             shift
             ;;
         -h|--help)
             echo "Usage: $0 [OPTION]"
             echo "Install all the packages and config files"
             echo ""
-            echo "  --root  force installation as root user"
-            echo "  -h      show this help message"
+            echo "  -r, --root      force installation as root user"
+            echo "  -d, --debug     enable debug mode (verbose)"
+            echo "  -h, --help      show this help message"
             exit 0
             ;;
         *)
@@ -80,20 +88,20 @@ if [ "$(basename "$(pwd)")" != "dotfiles" ]; then
 fi
 
 # Check connection to internet
-if ! ping -4 -c 1 google.com &>/dev/null; then
+if ! eval "ping -4 -c 1 google.com $debug"; then
     echo -e "${R}No internet connection. Exiting...${N}"
     exit 3
 fi
 
 # Update and upgrade system
 echo -e "${G}Updating and upgrading system using apt...${N}"
-sudo apt update -y &>/dev/null && sudo apt upgrade -y &>/dev/null
+eval "sudo apt update -y $debug && sudo apt upgrade -y $debug"
 check_success
 
 # Requirements: git, curl, wget
-echo -e "${G}Installing git, curl and wget...${N}"
-sudo apt install -y git curl wget &>/dev/null
-check_success
+check_command "git"
+check_command "curl"
+check_command "wget"
 
 # create .config directory
 if [ ! -d "$HOME"/.config ]; then
@@ -106,11 +114,11 @@ fi
 read -r -s -n 1 -p "Do you want to install apt packages? [y/(l)ite/N] " choice; echo
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "${G}Installing apt packages...${N}"
-    sudo apt install -y $(cat packages/apt.txt) &>/dev/null
+    eval "sudo apt install -y $(tr '\n' ' ' < packages/apt.txt) $debug"
     check_success
 elif [[ "$choice" =~ [lL] ]]; then
     echo -e "${G}Installing apt packages (lite)...${N}"
-    sudo apt install -y $(cat packages/apt-lite.txt) &>/dev/null
+    eval "sudo apt install -y $(tr '\n' ' ' < packages/apt-lite.txt) $debug"
     check_success
 else
     echo -e "${R}Apt packages were not installed.${N}"
@@ -124,7 +132,7 @@ if ask "Do you want to install snap packages?"; then
         if ! sudo snap install "$pkg"; then
             sudo snap install --classic "$pkg"
         fi
-    done < packages/snap.txt &>/dev/null
+    done < packages/snap.txt &>/dev/null # TODO debug mode
     check_success
 else
     echo -e "${R}Snap packages were not installed.${N}"
@@ -134,7 +142,7 @@ fi
 if ask "Do you want to install pip packages?"; then
     check_command "pip" "python3 python3-pip"
     echo -e "${G}Installing pip packages...${N}"
-    pip install -r packages/pip.txt &>/dev/null
+    eval "pip install -r packages/pip.txt $debug"
     check_success
 else
     echo -e "${R}Pip packages were not installed.${N}"
@@ -183,7 +191,7 @@ if ask "Do you want to copy bash config files?"; then
         if ask "Do you want to install copilot cli?"; then
             check_command "npm"
             echo -e "${G}Installing copilot cli...${N}"
-            npm install -g @githubnext/github-copilot-cli &>/dev/null
+            eval "npm install -g @githubnext/github-copilot-cli $debug"
             check_success
         else
             echo -e "${R}copilot cli was not installed${N}"
@@ -226,10 +234,11 @@ if ask "Do you want to copy bash config files?"; then
         echo -e "${G}Installing autojump requirements...${N}"
         check_command "python3"
         echo -e "${G}Installing autojump...${N}"
-        git clone https://github.com/wting/autojump.git ~/autojump_tmp &>/dev/null &&
+        eval "git clone https://github.com/wting/autojump.git ~/autojump_tmp $debug" &&
             cd ~/autojump_tmp/ &&
-            ./install.py &>/dev/null &&
-            rm -rf /autojump_tmp ||
+            eval "./install.py $debug" &&
+            rm -rf ~/autojump_tmp &&
+            eval "cd - $debug" ||
             echo -e "${R}autojump installation failed${N}"
     else
         echo -e "${R}autojump was not installed${N}"
@@ -277,7 +286,7 @@ if ask "Do you want to copy .tmux.conf?"; then
 
     if ask "Do you want to install tmux and plugins?"; then
         echo -e "${G}Installing tmux and plugins...${N}"
-        sudo apt install -y tmux &>/dev/null
+        eval "sudo apt install -y tmux $debug"
         check_success
         echo -e "${G}Installing tmux plugins...${N}"
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &&
@@ -317,7 +326,7 @@ if ask "Do you want to copy config/bat/?"; then
     mkdir -p "$HOME"/.config/bat/
     cp -r config/bat/* "$HOME"/.config/bat/
     # build bat cache (require to load custom themes)
-    bat cache --build &>/dev/null || batcat cache --build &>/dev/null
+    eval "bat cache --build $debug || batcat cache --build $debug"
     check_success
 else
     echo -e "${R}config/bat/ was not copied.${N}"
@@ -336,7 +345,7 @@ fi
 if ask "Do you want to install neovim appimage?"; then
     echo -e "${G}Installing neovim appimage dependencies (fuse)...${N}"
     # NOTE fuse vs fuse3
-    sudo apt install -y fuse &>/dev/null
+    eval "sudo apt install -y fuse $debug"
     check_success
     echo "Versions available:"
     echo " 1) latest stable"
@@ -370,7 +379,7 @@ fi
 # config/nvim/
 if ask "Do you want to copy config/nvim/?"; then
     echo -e "${G}Installing fd-find, ripgrep and shellcheck...${N}"
-    sudo apt install -y fd-find ripgrep shellcheck &>/dev/null
+    eval "sudo apt install -y fd-find ripgrep shellcheck $debug"
     check_success
     echo -e "${G}Copying config/nvim/...${N}"
     rm -rf "$HOME"/.config/nvim/
@@ -402,7 +411,7 @@ if ask "Do you want to copy misc/gnome-extensions/"; then
 
     if ask "Do you want to install gnome-shell-extensions?"; then
         echo -e "${G}Installing gnome-shell-extensions...${N}"
-        sudo apt install -y gnome-shell-extensions &>/dev/null
+        eval "sudo apt install -y gnome-shell-extensions $debug"
         check_success
     else
         echo -e "${R}gnome-shell-extensions was not installed.${N}"
@@ -444,7 +453,7 @@ if ask "Do you want to install nerd fonts?"; then
         cp misc/fonts/*/* "$HOME"/.local/share/fonts/ &&
         echo -e "${C}Copied fonts to ~/.local/share/fonts/${N}"
     echo -e "${G}Updating font cache...${N}"
-    fc-cache -f -v &>/dev/null ||
+    eval "fc-cache -f -v $debug" ||
         echo -e "${R}Couldn't update font cache${N}"
 else
     echo -e "${R}Fonts were not installed.${N}"
