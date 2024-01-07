@@ -1,7 +1,7 @@
 # Ctrl+backspace: delete word backward (same as Ctrl+w and Alt+Backspace)
 bind '"\C-h": backward-kill-word' &>/dev/null
 
-# Ctrl+p: Copy current line to clipboard (xclip)
+# Ctrl+p: copy current line to clipboard (xclip)
 bind '"\C-p": "\C-e\C-uxclip -selection clipboard <<EOTFF\n\C-y\nEOTFF\n"' &>/dev/null
 
 # Alt+l: clear screen
