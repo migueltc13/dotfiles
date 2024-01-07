@@ -50,7 +50,7 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 -- Python 3 executable
-g.python3_host_prog = vim.fn.system('which python3')
+g.python3_host_prog = vim.split(vim.fn.system('which python3'), '\n')[1]
 
 -- Set leader and local leader keys
 g.mapleader = ' '
