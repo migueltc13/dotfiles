@@ -83,3 +83,6 @@ export PATH="$HOME/scripts:$PATH"
 
 # Clean duplicate entries in $PATH
 export PATH=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
+
+# Use less with mouse support on git pagers
+export GIT_PAGER="less -FRX --mouse"
