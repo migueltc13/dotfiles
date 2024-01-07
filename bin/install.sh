@@ -293,7 +293,7 @@ if ask "Do you want to copy .tmux.conf?"; then
         go install github.com/arl/gitmux@latest
         check_success
         echo -e "${C}INFO${N}: gitmux was installed"
-        cp config/tmux/.gitmux.conf ".config/$HOME"
+        cp config/tmux/.gitmux.conf "$HOME/.config/"
         echo -e "${C}INFO${N}: gitmux config file was copied to ~/.config/.gitmux.conf"
     else
         echo -e "${R}gitmux was not installed.${N}"
