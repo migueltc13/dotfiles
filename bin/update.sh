@@ -28,7 +28,6 @@ check () {
         sudo rm -rf "$FILE2"
         sudo cp -r "$FILE1" "$FILE2"
     elif [[ "$choice" =~ [dD] ]]; then
-        #GIT_PAGER="less -FRX"; diff -r --color=always "$2" "$1" | less -x 4 -R --mouse
         diff -r --color=always "$2" "$1" | less -R -x 4 --mouse
         # Clear previous output lines
         tput el; echo -ne "\r"; tput cuu1; tput el; echo -ne "\r"
