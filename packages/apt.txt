@@ -126,7 +126,6 @@ gnome-power-manager
 gnome-session-canberra
 gnome-settings-daemon
 gnome-shell-extension-appindicator
-gnome-shell-extension-manager
 gnome-shell-extension-ubuntu-dock
 gnome-shell-extensions
 gnome-shell
