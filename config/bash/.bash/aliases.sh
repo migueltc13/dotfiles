@@ -3,13 +3,6 @@ alias ls='exa --group-directories-first --icons'
 alias ll='ls -alF'
 alias l='ls -lF'
 
-# fzf aliases
-alias f='find . -type f | fzf --preview="batcat --color=always --style=rule {}"'
-alias d='find . -type d | fzf'
-alias b='bat $(find . -type f | fzf --preview="batcat --color=always --style=rule {}")'
-alias o='xdg-open $(find . | fzf)'
-alias n='nvim $(find . | fzf --preview="batcat --color=always --style=rule {}")'
-
 # Shortcuts for Navigation
 alias up='cd ..'
 alias up2='cd ../..'
