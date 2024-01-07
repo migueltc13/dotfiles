@@ -5,3 +5,5 @@
     name = migueltc13
 [credential]
     helper = store
+[core]
+    pager = less -FRX --mouse
