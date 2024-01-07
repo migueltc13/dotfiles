@@ -418,7 +418,7 @@ if ask "Do you want to copy misc/gnome-extensions/"; then
 
     if ask "Do you want to enable gnome-extensions?"; then
         echo -e "${G}Enabling gnome-extensions...${N}"
-        doncf load /org/gnome/shell/disabled-extensions/ < config/gnome/extensions/disabled.conf
+        dconf load /org/gnome/shell/disabled-extensions/ < config/gnome/extensions/disabled.conf
         dconf load /org/gnome/shell/enabled-extensions/ < config/gnome/extensions/enabled.conf
         echo -e "${C}INFO${N}: re-login to apply changes"
     else
