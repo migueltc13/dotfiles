@@ -1,8 +1,6 @@
 -- Set colorscheme using telescope
 vim.api.nvim_create_user_command("Colors", function()
-    vim.cmd("Lazy load onedarkpro.nvim")
-    vim.cmd("Lazy load tokyonight.nvim")
-    vim.cmd("Telescope colorscheme")
+    require('util.colorscheme').change()
 end, {})
 
 -- Show keymaps using telescope
