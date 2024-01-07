@@ -14,7 +14,7 @@ source "$HOME/.fzf/shell/key-bindings.bash"
 
 # Env variables
 # -------------
-export FZF_DEFAULT_OPTS="--layout=reverse --ansi"
+export FZF_DEFAULT_OPTS="--layout=reverse --ansi --multi"
 export FZF_CTRL_R_OPTS="--prompt '$ '"
 # export FZF_DEFAULT_COMMAND='find .'
 export FZF_ALT_C_COMMAND='find . -type d'
