@@ -36,7 +36,7 @@ function M.todos(opts)
 
     -- Get current file
     local curr_file = nil
-    if opts.cf then
+    if opts and opts.cf then
         curr_file = vim.fn.expand("%:p")
     end
 
