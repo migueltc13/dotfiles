@@ -41,6 +41,11 @@ check () {
     fi
 }
 
+# File changes counter
+changes_count=0
+
+### Packages
+
 # apt-packages.txt
 apt list --installed 2>/dev/null | grep '\[installed\]' | cut -d'/' -f1 1> /tmp/apt.txt
 check "/tmp/apt.txt" "packages/apt.txt"
@@ -53,8 +58,7 @@ check "/tmp/snap.txt" "packages/snap.txt"
 pip list --format=freeze | cut -d '=' -f 1 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
 
-# File changes counter
-changes_count=0
+### Config
 
 # bash
 check "$HOME/.profile"               "config/bash/.profile"
@@ -89,11 +93,28 @@ check "$HOME/.config/BetterDiscord/" "config/betterdiscord/"
 # btop
 check "$HOME/.config/btop/"          "config/btop/"
 
-# miscellanous
+# gnome extensions settings
+dconf dump /org/gnome/shell/extensions/ 1> /tmp/gnome-extensions-settings.conf
+check "/tmp/gnome-extensions-settings.conf" "config/gnome/extensions/settings.conf"
+
+# gnome extensions enabled list
+dconf dump /org/gnome/shell/ | grep -Eo "enabled-extensions=\[.*\]" 1> /tmp/gnome-extensions-enabled.conf
+check "/tmp/gnome-extensions-enabled.conf" "config/gnome/extensions/enabled.conf"
+
+# gnome extensions disabled list
+dconf dump /org/gnome/shell/ | grep -Eo "disabled-extensions=\[.*\]" 1> /tmp/gnome-extensions-disabled.conf
+check "/tmp/gnome-extensions-disabled.conf" "config/gnome/extensions/disabled.conf"
+
+# gnome settings
+dconf dump / 1> /tmp/gnome-settings.conf
+check "/tmp/gnome-settings.conf" "config/gnome/settings.conf"
+
+### Miscellaneous
+
 check "$HOME/.local/share/gnome-shell/extensions/" "misc/gnome-extensions/"
 check "$HOME/Animations/"                          "misc/animations/"
 check "$HOME/Pictures/Wallpapers/"                 "misc/wallpapers/"
-# check "/usr/local/bin/"                             "misc/bin/"
+# check "/usr/local/bin/"                            "misc/bin/"
 # check "/usr/lib/command-not-found"                 "misc/command-not-found/command-not-found"
 # TODO: /opt dir
 
