@@ -31,11 +31,12 @@ if [ "$color_prompt" = yes ]; then
     _l="\[\e[0;32m\]"  # line
     _user="\[\e[1;33m\]"
     _time="\[\e[3;38;5;246m\]"
-    _path="\[\e[38;5;227m\]"
+    _path="\[\e[1;33m\]"
 
     # purple theme
     # _l="\[\e[0;35m\]"
     # _user="\[\e[1;35m\]"
+    # _path="\[\e[38;5;227m\]"
 
     # commands
     _time_cmd="${_time}\$(date +\"%H:%M:%S\")"
