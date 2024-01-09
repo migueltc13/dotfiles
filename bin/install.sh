@@ -191,7 +191,7 @@ if ask "Do you want to copy bash config files?"; then
         if ask "Do you want to install copilot cli?"; then
             check_command "npm"
             echo -e "${G}Installing copilot cli...${N}"
-            eval "npm install -g @githubnext/github-copilot-cli $debug"
+            eval "sudo npm install -g @githubnext/github-copilot-cli $debug"
             check_success
         else
             echo -e "${R}copilot cli was not installed${N}"
