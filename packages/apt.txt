@@ -371,7 +371,6 @@ tmux
 totem
 traceroute
 transmission-gtk
-tree
 tzdata
 ubuntu-advantage-tools
 ubuntu-docs
