@@ -1,3 +1,21 @@
+# override which to handle aliases and functions
+which(){
+  local w
+  w="$(command -V "$1")"
+  case "$w" in
+    *'is a function'*)
+      echo "${w#*$'\n'}"
+      ;;
+    *'is aliased to'*)
+      w="${w#*\`}"
+      echo "${w%\'*}"
+      ;;
+    *)
+      echo "${w##* }"
+      ;;
+  esac
+}
+
 # Create directory and navigate into it
 function mcd() {
   if [[ -z "$1" ]]; then
@@ -24,8 +42,8 @@ function d() {
 
 # fzf: find files and open them with batcat
 function b() {
-  # shellcheck disable=SC2155
-  local result=$(f)
+  local result
+  result=$(f)
   if [ -z "$result" ]; then
     return 130
   fi
@@ -35,8 +53,8 @@ function b() {
 
 # fzf: find files/directories and open them with xdg-open
 function o() {
-  # shellcheck disable=SC2155
-  local result=$(find . | fzf --no-multi)
+  local result
+  result=$(find . | fzf --no-multi)
   if [ -z "$result" ]; then
     return 130
   fi
@@ -45,8 +63,8 @@ function o() {
 
 # fzf: find files/directories and open them with nvim
 function n() {
-  # shellcheck disable=SC2155
-  local result=$(find . | fzf --preview="if [ -f {} ]; then batcat --color=always --style=rule {}; else exa -aG1 --icons {}; fi")
+  local result
+  result=$(find . | fzf --preview="if [ -f {} ]; then batcat --color=always --style=rule {}; else exa -aG1 --icons {}; fi")
   if [ -z "$result" ]; then
     return 130
   fi
@@ -91,24 +109,28 @@ function extract() {
     return 1
   fi
 
-  if [ ! -e "$1" ]; then
-    echo "Archive $1 does not exist."
-    return 2
-  fi
+  for f in "$@"; do
+    if [ ! -f "$f" ]; then
+      echo "$f is not a valid file"
+      return 2
+    fi
+  done
 
-  case "$1" in
-    *.tar.bz2 | *.tbz2) tar xjvf "$1"  ;;
-    *.tar.gz | *.tgz)   tar xzvf "$1"  ;;
-    *.tar)              tar xvf "$1"   ;;
-    *.bz2)              bunzip2 -v "$1";;
-    *.rar)              unrar x "$1"   ;;
-    *.gz)               gunzip "$1"    ;;
-    *.zip)              unzip "$1"     ;;
-    *.Z)                uncompress "$1";;
-    *.7z)               7z x "$1"      ;;
-    *.xz)               xz -d "$1"     ;;
-    *)                  echo "$0: cannot extract $1: unknown archive format"; return 3;;
-  esac
+  for f in "$@"; do
+    case "$f" in
+      *.tar.bz2 | *.tbz2) tar xjvf "$f"  ;;
+      *.tar.gz | *.tgz)   tar xzvf "$f"  ;;
+      *.tar)              tar xvf "$f"   ;;
+      *.bz2)              bunzip2 -v "$f";;
+      *.rar)              unrar x "$f"   ;;
+      *.gz)               gunzip "$f"    ;;
+      *.zip)              unzip "$f"     ;;
+      *.Z)                uncompress "$f";;
+      *.7z)               7z x "$f"      ;;
+      *.xz)               xz -d "$f"     ;;
+      *)                  echo "$0: cannot extract $f: unknown archive format" && return 3;;
+    esac
+  done
 }
 
 # Send 1 free sms per day with Text Belt
