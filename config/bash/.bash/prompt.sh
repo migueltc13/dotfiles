@@ -23,6 +23,16 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+__stopped_jobs() {
+    local stopped_jobs
+    stopped_jobs=$(jobs -s | cut -c31- | cut -d ' ' -f1 | tac | tr '\n' ' ' | sed 's/.$//')
+    if [ -z "$stopped_jobs" ]; then
+        return 1
+    fi
+    printf "⚙ %s" "$stopped_jobs"
+    return 0
+}
+
 if [ "$color_prompt" = yes ]; then
 
     _reset="\[\e[0m\]"
@@ -31,34 +41,43 @@ if [ "$color_prompt" = yes ]; then
     _l="\[\e[0;32m\]"  # line
     _user="\[\e[1;33m\]"
     _time="\[\e[3;38;5;246m\]"
-    _path="\[\e[38;5;227m\]"
+    _path="\[\e[0;33m\]"
+    _jobs="\[\e[0;35m\]"
 
     # purple theme
     # _l="\[\e[0;35m\]"
     # _user="\[\e[1;35m\]"
+    # _path="\[\e[38;5;227m\]"
 
     # commands
     _time_cmd="${_time}\$(date +\"%H:%M:%S\")"
     _git_cmd="\$(__git_ps1 \"\e[3;36m⎇  %s\")"
+    _jobs_cmd="${_jobs}\$(__stopped_jobs)"
 
-    # dynamic prompt: error color + git branch
+    # dynamic prompt: error color + git branch + background jobs stack
     set_prompt_color() {
         local status=$?
-        if [ $status -eq 0 ]; then
-            PC="\[\e[0;32m\]";
-        else
-            if [ $status -eq 130 ]; then
-                PC="\[\e[0;33m\]";
-            else
-                PC="\[\e[0;31m\]";
-            fi
-        fi
+        case $status in
+            0)   # success
+                PC="\[\e[0;32m\]";;
+            130) # SIGINT
+                PC="\[\e[0;33m\]";;
+            147 | 148) # SIGTSTP or SIGINT
+                PC="\[\e[0;35m\]";;
+            *)   # any other error
+                PC="\[\e[0;31m\]";;
+        esac
         if [ -z "$(__git_ps1)" ]; then
-            _gitl="${_l}│"
+            _gitl=""
         else
-            _gitl="${_l}├─┤${_git_cmd}${_l}│"
+            _gitl="${_l}├─┤${_git_cmd}"
         fi
-        PS1="${_l}╭──┤${_user}\u${_l}├─┤${_time_cmd}${_l}├─┤${_path}\w${_gitl}\n${_l}╰─${PC}▶\[\033[00m\] "
+        if [ -z "$(__stopped_jobs)" ]; then
+            _jobsl=""
+        else
+            _jobsl="${_l}├─┤${_jobs_cmd}"
+        fi
+        PS1="${_l}╭──┤${_user}\u${_l}├─┤${_time_cmd}${_l}├─┤${_path}\w${_gitl}${_jobsl}${_l}│\n${_l}╰─${PC}▶\[\033[00m\] "
         PS1="\[\e]0;\u@\h: \w   \a\]$PS1" # set window title
     }
     export PROMPT_COMMAND="set_prompt_color;$PROMPT_COMMAND"
