@@ -1,14 +1,19 @@
+# shell aliases
+alias :r='source ~/.bashrc'
+alias :q='exit'
+
 # ls aliases
 alias ls='exa --group-directories-first --icons'
 alias ll='ls -alF'
 alias l='ls -lF'
+alias tree='exa -T'
 
 # Shortcuts for Navigation
-alias up='cd ..'
-alias up2='cd ../..'
-alias up3='cd ../../..'
-alias up4='cd ../../../..'
-alias up5='cd ../../../../..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 
 # Tools
 alias t='tmux a || tmux'                                    # Attach to tmux session or create a new one
@@ -28,19 +33,19 @@ alias rustscan='sudo docker run -it --rm --name rustscan rustscan/rustscan:2.1.1
 alias openbullet2='sudo docker run --name openbullet2 --rm -p 8069:5000 -v ~/Git/OB2/UserData:/app/UserData/ -it openbullet/openbullet2:latest'
 
 # OSINT tools
-alias theHarvester='py3 /opt/theHarvester/theHarvester.py'  # Harvest info
-alias sublist3r='py3 /opt/Sublist3r/sublist3r.py'           # Enumerate subdomains
-alias sherlock='py3 /opt/sherlock/sherlock'                 # Find social media accounts by username
-alias whatbreach='py whatbreach.py'                         # Find breached emails, databases, pastes, and relevant info
+alias theHarvester='py /opt/theHarvester/theHarvester.py'   # Harvest info
+alias sublist3r='py /opt/Sublist3r/sublist3r.py'            # Enumerate subdomains
+alias sherlock='py /opt/sherlock/sherlock'                  # Find social media accounts by username
+alias whatbreach='py /opt/WhatBreach/whatbreach.py'         # Find breached emails, databases, pastes, and relevant info
 
 # Programing Shortcuts
-alias py='python2'
-alias py3='python3'
+alias py='python3'
 alias python='python3'
 alias venv='python -m venv venv'                            # Create a Python virtual environment
 alias activate='source venv/bin/activate'                   # Activate a virtual environment
-alias gcc='gcc -Wall -Wextra'                               # Use stricter warning flags with GCC
+alias gcc='gcc -Wall -Wextra'                               # Use stricter warning flags with gcc
 alias cpp='g++ -Wall -Wextra'                               # Use stricter warning flags with g++
+alias grind='valgrind --leak-check=full --show-leak-kinds=all'  # Check for memory leaks with Valgrind
 
 # Git Shortcuts
 alias g='git'
@@ -85,20 +90,17 @@ alias v='bat'                                               # Shortcut for batca
 alias edit='nvim'                                           # Edit a file with Neovim
 alias e='nvim'                                              # Shortcut for Neovim
 
-# File Decompression
-# Note: use extract for any type of archive (.bash_functions)
-alias untar='tar -zxvf'                                     # Untar a file with tar
-alias ungzip='gzip -d'                                      # Unzip a file with gzip
-alias unbzip2='bzip2 -d'                                    # Unzip a file with bzip2
-
 # Hacker news on the terminal
 alias news='hnterm'
 
-# Edit hosts file (and change ssh host key for target [TryHackMe, HackTheBox, ...])
-alias hosts='sudo nano /etc/hosts' # ; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t";'
+# Edit hosts file (and change ssh host key for target machine)
+alias hosts='sudo nano /etc/hosts; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t";'
 
 # Alert for long running commands. Usage: $ sleep 10; alert
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# :)
+alias starwars='telnet towel.blinkenlights.nl'
 
 # Project li4
 alias li4='ssh-lemonade -t li4 "tmux a || tmux && bash"'
