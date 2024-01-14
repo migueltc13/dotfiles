@@ -10,10 +10,10 @@ HISTCONTROL=ignoredups
 # append to the history file, don't overwrite it
 shopt -s histappend
 # immediately append to the history file
-PROMPT_COMMAND="history -a; history -n; "
+PROMPT_COMMAND="history -a;history -n;"
 
 # add a empty line after a command
-PROMPT_COMMAND+="echo; "
+PROMPT_COMMAND+="echo;"
 
 # update the values of LINES and COLUMNS. (window size)
 shopt -s checkwinsize
