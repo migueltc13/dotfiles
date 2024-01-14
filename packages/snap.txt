@@ -11,6 +11,7 @@ core22
 crackmapexec
 cups
 dotnet-sdk
+dust
 firefox
 gnome-3-28-1804
 gnome-3-38-2004
