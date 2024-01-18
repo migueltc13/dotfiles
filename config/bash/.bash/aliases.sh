@@ -103,4 +103,4 @@ alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal ||
 alias starwars='telnet towel.blinkenlights.nl'
 
 # Project li4
-alias li4='ssh-lemonade -t li4 "tmux a || tmux && bash"'
+alias li4='ssh-lemonade -t li4'
