@@ -124,5 +124,12 @@ return {
 			on_attach = lsp_on_attach,
 			handlers = handlers,
 		})
+
+		-- configure sqls server
+		-- lspconfig["sqls"].setup({
+		-- 	capabilities = capabilities,
+		-- 	on_attach = lsp_on_attach,
+		-- 	handlers = handlers,
+		-- })
 	end,
 }
