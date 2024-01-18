@@ -113,11 +113,14 @@ map('n', '<leader>t<tab>', ':ToggleTerm direction=tab\n',        desc('toggleter
 map('t', '<Esc>',          '<C-\\><C-n>',                        desc('toggleterm: enter normal mode'))
 map('t', '<C-q>',          '<C-\\><C-n>:q\n',                    desc('toggleterm: quit'))
 
--- Debugger
+-- DAP
 map('n', '<leader>dt', ':lua require("dapui").toggle()\n',             desc('DAP: toggle ui'))
 map('n', '<leader>dr', ':lua require("dapui").open({reset = true})\n', desc('DAP: reset'))
 map('n', '<leader>dc', ':DapContinue\n',                               desc('DAP: continue'))
 map('n', '<leader>d ', ':DapToggleBreakpoint\n',                       desc('DAP: toggle breakpoint'))
+
+-- DBUI
+map('n', '<leader>dd', ':DBUIToggle\n', desc('DBUI: toggle'))
 
 -- Persistence.nvim
 map('n', '<leader>q ', ':Persistence load\n',      desc('persistence: restore session'))
@@ -245,6 +248,6 @@ map('n', '<tab>',                '<cmd>tabnext<cr>',     desc('Next tab'))
 map('n', '<S-tab>',              '<cmd>tabprevious<cr>', desc('Previous tab'))
 map('n', '<leader><tab><tab>',   '<cmd>tabnext<cr>',     desc('Next tab [<tab>]'))
 map('n', '<leader><tab><S-tab>', '<cmd>tabprevious<cr>', desc('Previous tab [<S-tab>]'))
-for i = 1, 8 do
+for i = 1, 4 do
 map('n', '<leader><tab>' .. i, '<cmd>' .. i .. 'tabnext<cr>', desc('Go to tab ' .. i))
 end
