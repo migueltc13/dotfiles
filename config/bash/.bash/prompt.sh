@@ -29,7 +29,7 @@ __stopped_jobs() {
     if [ -z "$stopped_jobs" ]; then
         return 1
     fi
-    printf "⚙ %s" "$stopped_jobs"
+    printf "$1 %s" "$stopped_jobs"
     return 0
 }
 
@@ -72,12 +72,26 @@ if [ "$color_prompt" = yes ]; then
 
     # git branch symbol
     _git_symbol="⎇ "
-    # _git_symbol=" "
+    # _git_symbol=""
+    # _git_symbol=""
+    # _git_symbol=""
+    # _git_symbol=""
+    # _git_symbol=""
+    # _git_symbol=""
+
+    # jobs symbol
+    _jobs_symbol=""
+    # _jobs_symbol=""
+    # _jobs_symbol="⚙"
+    # _jobs_symbol=""
+    # _jobs_symbol=""
+    # _jobs_symbol=""
+    # _jobs_symbol=""
 
     # commands
     _time_cmd="${_time}\$(date +\"%H:%M:%S\")"
     _git_cmd="\$(__git_ps1 \"\${_git_color}\${_git_symbol} %s\")"
-    _jobs_cmd="${_jobs}\$(__stopped_jobs)"
+    _jobs_cmd="${_jobs}\$(__stopped_jobs \${_jobs_symbol})"
 
     # dynamic prompt: error color + git branch + background jobs stack
     set_prompt_color() {
@@ -100,7 +114,7 @@ if [ "$color_prompt" = yes ]; then
             _gitl="${_l}├─┤${_git_cmd}"
         fi
         # background jobs stack
-        if [ -z "$(__stopped_jobs)" ]; then
+        if [ -z "$(__stopped_jobs "$_jobs_symbol")" ]; then
             _jobsl=""
         else
             _jobsl="${_l}├─┤${_jobs_cmd}"
