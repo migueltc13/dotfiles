@@ -64,7 +64,7 @@ return {
             options = {
                 icons_enabled = true,
                 global_status = true,
-                disabled_filetypes = { 'neo-tree', 'dashboard' },
+                disabled_filetypes = { 'neo-tree', 'dashboard', 'dbui', 'dbout' },
                 theme = lualine_theme(),
                 -- theme = 'auto',
             },
