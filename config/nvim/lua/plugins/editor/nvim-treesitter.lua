@@ -52,6 +52,7 @@ return {
                 "query",
                 "regex",
                 "lua",
+                "sql",
                 "vim",
                 "vimdoc",
                 "comment",
