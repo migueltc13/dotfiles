@@ -12,6 +12,7 @@ appstream
 apt-config-icons-hidpi
 apt-utils
 apt
+aptitude
 at-spi2-core
 autoconf
 automake
@@ -219,13 +220,6 @@ libpam-sss
 libpcap0.8-dev
 libproxy1-plugin-gsettings
 libproxy1-plugin-networkmanager
-libreoffice-calc
-libreoffice-gnome
-libreoffice-impress
-libreoffice-math
-libreoffice-pdfimport
-libreoffice-style-breeze
-libreoffice-writer
 libreoffice
 libsasl2-modules
 libsdl2-dev
