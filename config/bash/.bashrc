@@ -51,6 +51,9 @@ fi
 # keybinds definitions
 [ -f ~/.bash/keybindings.sh ] && source ~/.bash/keybindings.sh
 
+# custom definitions
+[ -f ~/.bash/custom.sh ] && source ~/.bash/custom.sh
+
 # copilot cli definitions
 [ -f ~/.bash/copilot_cli.sh ] && source ~/.bash/copilot_cli.sh
 
