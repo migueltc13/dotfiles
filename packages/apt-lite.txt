@@ -6,6 +6,7 @@ fping
 gcc
 gh
 git
+git-lfs
 grep
 gzip
 less
@@ -24,7 +25,6 @@ speedtest-cli
 thefuck
 tmux
 traceroute
-tree
 vim
 vim-runtime
 vim-tiny

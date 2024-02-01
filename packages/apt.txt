@@ -55,6 +55,7 @@ dmz-cursor-theme
 docker-compose
 docker.io
 docker
+doxygen
 e2fsprogs
 efibootmgr
 eject
@@ -106,6 +107,7 @@ gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
 gir1.2-mutter-10
+git-lfs
 git
 gjs
 gnome-accessibility-themes
@@ -140,6 +142,7 @@ gobuster
 golang-go
 gparted
 gpg-agent
+graphviz
 grep
 grub-common
 grub-efi-amd64-bin
@@ -224,7 +227,6 @@ libreoffice
 libsasl2-modules
 libsdl2-dev
 libslirp-dev
-libssl-dev
 libtool
 libu2f-udev
 libwmf0.2-7-gtk
@@ -355,7 +357,6 @@ steghide
 sudo
 system-config-printer
 systemd-hwe-hwdb
-systemd-oomd
 terminator
 thefuck
 tldr
@@ -376,7 +377,6 @@ ubuntu-session
 ubuntu-settings
 ubuntu-standard
 ubuntu-wallpapers
-udev
 ueberzugpp
 unrar
 unzip
