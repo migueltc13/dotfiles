@@ -74,7 +74,7 @@
 		"ColorsCSS": ["BUTTON_DANGER_BACKGROUND", "STATUS_DANGER", "HEADER_PRIMARY"],
 		"EmojiSprites": ["DiversityPerRow", "PickerCount", "PickerPerRow"],
 		"InboxTabs": ["MENTIONS", "UNREADS"],
-		"MessageTypeGroups": ["USER_MESSAGE", "DELETABLE"],
+		"MessageTypeGroups": ["USER_MESSAGE", "UNDELETABLE"],
 		"ReadStateTypes": ["GUILD_EVENT", "NOTIFICATION_CENTER", "CHANNEL"],
 		"UserSettingsActionTypes": ["SLOW_USER_ACTION", "DAILY"]
 	},
@@ -221,7 +221,7 @@
 		}},
 		"GuildBadge": {"strings": ["foregroundDarkColor", "getBadgeCategory"]},
 		"GuildIcon": {"strings": ["SMOL", "badgeStrokeColor"], "funcStrings": ["render()"]},
-		"GuildItem": {"strings": ["guildNode:", "useShouldShowInvitesDisabledNotif", "clearGuildBurstPreview"]},
+		"GuildItem": {"strings": ["guildNode:", "useShouldShowInvitesDisabledNotif"]},
 		"GuildTooltipMutedText": {"strings": [".muteConfig", "color:\"text-muted\""]},
 		"Heading": {"strings": ["data-excessive", ".defaultColor"]},
 		"HeaderBarComponents": {"strings": ["isAuthenticated", ".HEADER_BAR"]},

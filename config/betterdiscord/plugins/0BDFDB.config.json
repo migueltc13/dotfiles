@@ -1,11 +1,11 @@
 {
 	"all": {
 		"changeLogs": {
-			"BDFDB": "3.5.8",
+			"BDFDB": "3.5.9",
 			"ImageUtilities": "5.4.0",
 			"ReadAllNotificationsButton": "1.7.5",
 			"SplitLargeMessages": "1.8.1",
-			"Translator": "2.6.1"
+			"Translator": "2.6.2"
 		},
 		"choices": {
 			"toastPosition": "right"
@@ -17,7 +17,7 @@
 			"useChromium": false
 		},
 		"hashes": {
-			"0BDFDB.data.json": "4ea1ccd6a3446153cfb389980665a35cc0ef1a3a",
+			"0BDFDB.data.json": "37e2001d7e6dc1d3d771e222cd9a1cf2bd43da63",
 			"0BDFDB.raw.css": "8c083e2a87a82aded5f3b2e27fb8b2f816b5f74a"
 		}
 	}

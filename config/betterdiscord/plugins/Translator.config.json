@@ -23,7 +23,8 @@
 			"addTranslateButton": true,
 			"usePerChatTranslation": true,
 			"sendOriginalMessage": false,
-			"showOriginalMessage": false
+			"showOriginalMessage": false,
+			"useSpoilerInOriginal": false
 		}
 	}
 }
