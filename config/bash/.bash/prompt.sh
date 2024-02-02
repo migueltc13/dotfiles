@@ -14,12 +14,12 @@ esac
 #force_color_prompt=yes
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -37,25 +37,27 @@ if [ "$color_prompt" = yes ]; then
 
     _reset="\[\e[0m\]"
 
-    # green theme
-    _l="\[\e[0;32m\]"  # line
-    _user="\[\e[1;33m\]"
-    _time="\[\e[3;38;5;246m\]"
-    _path="\[\e[0;33m\]"
-    _jobs="\[\e[0;35m\]"
-    _host_color="\[\e[0;35m\]"
-    _host_separator_color=${_time}
-    _git_color="\e[3;36m"
-
-    # purple theme
-    # _l="\[\e[0;35m\]"
-    # _user="\[\e[1;35m\]"
-    # _time="\[\e[3;38;5;246m\]"
-    # _path="\[\e[0;34m\]"
-    # _jobs="\[\e[0;36m\]"
-    # _host_color="\[\e[0;34m\]"
-    # _host_separator_color=${_time}
-    # _git_color="\e[3;92m"
+    if [ "$EUID" -eq 0 ]; then
+        # purple theme
+        _l="\[\e[0;35m\]"  # line
+        _user="\[\e[1;35m\]"
+        _time="\[\e[3;38;5;246m\]"
+        _path="\[\e[0;34m\]"
+        _jobs="\[\e[0;36m\]"
+        _host_color="\[\e[0;34m\]"
+        _host_separator_color=${_time}
+        _git_color="\e[3;92m"
+    else
+        # green theme
+        _l="\[\e[0;32m\]"  # line
+        _user="\[\e[1;33m\]"
+        _time="\[\e[3;38;5;246m\]"
+        _path="\[\e[0;33m\]"
+        _jobs="\[\e[0;35m\]"
+        _host_color="\[\e[0;35m\]"
+        _host_separator_color=${_time}
+        _git_color="\e[3;36m"
+    fi
 
     # status colors
     _success=${_l}
@@ -71,12 +73,12 @@ if [ "$color_prompt" = yes ]; then
     fi
 
     # git branch symbol
-    _git_symbol="⎇ "
+    # _git_symbol="⎇ "
     # _git_symbol=""
     # _git_symbol=""
     # _git_symbol=""
     # _git_symbol=""
-    # _git_symbol=""
+    _git_symbol=""
     # _git_symbol=""
 
     # jobs symbol
@@ -127,5 +129,5 @@ if [ "$color_prompt" = yes ]; then
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '  # default
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+    fi
+    unset color_prompt force_color_prompt
