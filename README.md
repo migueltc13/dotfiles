@@ -128,7 +128,7 @@ Cron job example:
 
 ```bash
 # m h   dom mon dow  command
-0 * * * *   $HOME/Pictures/Wallpapers/wallpaper.sh &> $HOME/Wallpapers/wallpaper.log
+0 * * * *   $HOME/Pictures/Wallpapers/wallpaper.sh &> $HOME/Pictures/Wallpapers/wallpaper.log
 ```
 
 #### Animations (ascii)
