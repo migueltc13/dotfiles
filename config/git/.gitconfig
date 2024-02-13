@@ -7,3 +7,4 @@
     helper = store
 [core]
     pager = less -FRX --mouse
+    editor = nvim
