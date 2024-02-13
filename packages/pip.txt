@@ -141,6 +141,7 @@ PyPasser
 pyppeteer
 pyRFC3339
 pyrsistent
+pyserial
 PySocks
 pyte
 python-apt

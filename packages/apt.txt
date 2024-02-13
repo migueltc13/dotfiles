@@ -13,6 +13,8 @@ apt-config-icons-hidpi
 apt-utils
 apt
 aptitude
+arduino-mk
+arduino
 at-spi2-core
 autoconf
 automake
@@ -27,7 +29,6 @@ bc
 binwalk
 bluez
 branding-ubuntu
-brltty
 bsdutils
 btop
 ca-certificates
@@ -59,7 +60,10 @@ doxygen
 e2fsprogs
 efibootmgr
 eject
+elixir
 eog
+erlang-dev
+erlang-xmerl
 evince
 exa
 expect
@@ -97,8 +101,8 @@ freerdp2-x11
 fwupd-signed
 fwupd
 gamemode
+gcc-12
 gcc
-gdm3
 gedit
 gettext
 gh
@@ -177,6 +181,7 @@ imagemagick-6-doc
 imagemagick
 indicator-application
 init
+inotify-tools
 inputattach
 iproute2
 iputils-ping
@@ -227,6 +232,7 @@ libreoffice
 libsasl2-modules
 libsdl2-dev
 libslirp-dev
+libssl-dev
 libtool
 libu2f-udev
 libwmf0.2-7-gtk
@@ -237,6 +243,7 @@ lldb
 locales
 login
 lolcat
+lp-solve
 lsb-release
 lua5.4
 luajit
@@ -246,6 +253,7 @@ make
 mawk
 memtest86+
 meson
+minicom
 mokutil
 mount
 mousetweaks
@@ -353,10 +361,12 @@ spice-vdagent
 sqlite3
 squid
 sshpass
+ssldump
 steghide
 sudo
 system-config-printer
 systemd-hwe-hwdb
+systemd-oomd
 terminator
 thefuck
 tldr
@@ -377,6 +387,7 @@ ubuntu-session
 ubuntu-settings
 ubuntu-standard
 ubuntu-wallpapers
+udev
 ueberzugpp
 unrar
 unzip
