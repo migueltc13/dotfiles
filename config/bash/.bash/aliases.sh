@@ -1,3 +1,6 @@
+# shellcheck disable=SC2154
+# SC2154: Variable "line" is referenced but not assigned. At copylast
+
 # shell aliases
 alias :r='source ~/.bashrc'
 alias :q='exit'
@@ -91,6 +94,9 @@ alias v='bat'                                               # Shortcut for batca
 # File Editing
 alias edit='nvim'                                           # Edit a file with Neovim
 alias e='nvim'                                              # Shortcut for Neovim
+
+# Copy last command(s) to clipboard
+alias copylast='history | fzf --height=50% --tac --ansi | awk '\''{sub(/^[[:space:]]*[0-9]+[[:space:]]*/, ""); sub(/[[:space:]]*$/, ""); print}'\'' | while IFS= read -r line; do echo "$line"; done | tee >(xclip -sel clipboard)'
 
 # Hacker news on the terminal
 alias news='hnterm'
