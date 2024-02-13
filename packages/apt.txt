@@ -75,7 +75,6 @@ ffmpeg
 figlet
 file-roller
 findutils
-firefox
 fonts-dejavu-core
 fonts-font-awesome
 fonts-freefont-ttf
