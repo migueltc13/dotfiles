@@ -28,6 +28,16 @@ function M.numbers()
     vim.notify("number: " .. status .. " | relativenumber: " .. status, level, { title = "Toggle option" })
 end
 
+function M.fileformat()
+    local fileformat = vim.bo.fileformat
+    if fileformat == "unix" then
+        vim.bo.fileformat = "dos"
+    else
+        vim.bo.fileformat = "unix"
+    end
+    vim.notify("fileformat: " .. vim.bo.fileformat, level, { title = "Toggle file format" })
+end
+
 local diagnostics_status = true
 function M.diagnostics()
     diagnostics_status = not diagnostics_status
