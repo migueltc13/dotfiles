@@ -148,6 +148,16 @@ else
     echo -e "${R}Pip packages were not installed.${N}"
 fi
 
+# Install cargo packages
+if ask "Do you want to install cargo packages?"; then
+    check_command "cargo" "cargo"
+    echo -e "${G}Installing cargo packages...${N}"
+    eval "cargo install $(tr '\n' ' ' < packages/cargo.txt) $debug"
+    check_success
+else
+    echo -e "${R}Cargo packages were not installed.${N}"
+fi
+
 ### Config files
 
 # Copy bash config files

@@ -54,8 +54,12 @@ snap list | tail -n +2 | cut -d' ' -f1 1> /tmp/snap.txt
 check "/tmp/snap.txt" "packages/snap.txt"
 
 # pip-packages.txt
-pip list --format=freeze | cut -d '=' -f 1 1> /tmp/pip.txt
+pip list --format=freeze | cut -d'=' -f1 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
+
+# cargo-packages.txt
+cargo install --list | grep -Ev '^ ' | cut -d' ' -f1 1> /tmp/cargo.txt
+check "/tmp/cargo.txt" "packages/cargo.txt"
 
 ### Config
 
