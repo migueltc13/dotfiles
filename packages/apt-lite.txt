@@ -9,6 +9,7 @@ git
 git-lfs
 grep
 gzip
+jq
 less
 make
 nano
