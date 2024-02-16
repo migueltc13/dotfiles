@@ -125,6 +125,20 @@ return {
 			handlers = handlers,
 		})
 
+        -- configure java server
+        -- lspconfig["java-language-server"].setup({
+        --     capabilities = capabilities,
+        --     on_attach = lsp_on_attach,
+        --     handlers = handlers,
+        -- })
+
+        -- configure java server
+        lspconfig["jdtls"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
+        })
+
 		-- configure sqls server
 		-- lspconfig["sqls"].setup({
 		-- 	capabilities = capabilities,
