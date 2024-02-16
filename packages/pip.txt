@@ -61,6 +61,8 @@ frozenlist
 future
 gpg
 greenlet
+grpcio
+grpcio-tools
 gyp
 h11
 hashID
@@ -109,6 +111,7 @@ persistent
 pexpect
 Pillow
 pip
+pipx
 pocketsphinx
 prompt-toolkit
 protobuf
@@ -197,6 +200,7 @@ unattended-upgrades
 undetected-chromedriver
 urllib3
 usb-creator
+userpath
 uvicorn
 uvloop
 wadllib

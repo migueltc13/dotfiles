@@ -24,6 +24,7 @@ baobab
 base-passwd
 base58
 bash-doc
+bash
 bat
 bc
 binwalk
@@ -38,6 +39,7 @@ cmake
 cmatrix
 composer
 console-setup
+coreutils
 cowsay
 crunch
 cups-bsd
@@ -64,6 +66,7 @@ elixir
 eog
 erlang-dev
 erlang-xmerl
+ethtool
 evince
 exa
 expect
@@ -100,8 +103,10 @@ freerdp2-x11
 fwupd-signed
 fwupd
 gamemode
+gawk
 gcc-12
 gcc
+gdm3
 gedit
 gettext
 gh
@@ -112,7 +117,6 @@ gir1.2-gtk-3.0
 gir1.2-mutter-10
 git-lfs
 git
-gjs
 gnome-accessibility-themes
 gnome-bluetooth
 gnome-calculator
@@ -188,8 +192,6 @@ isc-dhcp-client
 kbd
 kerneloops
 kmod
-language-pack-en-base
-language-pack-en
 language-pack-gnome-en-base
 language-pack-gnome-en
 language-selector-common
@@ -202,9 +204,9 @@ libatk-adaptor
 libcanberra-gtk-module
 libcurl4-gnutls-dev
 libdebconfclient0
+libev-dev
 libflashrom1
 libftdi1-2
-libgjs0g
 libglib2.0-bin
 libgmp-dev
 libgraphicsmagick1-dev
@@ -224,9 +226,13 @@ libopenblas0-pthread
 libpam-fprintd
 libpam-gnome-keyring
 libpam-sss
+libpcap-dev
 libpcap0.8-dev
+libpcre3-dev
+libprotobuf-dev
 libproxy1-plugin-gsettings
 libproxy1-plugin-networkmanager
+libreadline-dev
 libreoffice
 libsasl2-modules
 libsdl2-dev
@@ -235,6 +241,7 @@ libssl-dev
 libtool
 libu2f-udev
 libwmf0.2-7-gtk
+libxml2-dev
 libzstd-dev
 lighttpd
 linux-generic-hwe-22.04
@@ -249,6 +256,7 @@ luajit
 luarocks
 macchanger
 make
+maven
 mawk
 memtest86+
 meson
@@ -276,6 +284,7 @@ network-manager-openvpn-gnome
 network-manager-pptp-gnome
 network-manager
 nfs-common
+nftables
 nikto
 ninja-build
 nmap
@@ -294,6 +303,7 @@ passwd
 pcmciautils
 perl
 php
+pkg-config
 plocate
 plymouth-theme-spinner
 polenum
@@ -307,6 +317,7 @@ printer-driver-ptouch
 printer-driver-pxljr
 printer-driver-sag-gdi
 procps
+protobuf-compiler
 proxychains4
 proxychains
 pulseaudio-module-bluetooth
@@ -322,7 +333,9 @@ python3-gi
 python3-pip
 python3-setuptools
 python3-software-properties
+python3-tk
 python3-update-manager
+python3-venv
 python3.10-venv
 python3
 qpdf
@@ -366,8 +379,10 @@ sudo
 system-config-printer
 systemd-hwe-hwdb
 systemd-oomd
+tcpdump
 terminator
 thefuck
+tk
 tldr
 tmux
 totem
@@ -379,7 +394,6 @@ ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
-ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
 ubuntu-session
@@ -396,6 +410,7 @@ update-notifier
 usb-creator-gtk
 usrmerge
 util-linux
+uuid-dev
 vim-runtime
 vim-tiny
 vim
