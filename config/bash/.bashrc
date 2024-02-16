@@ -81,6 +81,9 @@ export PATH="$HOME/.local/bin:$PATH"
 # PATH for go binaries
 export PATH="$HOME/go/bin:$PATH"
 
+# PATH for cargo binaries
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # PATH for custom scripts
 export PATH="$HOME/scripts:$PATH"
 
