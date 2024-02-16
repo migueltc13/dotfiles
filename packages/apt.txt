@@ -189,6 +189,7 @@ inputattach
 iproute2
 iputils-ping
 isc-dhcp-client
+jq
 kbd
 kerneloops
 kmod
@@ -287,6 +288,7 @@ nfs-common
 nftables
 nikto
 ninja-build
+nix-bin
 nmap
 npm
 nuget
