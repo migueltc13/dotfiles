@@ -351,6 +351,7 @@ rfkill
 rhythmbox
 rig
 ripgrep
+ronn
 rsync
 rsyslog
 samba

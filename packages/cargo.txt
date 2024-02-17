@@ -1,3 +1,4 @@
-eza
+lsd
 toipe
 tree-sitter-cli
+vivid
