@@ -45,21 +45,25 @@ changes_count=0
 
 ### Packages
 
-# apt-packages.txt
+# apt
 apt list --installed 2>/dev/null | grep '\[installed\]' | cut -d'/' -f1 1> /tmp/apt.txt
 check "/tmp/apt.txt" "packages/apt.txt"
 
-# snap-packages.txt
+# snap
 snap list | tail -n +2 | cut -d' ' -f1 1> /tmp/snap.txt
 check "/tmp/snap.txt" "packages/snap.txt"
 
-# pip-packages.txt
+# pip
 pip list --format=freeze | cut -d'=' -f1 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
 
-# cargo-packages.txt
+# cargo
 cargo install --list | grep -Ev '^ ' | cut -d' ' -f1 1> /tmp/cargo.txt
 check "/tmp/cargo.txt" "packages/cargo.txt"
+
+# npm
+npm ls -g --json | jq -r '.. | select(.dependencies? // .) | .dependencies? | objects | keys_unsorted[] // .name?' 1> /tmp/npm.txt
+check "/tmp/npm.txt" "packages/npm.txt"
 
 ### Config
 
@@ -95,6 +99,12 @@ check "$HOME/.config/BetterDiscord/" "config/betterdiscord/"
 
 # btop
 check "$HOME/.config/btop/"          "config/btop/"
+
+# lsd
+check "$HOME/.config/lsd/"           "config/lsd/"
+
+# vivid
+check "$HOME/.config/vivid/"         "config/vivid/"
 
 # gnome extensions settings
 dconf dump /org/gnome/shell/extensions/ 1> /tmp/gnome-extensions-settings.conf
