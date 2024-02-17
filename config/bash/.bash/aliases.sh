@@ -6,10 +6,10 @@ alias :r='source ~/.bashrc'
 alias :q='exit'
 
 # ls aliases
-alias ls='exa --group-directories-first --icons'
+alias ls='lsd'
 alias ll='ls -alF'
 alias l='ls -lF'
-alias tree='exa -T'
+alias tree='lsd --tree'
 
 # Shortcuts for Navigation
 alias ..='cd ..'
