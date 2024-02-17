@@ -1,0 +1,7 @@
+@githubnext/github-copilot-cli
+corepack
+neovim
+npm
+peerflix
+typeracer-cli
+yarn
