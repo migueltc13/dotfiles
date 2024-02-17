@@ -33,14 +33,14 @@ return {
                 },
             },
             filetypes = {
-                yaml = false,
+                yaml = true, -- default: false
                 markdown = true, -- default: false
-                help = false,
-                gitcommit = false,
-                gitrebase = false,
-                hgcommit = false,
-                svn = false,
-                cvs = false,
+                help = true, -- default: false
+                gitcommit = true, -- default: false
+                gitrebase = true, -- default: false
+                hgcommit = true, -- default: false
+                svn = true, -- default: false
+                cvs = true, -- default: false
                 ["."] = false,
             },
             copilot_node_command = 'node', -- Node.js version must be > 16.x
