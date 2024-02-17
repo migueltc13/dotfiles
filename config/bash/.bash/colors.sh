@@ -1,3 +1,5 @@
+# shellcheck disable=SC2155 # Declare and assign separately to avoid masking return values in LS_COLORS
+
 if [ -x /usr/bin/dircolors ]; then
     # test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     # alias ls='ls --color=auto'
@@ -15,14 +17,5 @@ fi
 # gcc colors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# exa settings
-export EXA_COLORS=""
-# user and group (purple/yellow)
-#export EXA_COLORS="uu=35:un=33:gu=35:gn=33"
-export EXA_COLORS+="uu=33:un=35:gu=33:gn=35"
-# file types
-#export EXA_COLORS="$EXA_COLORS:*.mkv=36:*.mp3=36:*.mp4=36:*.aac=36:*.pdf=34:*.png=33:*.jpeg=33:*.jpg=33>"
-# date
-export EXA_COLORS+="$EXA_COLORS:da=3;38;5;246"
-# icons spacing
-# export EXA_ICON_SPACING=2
+# ls colors
+export LS_COLORS=$(vivid -d "$HOME"/.config/vivid/filetypes.yml  generate "$HOME"/.config/vivid/catppuccin.yml)
