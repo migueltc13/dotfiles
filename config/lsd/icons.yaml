@@ -1,0 +1,53 @@
+name:
+  .trash: 
+  .cargo: 
+  .emacs.d: 
+  .bash: 󱆃
+  .bashrc: 󱆃
+  .bash_history: 󱆃
+  .bash_logout: 󱆃
+  .bash_profile: 󱆃
+  .profile: 󱆃
+  .bash_aliases: 󱆃
+  .selected_editor: 
+  .nanorc: 
+  .sudo_as_admin_successful: 
+  .wakatime.cfg: 
+  .wakatime.bdb: 
+  a.out: 
+  go: 
+  .copilot-cli-access-token: 
+  .copilot-cli-copilot-token: 
+  Git: 
+  .git: 
+  .github: 
+  .gitignore: 
+  .gitconfig: 
+  .gitattributes: 
+  .gitmodules: 
+  .gitkeep: 
+extension:
+  # go: 
+  go: 
+  py: 
+  js: 
+  json: 
+  md: 
+  m: 
+  c: 
+  h: 
+  # cpp: 
+  # hpp: 
+  hs: 
+  rs: 
+filetype:
+  dir: 
+  file: 
+  pipe: 󰈲
+  socket: 󰆨
+  executable: 
+  symlink-dir: 
+  symlink-file: 
+  device-char: 
+  device-block: 󰜫
+  special: 
