@@ -33,6 +33,33 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+
+# perl
+export PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"$HOME/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
+
+# PATH for local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
+# PATH for go binaries
+export PATH="$HOME/go/bin:$PATH"
+
+# PATH for cargo binaries
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# PATH for custom scripts
+export PATH="$HOME/scripts:$PATH"
+
+# PATH for core
+export PATH="$PATH:/opt/core/venv/bin/"
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -62,33 +89,6 @@ fi
 
 # autojump definitions
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
-
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
-
-# perl
-export PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
-export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
-export PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
-export PERL_MB_OPT="--install_base \"$HOME/perl5\""
-export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
-
-# PATH for local binaries
-export PATH="$HOME/.local/bin:$PATH"
-
-# PATH for go binaries
-export PATH="$HOME/go/bin:$PATH"
-
-# PATH for cargo binaries
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# PATH for custom scripts
-export PATH="$HOME/scripts:$PATH"
-
-# PATH for core
-export PATH="$PATH:/opt/core/venv/bin/"
 
 # Clean duplicate entries in $PATH
 export PATH=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
