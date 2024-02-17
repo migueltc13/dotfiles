@@ -158,6 +158,16 @@ else
     echo -e "${R}Cargo packages were not installed.${N}"
 fi
 
+# Install npm packages
+if ask "Do you want to install npm packages?"; then
+    check_command "npm" "npm"
+    echo -e "${G}Installing npm packages...${N}"
+    eval "npm i -g $(tr '\n' ' ' < packages/npm.txt) $debug"
+    check_success
+else
+    echo -e "${R}Npm packages were not installed.${N}"
+fi
+
 ### Config files
 
 # Copy bash config files
@@ -409,6 +419,44 @@ if ! command -v "nvm" &> /dev/null && ask "Do you want to install nvm?"; then
 else
     echo -e "${R}nvm was not installed.${N}"
     echo -e "${C}INFO${N}: You may want to remove nvm exports from .bashrc"
+fi
+
+# config/lsd/
+if ask "Do you want to copy config/lsd/?"; then
+    echo -e "${G}Copying config/lsd/...${N}"
+    mkdir -p "$HOME"/.config/lsd/
+    cp config/lsd/* "$HOME"/.config/lsd/
+else
+    echo -e "${R}config/lsd/ was not copied.${N}"
+fi
+
+# Install lsd
+if ask "Do you want to install lsd?"; then
+    echo -e "${G}Installing lsd...${N}"
+    check_command "cargo" "cargo"
+    eval "cargo install lsd $debug"
+    check_success
+else
+    echo -e "${R}lsd was not installed.${N}"
+fi
+
+# config/vivid/
+if ask "Do you want to copy config/vivid/?"; then
+    echo -e "${G}Copying config/vivid/...${N}"
+    mkdir -p "$HOME"/.config/vivid/
+    cp config/vivid/* "$HOME"/.config/vivid/
+else
+    echo -e "${R}config/vivid/ was not copied.${N}"
+fi
+
+# Install vivid
+if ask "Do you want to install vivid?"; then
+    echo -e "${G}Installing vivid...${N}"
+    check_command "cargo" "cargo"
+    eval "cargo install vivid $debug"
+    check_success
+else
+    echo -e "${R}vivid was not installed.${N}"
 fi
 
 ### Miscellaneous
