@@ -7,8 +7,8 @@ alias :q='exit'
 
 # ls aliases
 alias ls='lsd'
-alias ll='ls -alF'
-alias l='ls -lF'
+alias ll='ls -al'
+alias l='ls -l'
 alias tree='lsd --tree'
 
 # Shortcuts for Navigation
