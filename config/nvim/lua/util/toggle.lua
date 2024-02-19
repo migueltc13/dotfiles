@@ -68,13 +68,48 @@ function M.inlay_hint()
     end
 end
 
-function M.treesitter()
+-- zen-mode
+
+function M.zen()
+    require("zen-mode").toggle()
+    vim.notify("Toggled zen mode", 3, { title = "Zen Mode", icon = "🧘" })
+end
+
+-- Treesitter
+
+function M.ts_highlight()
     if vim.b.ts_highlight then
         vim.treesitter.stop()
-        vim.notify("Disabled highlighting", level, { title = "Toggle Treesitter" })
+        vim.notify("Disabled highlight", level, { title = "Toggle Treesitter" })
     else
         vim.treesitter.start()
-        vim.notify("Enabled highlighting", level, { title = "Toggle Treesitter" })
+        vim.notify("Enabled highlight", level, { title = "Toggle Treesitter" })
+    end
+end
+
+function M.ts_indent()
+    vim.cmd("TSToggle indent")
+    vim.notify("Toggled indent", level, { title = "Toggle Treesitter" })
+end
+
+function M.ts_autotag()
+    vim.cmd("TSToggle autotag")
+    vim.notify("Toggled auto tag", level, { title = "Toggle Treesitter" })
+end
+
+function M.ts_inc_sel()
+    vim.cmd("TSToggle incremental_selection")
+    vim.notify("Toggled incremental selection", level, { title = "Toggle Treesitter" })
+end
+
+function M.ts_context()
+    local inject = require("util.inject")
+    local tsc = require("treesitter-context")
+    tsc.toggle()
+    if inject.get_upvalue(tsc.toggle, "enabled") then
+        vim.notify("Enabled context", level, { title = "Toggle Treesitter" })
+    else
+        vim.notify("Disabled context", level, { title = "Toggle Treesitter" })
     end
 end
 
@@ -127,11 +162,11 @@ function M.copilot()
     if copilot_status == true then
         copilot_status = false
         vim.cmd("silent Copilot disable")
-        vim.notify("Copilot disabled", 3, { title = "copilot", icon = M.copilot_icons.off })
+        vim.notify("Copilot disabled", 3, { title = "Copilot", icon = M.copilot_icons.off })
     else
         copilot_status = true
         vim.cmd("silent Copilot enable")
-        vim.notify("Copilot enabled", 3, { title = "copilot", icon = M.copilot_icons.on })
+        vim.notify("Copilot enabled", 3, { title = "Copilot", icon = M.copilot_icons.on })
     end
 end
 
