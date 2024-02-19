@@ -26,6 +26,7 @@ return {
             ["<leader>d"] =     { name = "+diagnostics/dap/dbui" },
             ["<leader>h"] =     { name = "+harpoon" },
             ["<leader>sn"] =    { name = "+noice" },
+            ["<leader>ut"] =    { name = "+treesitter" },
             -- ["<leader>x"] = { name = "+diagnostics/quickfix" },
         },
     },
