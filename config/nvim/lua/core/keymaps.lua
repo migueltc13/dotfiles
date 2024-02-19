@@ -10,31 +10,35 @@ local function desc(description, options)
     return opts
 end
 
-local Ts      = require("util.Telescope")
-local Neotree = require("util.NeoTree")
-local Noice   = require("util.Noice")
-local Misc    = require("util.misc")
-local Toggle  = require("util.toggle")
-local Colors  = require("util.colorscheme")
+local Telescope = require("util.Telescope")
+local Neotree   = require("util.NeoTree")
+local Noice     = require("util.Noice")
+local Misc      = require("util.misc")
+local Toggle    = require("util.toggle")
+local Colors    = require("util.colorscheme")
 
 -- UI toggle options
-map('n', '<leader>uc', Colors.change,       desc('Change colorscheme'))
-map('n', '<leader>us', Toggle.spell,        desc('Toggle spelling'))
-map('n', '<leader>uw', Toggle.wrap,         desc('Toggle word wrap'))
-map('n', '<leader>ur', Toggle.rnu,          desc('Toggle relative line numbers'))
-map('n', '<leader>ul', Toggle.numbers,      desc('Toggle line numbers'))
-map('n', '<leader>uf', Toggle.fileformat,   desc('Toggle file format'))
-map('n', '<leader>ud', Toggle.diagnostics,  desc('Toggle diagnostics (buffer)'))
-map('n', '<leader>uC', Toggle.conceallevel, desc('Toggle conceal'))
-map('n', '<leader>uh', Toggle.inlay_hint,   desc('Toggle inlay hints'))
-map('n', '<leader>ut', Toggle.treesitter,   desc('Toggle treesitter highlighting'))
-map('n', '<leader>un', Toggle.notify,       desc('Toggle notifications'))
-map('n', '<leader>uz', ':ZenMode\n',        desc('Toggle zen mode'))
+map('n', '<leader>uc',  Colors.change,       desc('Change colorscheme'))
+map('n', '<leader>us',  Toggle.spell,        desc('Toggle spelling'))
+map('n', '<leader>uw',  Toggle.wrap,         desc('Toggle word wrap'))
+map('n', '<leader>ur',  Toggle.rnu,          desc('Toggle relative line numbers'))
+map('n', '<leader>ul',  Toggle.numbers,      desc('Toggle line numbers'))
+map('n', '<leader>uf',  Toggle.fileformat,   desc('Toggle file format'))
+map('n', '<leader>ud',  Toggle.diagnostics,  desc('Toggle diagnostics (buffer)'))
+map('n', '<leader>uC',  Toggle.conceallevel, desc('Toggle conceal'))
+map('n', '<leader>uh',  Toggle.inlay_hint,   desc('Toggle inlay hints'))
+map('n', '<leader>uth', Toggle.ts_highlight, desc('Toggle highlighting'))
+map('n', '<leader>uti', Toggle.ts_indent,    desc('Toggle indent'))
+map('n', '<leader>uta', Toggle.ts_autotag,   desc('Toggle auto tag'))
+map('n', '<leader>uts', Toggle.ts_inc_sel,   desc('Toggle incremental selection'))
+map('n', '<leader>utc', Toggle.ts_context,   desc('Toggle context'))
+map('n', '<leader>un',  Toggle.notify,       desc('Toggle notifications'))
+map('n', '<leader>uz',  Toggle.zen,          desc('Toggle zen mode'))
 
 -- Telescope
 map('n', '<leader>ff',  ':Telescope find_files\n',      desc('telescope: find files'))
 map('n', '<leader> ',   '<leader>ff',                   desc('telescope: find files', { remap = true }))
-map('n', '<leader>fF',  Ts.find_hidden_files,           desc('telescope: find (hidden) files'))
+map('n', '<leader>fF',  Telescope.find_hidden_files,    desc('telescope: find (hidden) files'))
 map('n', '<leader>fp',  ':Telescope oldfiles\n',        desc('telescope: previous files'))
 map('n', '<leader>fg',  ':Telescope live_grep\n',       desc('telescope: live grep files'))
 map('n', '<leader>fb',  ':Telescope buffers\n',         desc('telescope: find buffers'))
@@ -45,9 +49,9 @@ map('n', '<leader>fa',  ':Telescope autocommands\n',    desc('telescope: autocom
 map('n', '<leader>:',   ':Telescope command_history\n', desc('telescope: command history'))
 map('n', '<leader>fk',  ':Telescope keymaps\n',         desc('telescope: keymaps'))
 map('n', '<leader>fn',  ':Telescope notify\n',          desc('telescope: notifications'))
-map('n', '<leader>ftw', Ts.todos,                       desc('telescope: find todo\'s in workspace'))
-map('n', '<leader>ftb', Ts.todos_current_file,          desc('telescope: find todo\'s in buffer'))
-map('n', '<leader>cf',  Ts.config_files,                desc('telescope: config files'))
+map('n', '<leader>ftw', Telescope.todos,                desc('telescope: find todo\'s in workspace'))
+map('n', '<leader>ftb', Telescope.todos_current_file,   desc('telescope: find todo\'s in buffer'))
+map('n', '<leader>cf',  Telescope.config_files,         desc('telescope: config files'))
 
 -- Search
 map('n', '<leader>sr', ':Spectre\n',                             desc('spectre: replace in files'))
@@ -66,8 +70,8 @@ map('n', '<leader>sM', ':Telescope man_pages\n',                 desc('telescope
 map('n', '<leader>sm', ':Telescope marks\n',                     desc('telescope: jump to mark'))
 map('n', '<leader>so', ':Telescope vim_options\n',               desc('telescope: options'))
 map('n', '<leader>sR', ':Telescope resume\n',                    desc('telescope: resume previous picker'))
-map('n', '<leader>sw', Ts.grep_word,                             desc('telescope: grep word'))
-map('v', '<leader>sw', Ts.grep_selection,                        desc('telescope: grep selection'))
+map('n', '<leader>sw', Telescope.grep_word,                      desc('telescope: grep word'))
+map('v', '<leader>sw', Telescope.grep_selection,                 desc('telescope: grep selection'))
 
 -- Harpoon
 map('n', '<leader>he', ':lua require("harpoon.ui").toggle_quick_menu()\n', desc('harpoon: toggle quick menu'))
@@ -196,6 +200,9 @@ map('n', '<leader>n', '<cmd>enew<cr>',              desc('New File'))
 -- Copy to the system clipboard (Ctrl + C)
 map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
 map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
+
+-- Allow Ctrl + ^ in insert mode
+map('i', '<C-^>', '<esc><C-^>', desc('[<C-^>]', { remap = true }))
 
 -- Delete word before cursor
 map({ 'i', 'c' }, '<C-H>', '<C-w>', { desc = 'Delete word before cursor', remap = true })
