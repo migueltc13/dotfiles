@@ -25,19 +25,25 @@ return {
                     node_decremental = "<bs>",
                 },
             },
+            -- Automatically install missing parsers when entering buffer
+            -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+            auto_install = true,
             -- ensure these language parsers are installed
             ensure_installed = {
-                "python",
                 "c",
+                "lua",
+                "vim",
+                "vimdoc",
+                "query",
+                "comment",
+                "bash",
+                "python",
                 "cpp",
                 "c_sharp",
                 "dot",
-                "doxygen",
                 "haskell",
                 "rust",
                 "java",
-                "csv",
-                "json",
                 "javascript",
                 "typescript",
                 "yaml",
@@ -45,18 +51,19 @@ return {
                 "css",
                 "markdown",
                 "markdown_inline",
-                "graphql",
-                "bash",
                 "dockerfile",
+                "doxygen",
                 "gitignore",
-                "query",
                 "regex",
-                "lua",
                 "sql",
-                "vim",
-                "vimdoc",
-                "comment",
+                "graphql",
+                "csv",
+                "json",
             },
+            -- Install parsers synchronously (only applied to `ensure_installed`)
+            sync_install = false,
+            -- List of parsers to ignore installing (or "all")
+            ignore_install = {},
         })
 
         require("treesitter-context").setup({
