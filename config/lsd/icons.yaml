@@ -1,7 +1,43 @@
+#       
 name:
   .trash: 
   .cargo: 
   .emacs.d: 
+  .gnome: 
+  music: 
+  library:  # 
+  games: 
+  go:  # 
+  uminho:  # 
+  ctf: 
+  mk7: 
+  exploits: 
+  books: 
+  packages: 
+  snap: 
+  .snap: 
+  steam:  # 
+  .steam:  # 
+  java: 
+  .java: 
+  arduino: 
+  .arduino15: 
+  fonts: 
+  .fonts: 
+  mozilla: 
+  .mozilla: 
+  git: 
+  .git: 
+  .gitignore: 
+  .gitconfig: 
+  .gitattributes: 
+  .gitmodules: 
+  .gitkeep: 
+  .github: 
+  .copilot-cli-access-token: 
+  .copilot-cli-copilot-token: 
+  .fzf: 󱆃
+  .autojump: 󱆃
   .bash: 󱆃
   .bashrc: 󱆃
   .bash_history: 󱆃
@@ -15,20 +51,8 @@ name:
   .wakatime.cfg: 
   .wakatime.bdb: 
   a.out: 
-  go: 
-  .copilot-cli-access-token: 
-  .copilot-cli-copilot-token: 
-  Git: 
-  .git: 
-  .github: 
-  .gitignore: 
-  .gitconfig: 
-  .gitattributes: 
-  .gitmodules: 
-  .gitkeep: 
 extension:
-  # go: 
-  go: 
+  go:  # 
   py: 
   js: 
   json: 
