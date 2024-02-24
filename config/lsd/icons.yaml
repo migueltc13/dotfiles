@@ -64,6 +64,8 @@ extension:
   # hpp: 
   hs: 
   rs: 
+  asc: 
+  gpg: 
 filetype:
   dir: 
   file: 
