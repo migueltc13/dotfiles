@@ -17,7 +17,7 @@ source "$HOME/.fzf/shell/key-bindings.bash"
 export FZF_DEFAULT_OPTS="--layout=reverse --ansi --multi"
 export FZF_CTRL_R_OPTS="--prompt '$ '"
 # export FZF_DEFAULT_COMMAND='find .'
-export FZF_ALT_C_COMMAND='find . -type d'
+export FZF_ALT_C_COMMAND='find . -type d 2>/dev/null'
 # export FZF_ALT_C_COMMAND='fdfind -H -t d'
 
 # Catppuccin mocha theme
