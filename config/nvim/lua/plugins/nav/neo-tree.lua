@@ -3,10 +3,23 @@ return {
     branch = "v3.x",
     cmd = "Neotree",
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-      -- "3rd/image.nvim", -- Image support in preview window: See `# Preview Mode` for more information
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "MunifTanjim/nui.nvim",
+        {
+            "s1n7ax/nvim-window-picker",
+            lazy = true,
+            name = "window-picker",
+            version = "2.*",
+            config = function()
+                require("window-picker").setup({
+                    hint = 'floating-big-letter', -- 'statusline-winbar' | 'floating-big-letter'
+                    selection_chars = '123456789',
+                    show_prompt = true,
+                })
+            end,
+        }
+        -- "3rd/image.nvim", -- Image support in preview window: See `# Preview Mode` for more information
     },
     init = function()
         if vim.fn.argc(-1) == 1 then
