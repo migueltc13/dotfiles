@@ -12,11 +12,11 @@ return {
                     jump_next = "]]",
                     accept = "<CR>",
                     refresh = "gr",
-                    open = "<M-CR>"
+                    open = "<M-c>",
                 },
                 layout = {
                     position = "bottom", -- top | bottom | left | right
-                    ratio = 0.4
+                    ratio = 0.4,
                 },
             },
             suggestion = {
@@ -24,12 +24,12 @@ return {
                 auto_trigger = true,
                 debounce = 75,
                 keymap = {
-                    accept = "<M-l>",
+                    accept = "<M-CR>",
                     accept_word = false,
                     accept_line = false,
-                    next = "<M-]>",
-                    prev = "<M-[>",
-                    dismiss = "<C-]>",
+                    next = "<M-n>",
+                    prev = "<M-p>",
+                    dismiss = "<M-]>",
                 },
             },
             filetypes = {
