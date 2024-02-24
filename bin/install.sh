@@ -46,6 +46,7 @@ function check_command() {
 # Default values
 root=false
 debug="&>/dev/null"
+debug_wget="-q"
 
 # Parse arguments
 for arg in "$@"; do
@@ -56,6 +57,7 @@ for arg in "$@"; do
             ;;
         -d|--debug)
             debug=""
+            debug_wget=""
             shift
             ;;
         -h|--help)
@@ -111,7 +113,7 @@ fi
 ### Packages
 
 # Install apt packages
-read -r -s -n 1 -p "Do you want to install apt packages? [y/(l)ite/N] " choice; echo
+read -r -n 1 -p "Do you want to install apt packages? [y/(l)ite/N] " choice; echo
 if [[ "$choice" =~ [yY] ]]; then
     echo -e "${G}Installing apt packages...${N}"
     eval "sudo apt install -y $(tr '\n' ' ' < packages/apt.txt) $debug"
@@ -299,18 +301,34 @@ else
     echo -e "${R}.Xresources was not copied.${N}"
 fi
 
-# .tmux.conf
-if ask "Do you want to copy .tmux.conf?"; then
-    echo -e "${G}Copying .tmux.conf...${N}"
-    cp config/tmux/.tmux.conf "$HOME"
+# tmux.conf
+if ask "Do you want to copy tmux.conf?"; then
+    echo -e "Choose where to copy tmux.conf:"
+    echo " 1) $HOME/.tmux.conf"
+    echo " 2) /etc/tmux.conf"
+    read -r -n 1 -p "Choose option: " choice; echo
+    case $choice in
+        1)
+            echo -e "${G}Copying tmux.conf to $HOME/.tmux.conf...${N}"
+            cp config/tmux/tmux.conf "$HOME/.tmux.conf"
+            ;;
+        2)
+            echo -e "${G}Copying tmux.conf to /etc/tmux.conf...${N}"
+            sudo cp config/tmux/tmux.conf /etc/
+            ;;
+        *)
+            echo -e "${C}Invalid option. Skipping tmux.conf copy.${N}"
+            ;;
+    esac
 
     if ask "Do you want to install tmux and plugins?"; then
         echo -e "${G}Installing tmux and plugins...${N}"
         eval "sudo apt install -y tmux $debug"
         check_success
         echo -e "${G}Installing tmux plugins...${N}"
-        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &&
-            ~/.tmux/plugins/tpm/bin/install_plugins
+        eval git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm "$debug" &&
+            eval ~/.tmux/plugins/tpm/bin/install_plugins "$debug"
+        check_success
         echo -e "${C}INFO${N}: tmux plugins were installed"
     else
         echo -e "${R}tmux and plugins were not installed.${N}"
@@ -322,13 +340,13 @@ if ask "Do you want to copy .tmux.conf?"; then
         go install github.com/arl/gitmux@latest
         check_success
         echo -e "${C}INFO${N}: gitmux was installed"
-        cp config/tmux/.gitmux.conf "$HOME/.config/"
+        cp config/tmux/gitmux.conf "$HOME/.config/.gitmux.conf"
         echo -e "${C}INFO${N}: gitmux config file was copied to ~/.config/.gitmux.conf"
     else
         echo -e "${R}gitmux was not installed.${N}"
     fi
 else
-    echo -e "${R}.tmux.conf was not copied.${N}"
+    echo -e "${R}tmux.conf was not copied.${N}"
 fi
 
 # config/terminator/config
@@ -363,29 +381,28 @@ fi
 
 # Neovim appimage
 if ask "Do you want to install neovim appimage?"; then
-    echo -e "${G}Installing neovim appimage dependencies (fuse)...${N}"
-    # NOTE fuse vs fuse3
-    eval "sudo apt install -y fuse $debug"
+    echo -e "${G}Installing neovim appimage dependencies (fuse3)...${N}"
+    eval "sudo apt install -y fuse2fs $debug"
     check_success
     echo "Versions available:"
     echo " 1) latest stable"
     echo " 2) latest nightly"
     echo " 3) v0.9.4"
-    read -r -s -n 1 -p "Choose version: " choice; echo
+    read -r -n 1 -p "Choose version: " choice; echo
     case $choice in
         1)
             echo -e "${G}Installing latest stable neovim appimage...${N}"
-            wget -O nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage &&
+            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage &&
                 chmod u+x nvim && sudo mv nvim /usr/local/bin
             ;;
         2)
             echo -e "${G}Installing latest nightly neovim appimage...${N}"
-            wget -O nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage &&
+            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage &&
                 chmod u+x nvim && sudo mv nvim /usr/local/bin
             ;;
         3)
             echo -e "${G}Installing v0.9.4 neovim appimage...${N}"
-            wget -O nvim https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage &&
+            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/v0.9.4/nvim.appimage &&
                 chmod u+x nvim && sudo mv nvim /usr/local/bin
             ;;
         *)
