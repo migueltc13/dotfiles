@@ -14,7 +14,5 @@ bind '"\es": "\C-k\C-ussh-menu\n"' &>/dev/null
 bind '"\eh": "\C-k\C-ucht\n"' &>/dev/null
 
 # vim movement keys
-bind '"\C-k": history-search-backward' &>/dev/null
-bind '"\C-j": history-search-forward' &>/dev/null
 bind '"\ek": history-search-backward' &>/dev/null
 bind '"\ej": history-search-forward' &>/dev/null
