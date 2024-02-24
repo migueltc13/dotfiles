@@ -73,6 +73,10 @@ check "/tmp/cargo.txt" "packages/cargo.txt"
 npm ls -g --json | jq -r '.. | select(.dependencies? // .) | .dependencies? | objects | keys_unsorted[] // .name?' 1> /tmp/npm.txt
 check "/tmp/npm.txt" "packages/npm.txt"
 
+# apt sources
+check "/etc/apt/sources.list"    "packages/sources.list"
+check "/etc/apt/sources.list.d/" "packages/sources.list.d/"
+
 ### Config
 
 # bash

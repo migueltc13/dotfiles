@@ -110,6 +110,19 @@ if [ ! -d "$HOME"/.config ]; then
     mkdir -p "$HOME"/.config
 fi
 
+# apt sources
+if ask "Do you want to add apt sources directory?"; then
+    echo -e "${G}Adding apt sources...${N}"
+    mkdir -p /etc/apt/sources.list.d
+    eval "sudo cp -r packages/sources.list.d/* /etc/apt/sources.list.d/ $debug"
+    check_success
+    echo -e "${G}Updating apt...${N}"
+    eval "sudo apt update $debug"
+    check_success
+else
+    echo -e "${R}Apt sources directory was not added.${N}"
+fi
+
 ### Packages
 
 # Install apt packages
