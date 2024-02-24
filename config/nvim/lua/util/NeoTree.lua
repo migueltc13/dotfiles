@@ -10,12 +10,12 @@ function M.open_in_system(state)
     if osType == "Windows_NT" then
         command = "start '" .. filepath .. "'"
     elseif osType == "Darwin" then
-        command = "open '" .. filepath .. "'"
+        command = "open '" .. filepath .. "' &>/dev/null &"
     else
         command = "xdg-open '" .. filepath .. "' &>/dev/null &"
     end
 
-    vim.notify("Opening " .. filepath, 2, { title = "NeoTree" })
+    vim.notify("Opening " .. filepath, vim.log.levels.INFO, { title = "NeoTree" })
     os.execute(command)
 end
 
