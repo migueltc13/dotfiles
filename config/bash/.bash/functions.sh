@@ -32,12 +32,12 @@ function calc() {
 
 # # fzf: find files
 function f() {
-    find . -type f | fzf --preview="batcat --color=always --style=rule {}"
+    find . -type f 2>/dev/null | fzf --preview="batcat --color=always --style=rule {}"
 }
 
 # fzf: find directories
 function d() {
-    find . -type d | fzf
+    find . -type d  2>/dev/null | fzf
 }
 
 # fzf: find files and open them with batcat
@@ -54,7 +54,7 @@ function b() {
 # fzf: find files/directories and open them with xdg-open
 function o() {
     local result
-    result=$(find . | fzf --no-multi)
+    result=$(find .  2>/dev/null | fzf --no-multi)
     if [ -z "$result" ]; then
         return 130
     fi
@@ -64,7 +64,13 @@ function o() {
 # fzf: find files/directories and open them with nvim
 function n() {
     local result
-    result=$(find . | fzf --preview="if [ -f {} ]; then batcat --color=always --style=rule {}; else exa -aG1 --icons {}; fi")
+    result=$(find .  2>/dev/null | \
+        fzf --preview="\
+        if [ -f {} ]; then\
+            batcat --color=always --style=rule {};\
+        else\
+            lsd --icon=always --color=always -A {};\
+        fi")
     if [ -z "$result" ]; then
         return 130
     fi
