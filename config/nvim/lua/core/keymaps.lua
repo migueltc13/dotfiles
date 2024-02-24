@@ -106,8 +106,8 @@ map('n', '<leader>snl', Noice.last_message,     desc('noice last message'))
 map('n', '<leader>snh', Noice.history,          desc('noice history'))
 map('n', '<leader>sna', Noice.all,              desc('noice all'))
 map('n', '<leader>snd', Noice.dismiss_all,      desc('dismiss all'))
-map({'i', 'n', 's'}, '<c-f>', function() Noice.scroll_forward('<c-f>')  end, desc('Scroll forward'))
-map({'i', 'n', 's'}, '<c-b>', function() Noice.scroll_backward('<c-b>') end, desc('Scroll backward'))
+map({'i', 's', 'n'}, '<c-f>', function() Noice.scroll_forward('<c-f>')  end, desc('Scroll forward'))
+map({'i', 's', 'n'}, '<c-b>', function() Noice.scroll_backward('<c-b>') end, desc('Scroll backward'))
 
 -- Terminal
 map('n', '<leader>tt',     ':ToggleTerm\n',                      desc('toggleterm: open terminal'))
@@ -134,9 +134,10 @@ map('n', '<leader>qs', ':Persistence save\n',      desc('persistence: save curre
 map('n', '<leader>qd', ':Persistence stop\n',      desc('persistence: don\'t save session'))
 
 -- Neo-tree
-map('n', '<leader>e', ':Neotree toggle\n', desc('NeoTree: toggle'))
-map('n', '<leader>be', Neotree.buffers,    desc('NeoTree: open buffers'))
-map('n', '<leader>ge', Neotree.git_status, desc('NeoTree: open git status'))
+map('n', '<leader>e',  ':Neotree toggle\n', desc('NeoTree: toggle'))
+map('n', '<M-e>',      ':Neotree focus\n',  desc('NeoTree: focus')) -- overrides nvim-autopairs fast wrap
+map('n', '<leader>be', Neotree.buffers,     desc('NeoTree: open buffers'))
+map('n', '<leader>ge', Neotree.git_status,  desc('NeoTree: open git status'))
 
 -- Git
 map('n', '<leader>gg', ':LazyGit\n',               desc('lazygit: open'))
@@ -173,9 +174,21 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
 -- ../plugins/git/gitsigns.lua
 -- ../plugins/util/telescope.lua
 
+-- Allow moving in insert mode with <alt> + hjkl
+map({ 'i', 'c' }, '<A-h>', '<left>',  desc('Move left',  { remap = true }))
+map({ 'i', 'c' }, '<A-j>', '<down>',  desc('Move down',  { remap = true }))
+map({ 'i', 'c' }, '<A-k>', '<up>',    desc('Move up',    { remap = true }))
+map({ 'i', 'c' }, '<A-l>', '<right>', desc('Move right', { remap = true }))
+
+-- Allow moving on wrapped lines
+map('n', 'j',      'v:count ? "j" : "gj"',      { expr = true, remap = true })
+map('n', 'k',      'v:count ? "k" : "gk"',      { expr = true, remap = true })
+map('n', '<down>', 'v:count ? "<down>" : "gj"', { expr = true, remap = true })
+map('n', '<up>',   'v:count ? "<up>"   : "gk"', { expr = true, remap = true })
+
 -- Allow moving selected line(s) of text
-map('x', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
-map('x', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
+map('v', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
+map('v', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
 
 -- Keep cursor centered when paging up/down
 map('n', '<C-d>', '<C-d>zz', desc('Page down', { remap = true }))
@@ -190,19 +203,22 @@ map('v', '<', '<gv', desc('Indent left',  { remap = true }))
 map('v', '>', '>gv', desc('Indent right', { remap = true }))
 
 -- highlights under cursor
-map('n', '<leader>ui', vim.show_pos, desc('Inspect Pos'))
+map('n', '<leader>ui', vim.show_pos, desc('Inspect position under cursor'))
 
 -- File operations
-map({ 'i', 'x', 'n' }, '<C-s>', '<cmd>w<cr><esc>',  desc('Save file'))
-map({ 'i', 'x', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', desc('Save file and quit'))
+map({ 'i', 'v', 'n' }, '<C-s>', '<cmd>w<cr><esc>',  desc('Save file'))
+map({ 'i', 'v', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', desc('Save file and quit'))
 map('n', '<leader>n', '<cmd>enew<cr>',              desc('New File'))
 
--- Copy to the system clipboard (Ctrl + C)
-map('x', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
-map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
+-- Ctrl + click to open links
+map({'i', 'v', 'c', 't', 'n'}, '<C-LeftMouse>', '', desc('Open link'), { remap = true })
 
 -- Allow Ctrl + ^ in insert mode
 map('i', '<C-^>', '<esc><C-^>', desc('[<C-^>]', { remap = true }))
+
+-- Copy to the system clipboard (Ctrl + C)
+map('v', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
+map('n', '<C-C>', 'm`<cmd>norm! V<cr>"+y<esc>``', desc('Copy to system clipboard'))
 
 -- Delete word before cursor
 map({ 'i', 'c' }, '<C-H>', '<C-w>', { desc = 'Delete word before cursor', remap = true })
@@ -226,11 +242,11 @@ map('n', '<C-j>', '<C-w>j', desc('Go to the lower window', { remap = true }))
 map('n', '<C-k>', '<C-w>k', desc('Go to the upper window', { remap = true }))
 map('n', '<C-l>', '<C-w>l', desc('Go to the right window', { remap = true }))
 
--- Resize windows using <alt> hjkl keys
-map('n', '<A-k>', '<cmd>resize +4<cr>',      desc('Increase window height'))
-map('n', '<A-j>', '<cmd>resize -4<cr>',      desc('Decrease window height'))
-map('n', '<A-h>', '<cmd>vert resize -4<cr>', desc('Decrease window width'))
-map('n', '<A-l>', '<cmd>vert resize +4<cr>', desc('Increase window width'))
+-- Resize windows using <ctrl> + <alt> hjkl keys
+map('n', '<C-A-k>', '<cmd>resize +4<cr>',      desc('Increase window height'))
+map('n', '<C-A-j>', '<cmd>resize -4<cr>',      desc('Decrease window height'))
+map('n', '<C-A-h>', '<cmd>vert resize -4<cr>', desc('Decrease window width'))
+map('n', '<C-A-l>', '<cmd>vert resize +4<cr>', desc('Increase window width'))
 
 -- Split windows
 map('n', '<leader>w|', '<C-w>v', desc('Split window right',  { remap = true }))
