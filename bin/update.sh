@@ -18,6 +18,14 @@ fi
 check () {
     FILE1=$1
     FILE2=$2
+    if [ ! -e "$FILE1" ]; then
+        echo "$FILE1 does not exist"
+        return
+    fi
+    if [ ! -e "$FILE2" ]; then
+        echo "$FILE2 does not exist"
+        return
+    fi
     if ! diff -r "$FILE2" "$FILE1" 1>/dev/null; then
         echo "cp -r $FILE1 $FILE2"
 
@@ -82,8 +90,9 @@ check "$HOME/.Xresources"            "config/xterm/.Xresources"
 check "$HOME/.gitconfig"             "config/git/.gitconfig"
 
 # tmux
-check "$HOME/.tmux.conf"             "config/tmux/.tmux.conf"
-check "$HOME/.config/.gitmux.conf"   "config/tmux/.gitmux.conf"
+# check "$HOME/.tmux.conf"             "config/tmux/.tmux.conf"
+check "/etc/tmux.conf"               "config/tmux/tmux.conf"
+check "$HOME/.config/.gitmux.conf"   "config/tmux/gitmux.conf"
 
 # nvim
 check "$HOME/.config/nvim/"          "config/nvim/"
