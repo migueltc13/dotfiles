@@ -1,0 +1,64 @@
+/* Dark mode in pdf viewer */
+/* @-moz-document regexp("^(?!.*\\.pdf\\?n).*") {
+    #viewerContainer > #viewer .page > .canvasWrapper > canvas {
+        filter: grayscale(10%) invert(90%);
+    }
+} */
+
+/* if the .pdf contains "?normal" in the url, it will not be affected by the filter */
+/* @-moz-document regexp("^(?!.*\\.pdf\\?normal).*") {
+    #viewerContainer > #viewer .page > .canvasWrapper > canvas {
+        filter: grayscale(0%) invert(0%);
+    }
+} */
+
+/* dark mode theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* definitions */
+        --background-color: #131313 !important;
+        --background-color-secondary: #262626 !important;
+        --background-color-tertiary: #202020 !important;
+        /* about:home | about:newtab */
+        --newtab-background-color: var(--background-color) !important;
+        --newtab-background-color-secondary: var(--background-color-secondary) !important;
+        /* about:preferences */
+        --in-content-page-background: var(--background-color) !important;
+        --in-content-box-background: var(--background-color) !important;
+        --in-content-box-background-odd: var(--background-color-secondary) !important;
+        --in-content-box-info-background: var(--background-color-secondary) !important;
+        --in-content-border-color: var(--background-color-secondary) !important;
+        --in-content-box-border-color: var(--background-color-secondary) !important;
+        /* about:profile */
+        --in-content-table-background: var(--background-color-tertiary) !important;
+
+        --tabpanel-background-color: var(--background-color) !important;
+        -moz-Dialog: var(--background-color) !important;
+
+        --body-bg-color: var(--background-color) !important;
+        --scrollbar-color: var(--background-color-secondary) !important;
+        --scrollbar-bg-color: var(--background-color) !important;
+
+        /* pdf viewer */
+        --toolbar-bg-color: var(--background-color) !important;
+        --toolbar-border-color: var(--background-color-secondary) !important;
+        --button-hover-color: var(--background-color-tertiary) !important;
+        --field-bg-color: var(--background-color-secondary) !important;
+        --field-border-color: var(--background-color-secondary) !important;
+        --sidebar-toolbar-bg-color: var(--background-color) !important;
+        --doorhanger-bg-color: var(--background-color) !important;
+        --doorhanger-border-color: var(--background-color-secondary) !important;
+        --doorhanger-hover-bg-color: var(--background-color-tertiary) !important;
+        --dropdown-btn-bg-color: var(--background-color) !important;
+    }
+
+    /* about:preferences More from Mozilla */
+    .qr-code-box:not([hidden="true"]) {
+        background-color: var(--background-color-secondary) !important;
+    }
+
+    #customization-container {
+        background-color: var(--background-color) !important;
+        color: var(--background-color) !important;
+    }
+}

@@ -579,4 +579,8 @@ echo -e "${C}INFO${N}: manually copy scripts into your system (misc/bin/)"
 # /usr/lib/command-not-found
 echo -e "${C}INFO${N}: manually copy misc/command-not-found/command-not-found to /usr/lib/command-not-found"
 
+# firefox css TODO automate this
+echo -e "${C}INFO${N}: create a sym link \"~/.mozilla/firefox/release/\" pointing to your current firefox profile"
+echo -e "${C}INFO${N}: copy misc/firefox/chrome to the sym link created"
+
 exit 0

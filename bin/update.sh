@@ -140,6 +140,7 @@ check "/tmp/gnome-settings.conf" "config/gnome/settings.conf"
 check "$HOME/.local/share/gnome-shell/extensions/" "misc/gnome-extensions/"
 check "$HOME/Animations/"                          "misc/animations/"
 check "$HOME/Pictures/Wallpapers/"                 "misc/wallpapers/"
+check "$HOME/.mozilla/firefox/release/chrome"      "misc/firefox/chrome/"
 # check "/usr/local/bin/"                            "misc/bin/"
 # check "/usr/lib/command-not-found"                 "misc/command-not-found/command-not-found"
 # TODO: /opt dir
