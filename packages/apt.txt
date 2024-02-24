@@ -32,9 +32,11 @@ bluez
 branding-ubuntu
 bsdutils
 btop
+build-essential
 ca-certificates
 cargo
 cheese
+cmake-data
 cmake
 cmatrix
 composer
@@ -62,10 +64,7 @@ doxygen
 e2fsprogs
 efibootmgr
 eject
-elixir
 eog
-erlang-dev
-erlang-xmerl
 ethtool
 evince
 exa
@@ -78,6 +77,8 @@ ffmpeg
 figlet
 file-roller
 findutils
+firefox
+firmware-sof-signed
 fonts-dejavu-core
 fonts-font-awesome
 fonts-freefont-ttf
@@ -100,6 +101,8 @@ foomatic-db-compressed-ppds
 fortune-mod
 fping
 freerdp2-x11
+fuse2fs
+fuse3
 fwupd-signed
 fwupd
 gamemode
@@ -193,6 +196,8 @@ jq
 kbd
 kerneloops
 kmod
+language-pack-en-base
+language-pack-en
 language-pack-gnome-en-base
 language-pack-gnome-en
 language-selector-common
@@ -218,6 +223,7 @@ libkrb5-dev
 libllvm13
 libmagickwand-dev
 libmutter-10-0
+libmysqlclient21
 libnotify-bin
 libnss-mdns
 libnss3-dev
@@ -265,8 +271,12 @@ minicom
 mokutil
 mount
 mousetweaks
+mssql-server
 mutter-common
+mysql-apt-config
+mysql-common
 mysql-server
+mysql-workbench-community
 nano
 nautilus-sendto
 nautilus-share
@@ -397,6 +407,7 @@ ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
+ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
 ubuntu-session
@@ -404,7 +415,6 @@ ubuntu-settings
 ubuntu-standard
 ubuntu-wallpapers
 udev
-ueberzugpp
 unrar
 unzip
 update-manager-core
