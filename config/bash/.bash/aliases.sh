@@ -70,6 +70,7 @@ alias update='sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -
 alias install='sudo apt install -y'
 alias remove='sudo apt remove -y'
 alias search='apt search'
+alias info='apt info'
 alias refresh='sudo snap refresh'
 
 # Process Management
