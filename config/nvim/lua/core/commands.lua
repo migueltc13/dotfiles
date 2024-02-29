@@ -3,6 +3,11 @@ vim.api.nvim_create_user_command("Colors", function()
     require('util.colorscheme').change()
 end, {})
 
+-- Trim spaces in the of the line
+vim.api.nvim_create_user_command("TrimSpaces", function()
+    vim.cmd("silent! :%s/\\s\\+$//e")
+end, {})
+
 -- Show keymaps using telescope
 vim.api.nvim_create_user_command("Keymaps", function()
     vim.cmd("Telescope keymaps")
