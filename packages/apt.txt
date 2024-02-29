@@ -203,6 +203,7 @@ language-pack-gnome-en
 language-selector-common
 language-selector-gnome
 laptop-detect
+latexmk
 ldap-utils
 less
 libarchive-dev
@@ -394,6 +395,9 @@ systemd-hwe-hwdb
 systemd-oomd
 tcpdump
 terminator
+texlive-lang-portuguese
+texlive-latex-recommended
+texlive-xetex
 thefuck
 tk
 tldr
@@ -401,6 +405,7 @@ tmux
 totem
 traceroute
 transmission-gtk
+ttf-mscorefonts-installer
 tzdata
 ubuntu-advantage-tools
 ubuntu-docs
