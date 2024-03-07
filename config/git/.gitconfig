@@ -8,3 +8,5 @@
 [core]
     pager = less -FRX --mouse
     editor = nvim
+[init]
+    defaultBranch = main
