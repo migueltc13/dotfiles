@@ -2,6 +2,7 @@ acpi-support
 adduser
 aircrack-ng
 aisleriot
+alacarte
 alsa-base
 alsa-ucm-conf
 alsa-utils
@@ -216,6 +217,8 @@ libflashrom1
 libftdi1-2
 libglib2.0-bin
 libgmp-dev
+libgpgme11
+libgpgmepp6
 libgraphicsmagick1-dev
 libgtk-3-dev
 libimage-exiftool-perl
@@ -343,6 +346,7 @@ python3-dbus
 python3-distutils-extra
 python3-gi-cairo
 python3-gi
+python3-gpg
 python3-pip
 python3-setuptools
 python3-software-properties
