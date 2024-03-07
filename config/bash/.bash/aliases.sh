@@ -83,6 +83,9 @@ alias pstop='ps aux --sort=-rss | head -10'                 # List top memory-co
 alias ptree='pstree -p'                                     # View the process tree with PIDs
 alias syslog='tail -f /var/log/syslog'                      # Monitor system log in real-time
 
+# Notes
+alias notes='tmux attach -t notes 2>/dev/null || tmux new -s notes "cd ~/notes && nvim ."'
+
 # Quick References
 alias examples='tldr'                                       # Get command examples with tldr
 alias datetime="date '+%d-%m-%Y %H:%M:%S'"                  # Get clean date and time
