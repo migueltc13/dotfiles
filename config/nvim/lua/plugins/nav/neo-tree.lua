@@ -54,7 +54,7 @@ return {
             -- hijack_netrw_behavior = "open_current",
         },
         window = {
-            position = "left", -- "current"
+            position = "right", -- "current"
             width = 30,
             -- auto_expand_width = true,
             mappings = {
