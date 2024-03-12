@@ -203,6 +203,7 @@ usb-creator
 userpath
 uvicorn
 uvloop
+vboxapi
 wadllib
 wcwidth
 webencodings
