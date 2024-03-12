@@ -52,6 +52,8 @@ dash
 dconf-editor
 debconf-i18n
 debconf
+default-jdk
+default-jre
 deja-dup
 diffutils
 dirb
@@ -110,6 +112,7 @@ gamemode
 gawk
 gcc-12
 gcc
+gdb
 gdm3
 gedit
 gettext
@@ -433,9 +436,11 @@ usb-creator-gtk
 usrmerge
 util-linux
 uuid-dev
+valgrind
 vim-runtime
 vim-tiny
 vim
+virtualbox-qt
 vlc
 w3m
 wfuzz
