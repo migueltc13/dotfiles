@@ -15,6 +15,12 @@ PROMPT_COMMAND="history -a;history -n;"
 # add a empty line after a command
 PROMPT_COMMAND+="echo;"
 
+# save OLDPWD to file to restore it when opening a new terminal
+PROMPT_COMMAND+="pwd>~/.bash/OLDPWD;"
+
+# load OLDPWD from file
+[ -f ~/.bash/OLDPWD ] && OLDPWD=$(cat ~/.bash/OLDPWD)
+
 # update the values of LINES and COLUMNS. (window size)
 shopt -s checkwinsize
 
