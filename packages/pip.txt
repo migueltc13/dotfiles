@@ -192,8 +192,8 @@ trio
 trio-websocket
 typing_extensions
 tzdata
-ubuntu-advantage-tools
 ubuntu-drivers-common
+ubuntu-pro-client
 ufw
 ujson
 unattended-upgrades
