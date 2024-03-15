@@ -114,7 +114,7 @@ fi
 if ask "Do you want to add apt sources directory?"; then
     echo -e "${G}Adding apt sources...${N}"
     mkdir -p /etc/apt/sources.list.d
-    eval "sudo cp -r packages/sources.list.d/* /etc/apt/sources.list.d/ $debug"
+    eval "sudo cp -r packages/apt-sources/sources.list.d/* /etc/apt/sources.list.d/ $debug"
     check_success
     echo -e "${G}Updating apt...${N}"
     eval "sudo apt update $debug"
