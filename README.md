@@ -39,15 +39,16 @@ Package lists, located in [packages/](./packages/).
 
 - [apt.txt](packages/apt.txt) - apt packages
 - [apt-lite.txt](packages/apt-lite.txt) - minimal apt packages
+- [apt-sources](packages/apt-sources/) - apt sources list
 - [snap.txt](packages/snap.txt) - snap packages
 - [pip.txt](packages/pip.txt) - pip packages
-<!-- TODO - [npm-packages.txt](npm-packages.txt) - npm packages -->
+- [cargo-packages.txt](cargo-packages.txt) - cargo packages
+- [npm-packages.txt](npm-packages.txt) - npm packages
 <!-- TODO - [gem-packages.txt](gem-packages.txt) - gem packages -->
-<!-- TODO - [cargo-packages.txt](cargo-packages.txt) - cargo packages -->
 
 ---
 
-### config
+### Config
 
 Configuration files, located in [config/](./config/).
 
@@ -96,9 +97,17 @@ Configuration files, located in [config/](./config/).
 
 - [git/.gitconfig](./config/git/.gitconfig) - git config file
 
+#### LSDeluxe
+
+- [lsd/](./config/lsd/) - lsd config dir
+
+#### Vivid
+
+- [vivid/](./config/vivid/) - vivid config dir
+
 ---
 
-### misc
+### Misc
 
 Miscellaneous files, located in [misc/](./misc/).
 
@@ -154,6 +163,10 @@ Located in [misc/gnome-extensions/](./misc/gnome-extensions/).
 Located in [misc/bin/](./misc/bin/).
 
 > Scripts from /usr/local/bin
+
+#### Firefox custom css theme
+
+Located in [misc/firefox/](./misc/firefox/).
 
 <!--
 #### command-not-found
