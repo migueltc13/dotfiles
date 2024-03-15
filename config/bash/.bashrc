@@ -1,3 +1,5 @@
+# shellcheck disable=SC1090,SC1091
+
 # Examples (package: bash-doc):
 # /usr/share/doc/bash/examples/startup-files
 # /usr/share/doc/bash-doc/examples
@@ -94,7 +96,9 @@ export PATH="$PATH:/opt/core/venv/bin/"
 [ -f ~/.bash/fzf.sh ] && source ~/.bash/fzf.sh
 
 # autojump definitions
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
 # Clean duplicate entries in $PATH
-export PATH=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
+path=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
+export PATH="$path"
+
