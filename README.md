@@ -55,15 +55,15 @@ Configuration files, located in [config/](./config/).
 #### Bash
 
 - [.profile](./config/bash/.profile) - bash profile, used for login shells
-- [.bashrc](./config/bash/.bashrc) - main bash config file
-- [.bash/prompt.sh](./config/bash/.bash/prompt.sh) - prompt
-- [.bash/colors.sh](./config/bash/.bash/colors.sh) - colors
-- [.bash/aliases.sh](./config/bash/.bash/aliases.sh) - aliases
-- [.bash/functions.sh](./config/bash/.bash/functions.sh) - functions
-- [.bash/keybindings.sh](./config/bash/.bash/keybindings.sh) - keybindings
-- [.bash/copilot_cli.sh](./config/bash/.bash/copilot_cli.sh) - copilot cli config
-- [.bash/fzf.sh](./config/bash/.bash/fzf.sh) - fzf config
-- [.bash/custom.sh](./config/bash/.bash/custom.sh) - custom config for specific machine (not tracked)
+- [.bashrc](./config/bash/.bashrc) - main bash config file, includes history and bash settings, PATH, etc
+- [.bash/prompt.sh](./config/bash/.bash/prompt.sh) - custom command prompt with colored error codes, git integration and more
+- [.bash/colors.sh](./config/bash/.bash/colors.sh) - custom colors for many commands like ls, grep, etc
+- [.bash/aliases.sh](./config/bash/.bash/aliases.sh) - aliases definitions
+- [.bash/functions.sh](./config/bash/.bash/functions.sh) - functions definitions
+- [.bash/keybindings.sh](./config/bash/.bash/keybindings.sh) - keybindings definitions
+- [.bash/copilot_cli.sh](./config/bash/.bash/copilot_cli.sh) - copilot cli functions and aliases definitions
+- [.bash/fzf.sh](./config/bash/.bash/fzf.sh) - fzf config, including keybindings and custom commands
+- [.bash/custom.sh](./config/bash/.bash/custom.sh) - custom config for specific machine or user settings (not tracked)
 
 #### Neovim
 
