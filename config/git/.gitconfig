@@ -1,8 +1,9 @@
 [diff]
     colorMoved = default
 [user]
-    email = migueltc13@gmail.com
+    email = 73550106+migueltc13@users.noreply.github.com
     name = migueltc13
+    signingkey = AA0DA4B63E6B2732
 [credential]
     helper = store
 [core]
@@ -10,3 +11,5 @@
     editor = nvim
 [init]
     defaultBranch = main
+[commit]
+    gpgsign = true
