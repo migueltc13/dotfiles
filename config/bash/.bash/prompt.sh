@@ -41,7 +41,7 @@ if [ "$color_prompt" = yes ]; then
         # purple theme
         _l="\[\e[0;35m\]"  # line
         _user="\[\e[1;35m\]"
-        _time="\[\e[3;38;5;246m\]"
+        _time="\[\e[0;38;5;246m\]"
         _path="\[\e[0;34m\]"
         _jobs="\[\e[0;36m\]"
         _host_color="\[\e[0;34m\]"
@@ -51,7 +51,7 @@ if [ "$color_prompt" = yes ]; then
         # green theme
         _l="\[\e[0;32m\]"  # line
         _user="\[\e[1;33m\]"
-        _time="\[\e[3;38;5;246m\]"
+        _time="\[\e[0;38;5;246m\]"
         _path="\[\e[0;33m\]"
         _jobs="\[\e[0;35m\]"
         _host_color="\[\e[0;35m\]"

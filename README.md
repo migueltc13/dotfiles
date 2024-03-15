@@ -56,7 +56,7 @@ Configuration files, located in [config/](./config/).
 
 - [.profile](./config/bash/.profile) - bash profile, used for login shells
 - [.bashrc](./config/bash/.bashrc) - main bash config file, includes history and bash settings, PATH, etc
-- [.bash/prompt.sh](./config/bash/.bash/prompt.sh) - custom command prompt with colored error codes, git integration and more
+- [.bash/prompt.sh](./config/bash/.bash/prompt.sh) - custom command prompt with colored error codes, background jobs indicator, git integration, etc
 - [.bash/colors.sh](./config/bash/.bash/colors.sh) - custom colors for many commands like ls, grep, etc
 - [.bash/aliases.sh](./config/bash/.bash/aliases.sh) - aliases definitions
 - [.bash/functions.sh](./config/bash/.bash/functions.sh) - functions definitions
