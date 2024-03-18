@@ -323,6 +323,7 @@ pcmciautils
 perl
 php
 pkg-config
+plantuml
 plocate
 plymouth-theme-spinner
 polenum
