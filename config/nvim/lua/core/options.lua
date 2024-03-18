@@ -4,7 +4,6 @@ local g = vim.g
 -- General settings
 o.termguicolors = true               -- Enable true color support (24 bits)
 o.encoding = "UTF-8"                 -- UTF-8 byte sequence
-o.mouse = "a"                        -- Enable mouse support
 o.updatetime = 400                   -- Decrease update time (default 4000 ms)
 o.timeoutlen = 200                   -- Mapped sequences time (default 1000 ms)
 o.number = true                      -- Show line numbers
@@ -37,6 +36,15 @@ o.smartcase = true                   -- Ignore case when searching lowercase
 o.splitbelow = true                  -- Horizontal splits will automatically be below
 o.splitright = true                  -- Vertical splits will automatically be to the right
 
+-- Mouse settings
+o.mouse = "a"                        -- Enable mouse support in all modes
+o.mousemodel = "popup_setpos"        -- Set mouse model to popup_setpos
+o.mousefocus = false                 -- Disable mouse focus
+o.mousescroll = "ver:1,hor:3"        -- Set mouse scroll speed (default ver:3,hor:6)
+o.mousetime = 400                    -- Set double click speed time (default 500 ms)
+o.mousemoveevent = false             -- Disable mouse move event
+o.mousehide = true                   -- Enable mouse hide when typing
+
 -- Clipboard settings
 o.clipboard = "unnamed"
 
@@ -44,6 +52,11 @@ o.clipboard = "unnamed"
 o.undofile = true
 o.undolevels = 10000
 o.undodir = vim.fn.stdpath('state') .. '/undodir'
+
+-- Spell settings
+o.spell = false                      -- Disable spell checking
+o.spelllang = "en,pt_pt"             -- Set spell language to English and Portuguese (Portugal)
+o.spellfile = vim.fn.stdpath('config') .. '/spell/custom.utf-8.add'
 
 -- Disable netrw and its plugins
 g.loaded_netrw = 1
