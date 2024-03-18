@@ -3,5 +3,7 @@ corepack
 neovim
 npm
 peerflix
+prettier-plugin-java
+prettier
 typeracer-cli
 yarn
