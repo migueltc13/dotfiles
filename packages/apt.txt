@@ -104,6 +104,7 @@ foomatic-db-compressed-ppds
 fortune-mod
 fping
 freerdp2-x11
+fswatch
 fuse2fs
 fuse3
 fwupd-signed
