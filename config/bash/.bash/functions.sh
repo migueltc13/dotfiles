@@ -108,6 +108,41 @@ function graw() {
     curl "$raw_link" -s > "$(echo "$path_to_file" | rev | cut -d '/' -f 1 | rev)"
 }
 
+# Open or more github repositories in browser
+function gho() {
+    list_orgs=false
+    case "$1" in
+        -h | --help)
+            echo "Usage: gho [-o] [search query]"
+            return 0
+            ;;
+        -o | --orgs | --org)
+            args=("${@:2}")
+            list_orgs=true
+            ;;
+        *)
+            args=("$@")
+            ;;
+    esac
+
+    # flags
+    MAX_REPOS=100
+    FZF_FLAGS=""
+    [ ${#args[@]} -ne 0 ] && FZF_FLAGS="-q \"${args[*]}\""
+    [ "$(tput cols)" -gt 75 ] && FZF_FLAGS+=" --preview='gh repo view {}'"
+
+    # list user repos
+    repos=$(gh repo list --limit $MAX_REPOS)
+
+    # list org repos
+    if [ "$list_orgs" = true ]; then
+        orgs=$(gh api user/orgs --jq '.[] | .login')
+        repos+=$(for org in $orgs; do gh repo list "$org" --limit $MAX_REPOS; done)
+    fi
+
+    echo "$repos" | cut -f1 | eval fzf "$FZF_FLAGS" | xargs -I {} gh repo view --web {}
+}
+
 # Extract any type of archive
 function extract() {
     if [ -z "$1" ]; then
