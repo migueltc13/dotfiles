@@ -138,7 +138,7 @@
 		"NitroUtils": {"props": ["canUseIncreasedMessageLength", "canUsePremiumGuildMemberProfile"]},
 		"NotificationSettingsUtils": {"props": ["setDesktopType", "setTTSType"]},
 		"PlatformUtils": {"props": ["isAndroid", "isWindows"]},
-		"PermissionRoleUtils": {"props": ["can", "ALLOW", "DENY"]},
+		"PermissionRoleUtils": {"props": ["can", "makeEveryoneOverwrite"]},
 		"PreferencesContext": {"strings": ["reducedMotion", "forcedColors", "alwaysShowLinkDecorations", "createContext"]},
 		"PrivateChannelUtils": {"props": ["addRecipient", "openPrivateChannel"]},
 		"QuerySearchUtils": {"props": ["queryGuilds", "queryGroupDMs"]},
@@ -503,7 +503,7 @@
 		"UserTheme": {"strings": [".profileColors", "useDefaultClientTheme:"], "noSearch": true},
 		"VideoBackground": {"strings": ["backgroundSrc:", "pulseSpeakingIndicator:", ".avatarWrapper"]},
 		"VoiceUser": {"protos": ["renderPrioritySpeaker", "renderIcons", "renderAvatar"]},
-		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "previewUserIdAfterDelay"]}
+		"VoiceUsers": {"strings": ["hidePreview", "previewIsOpen", "Permissions.MOVE_MEMBERS"]}
 	},
 	"ModuleUtilsConfig": {
 		"QueuedComponents": [],
@@ -5483,6 +5483,7 @@
 		}
 	},
 	"BDFDB_Patrons": {
+		"1113460780113854525": 	{"active": true,	"tier": "t2",	"text": "",						"color": "",			"id": "pinguwu (hugo)"},
 		"864982372751245313": 	{"active": true,	"tier": "t2",	"text": "",						"color": "",			"id": "windowsuss (fynn)"},
 		"148234730523852800": 	{"active": true,	"tier": "t2",	"text": "",						"color": "",			"id": "inbroso (MaEp)"},
 		"105509397211406336": 	{"active": true,	"tier": "t2",	"text": "",						"color": "",			"id": "samtino (SgJeff)"},
