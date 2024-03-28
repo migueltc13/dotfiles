@@ -16,6 +16,7 @@ gnome-3-38-2004
 gnome-42-2204
 gtk-common-themes
 hnterm
+julia
 mapscii
 marksman
 mdl
