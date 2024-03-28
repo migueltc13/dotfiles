@@ -62,6 +62,9 @@ o.spellfile = vim.fn.stdpath('config') .. '/spell/custom.utf-8.add'
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
+-- Disable ruby provider
+g.loaded_ruby_provider = 0
+
 -- Python 3 executable
 g.python3_host_prog = vim.split(vim.fn.system('which python3'), '\n')[1]
 
