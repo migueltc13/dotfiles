@@ -116,6 +116,7 @@ alias hosts='sudo nano /etc/hosts; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t"
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # :)
+alias maps='telnet mapscii.me'
 alias starwars='telnet towel.blinkenlights.nl'
 
 # Project li4
