@@ -29,7 +29,6 @@ radare2
 screenkey
 searchsploit
 seclists
-snap-store
 snapd
 snapd-desktop-integration
 termius-app

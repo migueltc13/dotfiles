@@ -1,7 +1,6 @@
 acpi-support
 adduser
 aircrack-ng
-aisleriot
 alacarte
 alsa-base
 alsa-ucm-conf
@@ -42,7 +41,6 @@ cmake
 cmatrix
 composer
 console-setup
-coreutils
 cowsay
 crunch
 cups-bsd
@@ -97,6 +95,7 @@ fonts-noto-color-emoji
 fonts-opensymbol
 fonts-sil-abyssinica
 fonts-sil-padauk
+fonts-stix
 fonts-thai-tlwg
 fonts-tibetan-machine
 fonts-ubuntu
@@ -122,7 +121,6 @@ ghostscript-x
 gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
-gir1.2-mutter-10
 git-lfs
 git
 gnome-accessibility-themes
@@ -130,13 +128,13 @@ gnome-bluetooth
 gnome-calculator
 gnome-calendar
 gnome-characters
+gnome-chess
 gnome-control-center
 gnome-disk-utility
 gnome-font-viewer
 gnome-initial-setup
 gnome-keyring
 gnome-logs
-gnome-mahjongg
 gnome-menus
 gnome-mines
 gnome-power-manager
@@ -151,7 +149,6 @@ gnome-sushi
 gnome-system-monitor
 gnome-terminal
 gnome-themes-extra
-gnome-todo
 gnome-tweaks
 gobuster
 golang-go
@@ -230,7 +227,6 @@ libjpeg62
 libkrb5-dev
 libllvm13
 libmagickwand-dev
-libmutter-10-0
 libmysqlclient21
 libnotify-bin
 libnss-mdns
@@ -275,12 +271,10 @@ maven
 mawk
 memtest86+
 meson
-minicom
 mokutil
 mount
 mousetweaks
 mssql-server
-mutter-common
 mysql-apt-config
 mysql-common
 mysql-server
@@ -341,8 +335,6 @@ procps
 protobuf-compiler
 proxychains4
 proxychains
-pulseaudio-module-bluetooth
-pulseaudio
 putty-tools
 python2
 python3-babel
@@ -368,7 +360,6 @@ ranger
 redis-tools
 remmina
 rfkill
-rhythmbox
 rig
 ripgrep
 ronn
@@ -382,11 +373,9 @@ sharutils
 shellcheck
 shim-signed
 shotwell
-simple-scan
 slop
 smbclient
 snap
-snapd
 socat
 software-properties-common
 software-properties-gtk
