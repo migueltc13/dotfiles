@@ -2,7 +2,7 @@
  * @name ReadAllNotificationsButton
  * @author DevilBro
  * @authorId 278543574059057154
- * @version 1.7.5
+ * @version 1.7.6
  * @description Adds a Clear Button to the Server List and the Mentions Popout
  * @invite Jx3TjNS
  * @donate https://www.paypal.me/MircoWittrien
@@ -25,9 +25,14 @@ module.exports = (_ => {
 		getDescription () {return `The Library Plugin needed for ${this.name} is missing. Open the Plugin Settings to download it. \n\n${this.description}`;}
 		
 		downloadLibrary () {
-			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
-				if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
-				else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+			BdApi.Net.fetch("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js").then(r => {
+				if (!r || r.status != 200) throw new Error();
+				else return r.text();
+			}).then(b => {
+				if (!b) throw new Error();
+				else return require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", {type: "success"}));
+			}).catch(error => {
+				BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
 			});
 		}
 		
@@ -139,9 +144,9 @@ module.exports = (_ => {
 						confirmClear:		{value: false, 	description: "Asks for your confirmation before clearing reads"}
 					},
 					batch: {
-						guilds:				{value: true, 	description: "unread Servers"},
-						muted:				{value: false, 	description: "muted unread Servers"},
-						dms:				{value: false, 	description: "unread DMs"}
+						guilds:			{value: true, 	description: "unread Servers"},
+						muted:			{value: false, 	description: "muted unread Servers"},
+						dms:			{value: false, 	description: "unread DMs"}
 					}
 				};
 			
@@ -303,7 +308,7 @@ module.exports = (_ => {
 										clearing = true;
 										let toast = BDFDB.NotificationUtils.toast(`${this.labels.toast_clearing} - ${BDFDB.LanguageUtils.LibraryStrings.please_wait}`, {timeout: 0, ellipsis: true});
 										for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
-											BDFDB.LibraryModules.APIUtils.delete({
+											BDFDB.LibraryModules.APIUtils.HTTP.del({
 												url: BDFDB.DiscordConstants.Endpoints.MENTIONS_MESSAGE_ID(messages[i].id),
 												retries: 2,
 												oldFormErrors: true
