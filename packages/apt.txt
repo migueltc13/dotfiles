@@ -41,6 +41,7 @@ cmake
 cmatrix
 composer
 console-setup
+coreutils
 cowsay
 crunch
 cups-bsd
@@ -121,6 +122,7 @@ ghostscript-x
 gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
+gir1.2-mutter-10
 git-lfs
 git
 gnome-accessibility-themes
@@ -227,6 +229,7 @@ libjpeg62
 libkrb5-dev
 libllvm13
 libmagickwand-dev
+libmutter-10-0
 libmysqlclient21
 libnotify-bin
 libnss-mdns
@@ -275,6 +278,7 @@ mokutil
 mount
 mousetweaks
 mssql-server
+mutter-common
 mysql-apt-config
 mysql-common
 mysql-server
@@ -335,6 +339,8 @@ procps
 protobuf-compiler
 proxychains4
 proxychains
+pulseaudio-module-bluetooth
+pulseaudio
 putty-tools
 python2
 python3-babel
@@ -376,6 +382,7 @@ shotwell
 slop
 smbclient
 snap
+snapd
 socat
 software-properties-common
 software-properties-gtk
