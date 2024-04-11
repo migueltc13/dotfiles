@@ -112,6 +112,7 @@ fwupd
 gamemode
 gawk
 gcc-12
+gcc-multilib
 gcc
 gdb
 gdm3
@@ -193,6 +194,7 @@ indicator-application
 init
 inotify-tools
 inputattach
+ipcalc
 iproute2
 iputils-ping
 isc-dhcp-client
@@ -354,7 +356,6 @@ python3-pip
 python3-setuptools
 python3-software-properties
 python3-tk
-python3-update-manager
 python3-venv
 python3.10-venv
 python3
@@ -427,8 +428,6 @@ ubuntu-wallpapers
 udev
 unrar
 unzip
-update-manager-core
-update-manager
 update-notifier
 usb-creator-gtk
 usrmerge
