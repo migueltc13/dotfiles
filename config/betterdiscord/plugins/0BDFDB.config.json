@@ -1,7 +1,7 @@
 {
 	"all": {
 		"changeLogs": {
-			"BDFDB": "3.6.3",
+			"BDFDB": "3.6.4",
 			"ImageUtilities": "5.4.2",
 			"ReadAllNotificationsButton": "1.7.6",
 			"SplitLargeMessages": "1.8.2",
@@ -18,7 +18,7 @@
 		},
 		"hashes": {
 			"0BDFDB.data.json": "1f7fe3a6ef0f812ecc4eb2239b72e430f99386d9",
-			"0BDFDB.raw.css": "394a9de5688dc77648151e11e95f401eb1171dab"
+			"0BDFDB.raw.css": "a0d78e91c26de487f794582adc781e60d32b2445"
 		}
 	}
 }
