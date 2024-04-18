@@ -232,7 +232,6 @@ libkrb5-dev
 libllvm13
 libmagickwand-dev
 libmutter-10-0
-libmysqlclient21
 libnotify-bin
 libnss-mdns
 libnss3-dev
@@ -262,7 +261,6 @@ libzstd-dev
 lighttpd
 linux-generic-hwe-22.04
 lldb
-locales
 login
 lolcat
 lp-solve
@@ -281,10 +279,8 @@ mount
 mousetweaks
 mssql-server
 mutter-common
-mysql-apt-config
-mysql-common
+mysql-client
 mysql-server
-mysql-workbench-community
 nano
 nautilus-sendto
 nautilus-share
@@ -311,7 +307,8 @@ nmap
 npm
 nuget
 obs-studio
-openjdk-17-jdk
+openjdk-21-jdk
+openjdk-21-jre
 openprinting-ppds
 openvpn
 orca
@@ -413,7 +410,6 @@ traceroute
 transmission-gtk
 ttf-mscorefonts-installer
 tzdata
-ubuntu-advantage-tools
 ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
