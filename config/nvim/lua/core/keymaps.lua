@@ -148,6 +148,9 @@ map('n', '<leader>gs', ':Telescope git_status\n',  desc('Git: status'))
 map('n', '<leader>cc', Toggle.copilot,      desc('copilot: toggle'))
 map('n', '<leader>cs', ':Copilot status\n', desc('copilot: status'))
 
+-- CopilotChat
+map('n', '<leader>ct', ':CopilotChatToggle\n', desc('copilot-chat: toggle'))
+
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))
 
@@ -168,6 +171,7 @@ map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
 
 -- Other plugins keymaps definitions
 -- ../plugins/ai/copilot.lua
+-- ../plugins/ai/copilotchat.lua
 -- ../plugins/editor/nvim-cmp.lua
 -- ../plugins/editor/nvim-treesitter.lua
 -- ../plugins/editor/comment-nvim.lua
