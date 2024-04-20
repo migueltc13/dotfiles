@@ -84,7 +84,8 @@ alias ptree='pstree -p'                                        # View the proces
 alias syslog='tail -f /var/log/syslog'                         # Monitor system log in real-time
 
 # Notes
-alias notes='tmux attach -t notes 2>/dev/null || tmux new -s notes "cd ~/notes && nvim ."'
+alias notes='nvim ~/notes'                                     # Open notes in Neovim
+alias notes-tmux='tmux attach -t notes 2>/dev/null || tmux new -s notes "cd ~/notes && nvim ."'
 
 # Quick References
 alias examples='tldr'                                          # Get command examples with tldr
@@ -95,7 +96,6 @@ alias pi='echo 3.1415926535'                                   # Get the value o
 alias euler='echo 2.7182818284'                                # Get the value of Euler's number to 10 decimal places
 
 # File Viewing
-alias bat='batcat'                                             # View a file with syntax highlighting
 alias view='bat'                                               # Shortcut for batcat
 alias v='bat'                                                  # Shortcut for batcat
 
