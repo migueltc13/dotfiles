@@ -235,9 +235,12 @@ if ask "Do you want to copy bash config files?"; then
         echo -e "${R}.bash/copilot_cli.sh was not copied.${N}"
     fi
 
-    if ask "Do you want to copy .bash/fzf.sh?"; then
+    if ask "Do you want to copy .bash/fzf.sh and .bash/fzf-git.sh?"; then
         echo -e "${G}Copying .bash/fzf.sh...${N}"
         cp config/bash/.bash/fzf.sh "$HOME/.bash/"
+
+        echo -e "${G}Copying .bash/fzf-git.sh...${N}"
+        cp config/bash/.bash/fzf-git.sh "$HOME/.bash/"
 
         if ask "Do you want to install fzf (via git)?"; then
             echo -e "${G}Installing fzf...${N}"
