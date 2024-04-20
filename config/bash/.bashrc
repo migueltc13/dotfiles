@@ -95,6 +95,9 @@ export PATH="$PATH:/opt/core/venv/bin/"
 # fzf definitions
 [ -f ~/.bash/fzf.sh ] && source ~/.bash/fzf.sh
 
+# fzf-git definitions
+[ -f ~/.bash/fzf-git.sh ] && source ~/.bash/fzf-git.sh
+
 # autojump definitions
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
