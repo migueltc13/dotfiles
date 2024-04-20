@@ -119,6 +119,9 @@ check "$HOME/.config/lsd/"           "config/lsd/"
 # vivid
 check "$HOME/.config/vivid/"         "config/vivid/"
 
+# delta
+check "$HOME/.config/delta/"         "config/delta/"
+
 # gnome extensions settings
 dconf dump /org/gnome/shell/extensions/ 1> /tmp/gnome-extensions-settings.conf
 check "/tmp/gnome-extensions-settings.conf" "config/gnome/extensions/settings.conf"

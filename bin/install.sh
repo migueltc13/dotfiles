@@ -301,6 +301,15 @@ else
     echo -e "${R}.gitconfig was not copied.${N}"
 fi
 
+# delta themes
+if ask "Do you want to copy delta themes?"; then
+    echo -e "${G}Copying delta themes...${N}"
+    mkdir -p "$HOME"/.config/delta/
+    cp -r config/delta/* "$HOME"/.config/delta/
+else
+    echo -e "${R}Delta themes were not copied.${N}"
+fi
+
 # .nanorc
 if ask "Do you want to copy .nanorc?"; then
     echo -e "${G}Copying .nanorc...${N}"
