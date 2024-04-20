@@ -1,3 +1,5 @@
+bat
+git-delta
 lsd
 toipe
 tree-sitter-cli
