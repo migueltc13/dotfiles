@@ -19,3 +19,6 @@ fi
 
 # ls colors
 export LS_COLORS=$(vivid -d "$HOME"/.config/vivid/filetypes.yml  generate "$HOME"/.config/vivid/catppuccin.yml)
+
+# bat theme
+export BAT_THEME="Catppuccin-mocha"
