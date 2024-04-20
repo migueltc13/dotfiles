@@ -25,7 +25,6 @@ base-passwd
 base58
 bash-doc
 bash
-bat
 bc
 binwalk
 bluez
@@ -261,6 +260,7 @@ libzstd-dev
 lighttpd
 linux-generic-hwe-22.04
 lldb
+locales
 login
 lolcat
 lp-solve
@@ -410,6 +410,7 @@ traceroute
 transmission-gtk
 ttf-mscorefonts-installer
 tzdata
+ubuntu-advantage-tools
 ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
