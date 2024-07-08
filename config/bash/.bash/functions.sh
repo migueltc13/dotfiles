@@ -10,6 +10,10 @@ function which() {
             w="${w#*\`}"
             echo "${w%\'*}"
             ;;
+        *'is hashed'*)
+            w=${w::-1}
+            echo "${w##* (}"
+            ;;
         *)
             echo "${w##* }"
             ;;
