@@ -17,6 +17,7 @@ backoff
 base58
 bcrypt
 beautifulsoup4
+berserk
 binwalk
 blinker
 Brlapi
@@ -27,7 +28,9 @@ certifi
 cffi
 chardet
 charset-normalizer
+chess
 chrome-gnome-shell
+cli-chess
 click
 click-plugins
 colorama
@@ -41,6 +44,7 @@ debugpy
 decorator
 defer
 Deprecated
+devscripts
 distro
 distro-info
 dnspython
@@ -96,6 +100,8 @@ monotonic
 more-itertools
 msgpack
 multidict
+mysql-connector-python
+ndjson
 netaddr
 netifaces
 numpy
@@ -151,6 +157,7 @@ python-dateutil
 python-debian
 python-distutils-extra
 python-dotenv
+python-magic
 python-rapidjson
 pytz
 pyxattr
@@ -197,6 +204,7 @@ ufw
 ujson
 unattended-upgrades
 undetected-chromedriver
+unidiff
 urllib3
 usb-creator
 userpath
