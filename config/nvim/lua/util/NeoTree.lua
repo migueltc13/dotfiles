@@ -12,10 +12,10 @@ function M.open_in_system(state)
     elseif osType == "Darwin" then
         command = "open '" .. filepath .. "' &>/dev/null &"
     else
-        command = "xdg-open '" .. filepath .. "' &>/dev/null &"
+        command = "bash -c \"xdg-open '" .. filepath .. "' &>/dev/null & disown\""
     end
 
-    vim.notify("Opening " .. filepath, vim.log.levels.INFO, { title = "NeoTree" })
+    -- vim.notify("Opening " .. filepath, vim.log.levels.INFO, { title = "NeoTree" })
     os.execute(command)
 end
 
