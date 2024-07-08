@@ -1,3 +1,5 @@
+### Examples
+
 # This is `bat`s configuration file. Each line either contains a comment or
 # a command-line option that you want to pass to `bat` by default. You can
 # run `bat --help` to get a list of all possible configuration options.
@@ -5,7 +7,6 @@
 # Specify desired highlighting theme (e.g. "TwoDark"). Run `bat --list-themes`
 # for a list of all available themes
 #--theme="TwoDark"
---theme="Catppuccin-mocha"
 
 # Enable this to use italic text on the terminal. This is not supported on all
 # terminal emulators (like tmux, by default):
@@ -24,3 +25,10 @@
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
 #--map-syntax "*.ino:C++"
 #--map-syntax ".ignore:Git Ignore"
+
+### Config
+
+--theme="Catppuccin-mocha"
+-p
+# --style=plain
+# --paging=never
