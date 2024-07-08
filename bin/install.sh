@@ -473,13 +473,17 @@ else
 fi
 
 # Install lsd
-if ask "Do you want to install lsd?"; then
+if ! command -v "lsd" &> /dev/null && ask "Do you want to install lsd?"; then
     echo -e "${G}Installing lsd...${N}"
     check_command "cargo" "cargo"
     eval "cargo install lsd $debug"
     check_success
 else
-    echo -e "${R}lsd was not installed.${N}"
+    if command -v "lsd" &> /dev/null; then
+        echo -e "${C}INFO${N}: lsd is already installed"
+    else
+        echo -e "${R}lsd was not installed.${N}"
+    fi
 fi
 
 # config/vivid/
