@@ -212,11 +212,11 @@ if ask "Do you want to copy bash config files?"; then
     cp config/bash/.bash/aliases.sh "$HOME/.bash/"
     cp config/bash/.bash/functions.sh "$HOME/.bash/"
 
-    if ask "Do you want to copy .bash/keybindings.sh?"; then
-        echo -e "${G}Copying .bash/keybindings.sh...${N}"
-        cp config/bash/.bash/keybindings.sh "$HOME/.bash/"
+    if ask "Do you want to copy .bash/keybinds.sh?"; then
+        echo -e "${G}Copying .bash/keybinds.sh...${N}"
+        cp config/bash/.bash/keybinds.sh "$HOME/.bash/"
     else
-        echo -e "${R}.bash/keybindings.sh was not copied.${N}"
+        echo -e "${R}.bash/keybinds.sh was not copied.${N}"
     fi
 
     if ask "Do you want to copy .bash/copilot_cli.sh?"; then

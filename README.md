@@ -60,7 +60,7 @@ Configuration files, located in [config/](./config/).
 - [.bash/colors.sh](./config/bash/.bash/colors.sh) - custom colors for many commands like ls, grep, etc
 - [.bash/aliases.sh](./config/bash/.bash/aliases.sh) - aliases definitions
 - [.bash/functions.sh](./config/bash/.bash/functions.sh) - functions definitions
-- [.bash/keybindings.sh](./config/bash/.bash/keybindings.sh) - keybindings definitions
+- [.bash/keybinds.sh](./config/bash/.bash/keybinds.sh) - keybindings definitions
 - [.bash/copilot_cli.sh](./config/bash/.bash/copilot_cli.sh) - copilot cli functions and aliases definitions
 - [.bash/fzf.sh](./config/bash/.bash/fzf.sh) - fzf config, including keybindings and custom commands
 - [.bash/custom.sh](./config/bash/.bash/custom.sh) - custom config for specific machine or user settings (not tracked)

@@ -87,7 +87,7 @@ export PATH="$PATH:/opt/core/venv/bin/"
 [ -f ~/.bash/functions.sh ] && source ~/.bash/functions.sh
 
 # keybinds definitions
-[ -f ~/.bash/keybindings.sh ] && source ~/.bash/keybindings.sh
+[ -f ~/.bash/keybinds.sh ] && source ~/.bash/keybinds.sh
 
 # custom definitions
 [ -f ~/.bash/custom.sh ] && source ~/.bash/custom.sh
