@@ -1,5 +1,5 @@
 # override which to handle aliases and functions
-which(){
+function which() {
     local w
     w="$(command -V "$1")"
     case "$w" in
@@ -28,6 +28,16 @@ function mcd() {
 # Perform basic calculations
 function calc() {
     echo "$@" | bc -l
+}
+
+# Explode directory
+function explode() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 <dir>"
+        return 1
+    fi
+    mv "$1"/* .
+    rmdir "$1"
 }
 
 # # fzf: find files
@@ -176,10 +186,15 @@ function extract() {
 
 # Send 1 free sms per day with Text Belt
 function send-sms() {
-curl -X POST https://textbelt.com/text \
-    --data-urlencode phone="$1" \
-    --data-urlencode message="$2" \
-    -d key=textbelt
+    if [ $# -ne 2 ]; then
+        echo "Usage: $0 <phone_number> <message>"
+        return 1
+    fi
+
+    curl -X POST https://textbelt.com/text \
+        --data-urlencode phone="$1" \
+        --data-urlencode message="$2" \
+        -d key=textbelt
 }
 
 # Fix previous command
@@ -200,4 +215,3 @@ function fuck() {
     # shellcheck disable=SC2086
     history -s $TF_CMD;
 }
-
