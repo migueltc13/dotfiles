@@ -53,6 +53,8 @@ debconf
 default-jdk
 default-jre
 deja-dup
+devscripts
+dh-make
 diffutils
 dirb
 dirmngr
@@ -62,6 +64,7 @@ docker-compose
 docker.io
 docker
 doxygen
+dput
 e2fsprogs
 efibootmgr
 eject
@@ -125,6 +128,7 @@ gir1.2-gtk-3.0
 gir1.2-mutter-10
 git-lfs
 git
+gjs
 gnome-accessibility-themes
 gnome-bluetooth
 gnome-calculator
@@ -214,11 +218,14 @@ less
 libarchive-dev
 libatk-adaptor
 libcanberra-gtk-module
+libconfig-dev
 libcurl4-gnutls-dev
 libdebconfclient0
 libev-dev
+libevent-dev
 libflashrom1
 libftdi1-2
+libgjs0g
 libglib2.0-bin
 libgmp-dev
 libgpgme11
@@ -226,9 +233,11 @@ libgpgmepp6
 libgraphicsmagick1-dev
 libgtk-3-dev
 libimage-exiftool-perl
+libjansson-dev
 libjpeg62
 libkrb5-dev
 libllvm13
+liblua5.2-dev
 libmagickwand-dev
 libmutter-10-0
 libnotify-bin
@@ -265,6 +274,7 @@ login
 lolcat
 lp-solve
 lsb-release
+lua5.2
 lua5.4
 luajit
 luarocks
@@ -320,6 +330,7 @@ passwd
 pcmciautils
 perl
 php
+pipewire
 pkg-config
 plantuml
 plocate
@@ -402,12 +413,14 @@ texlive-lang-portuguese
 texlive-latex-recommended
 texlive-xetex
 thefuck
+thunderbird
 tk
 tldr
 tmux
 totem
 traceroute
 transmission-gtk
+tshark
 ttf-mscorefonts-installer
 tzdata
 ubuntu-advantage-tools
@@ -415,6 +428,7 @@ ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
+ubuntu-release-upgrader-core
 ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
