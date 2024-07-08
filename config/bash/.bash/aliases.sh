@@ -97,8 +97,8 @@ alias pi='echo 3.1415926535'                                   # Get the value o
 alias euler='echo 2.7182818284'                                # Get the value of Euler's number to 10 decimal places
 
 # File Viewing
-alias view='bat'                                               # Shortcut for batcat
-alias v='bat'                                                  # Shortcut for batcat
+alias view='bat'                                               # Shortcut for bat
+alias v='bat'                                                  # Shortcut for bat
 
 # File Editing
 alias edit='nvim'                                              # Edit a file with Neovim
@@ -116,9 +116,9 @@ alias hosts='sudo nvim /etc/hosts; ssh-keygen -f "$HOME/.ssh/known_hosts" -R "t"
 # Alert for long running commands. Usage: $ sleep 10; alert
 alias alert='notify-send --urgency=critical -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# Project li4
+# alias li4='ssh-lemonade -t li4'
+
 # :)
 alias maps='telnet mapscii.me'
 alias starwars='telnet towel.blinkenlights.nl'
-
-# Project li4
-# alias li4='ssh-lemonade -t li4'
