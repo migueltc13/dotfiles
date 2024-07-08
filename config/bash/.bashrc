@@ -101,10 +101,12 @@ export PATH="$PATH:/opt/core/venv/bin/"
 # fzf-git definitions
 [ -f ~/.bash/fzf-git.sh ] && source ~/.bash/fzf-git.sh
 
+# load environment variables from ~/.bash/secrets.sh
+[ -f ~/.bash/secrets.sh ] && source ~/.bash/secrets.sh
+
 # autojump definitions
 [[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && source ~/.autojump/etc/profile.d/autojump.sh
 
 # Clean duplicate entries in $PATH
 path=$(echo -n "$PATH" | tr ':' '\n' | awk '{gsub(/\/$/, "", $0)} !a[$0]++' | paste -sd ':' -)
 export PATH="$path"
-
