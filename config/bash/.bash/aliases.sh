@@ -4,6 +4,7 @@
 # shell aliases
 alias :r='source ~/.bashrc'
 alias :q='exit'
+alias :qa='killall -9 bash'
 
 # ls aliases
 alias ls='lsd'
