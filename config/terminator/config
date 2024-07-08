@@ -16,6 +16,7 @@
   insert_number = ""
   insert_padded = ""
   layout_launcher = ""
+  help = ""
 [profiles]
   [[default]]
     background_darkness = 0.9
@@ -60,6 +61,16 @@
     scrollback_lines = 50000
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
+    use_system_font = False
+  [[white]]
+    background_color = "#ffffff"
+    cursor_color = "#dc8a78"
+    font = Hack Nerd Font Mono 11
+    foreground_color = "#4c4f69"
+    scrollbar_position = hidden
+    scrollback_lines = 50000
+    scrollback_infinite = True
+    palette = "#5c5f77:#d20f39:#40a02b:#df8e1d:#1e66f5:#ea76cb:#179299:#acb0be:#6c6f85:#d20f39:#40a02b:#df8e1d:#1e66f5:#ea76cb:#179299:#bcc0cc"
     use_system_font = False
   [[_OBS]]
     background_darkness = 0.8
