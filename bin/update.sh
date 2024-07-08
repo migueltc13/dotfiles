@@ -66,7 +66,7 @@ pip list --format=freeze | cut -d'=' -f1 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
 
 # cargo
-cargo install --list | grep -Ev '^ ' | cut -d' ' -f1 1> /tmp/cargo.txt
+cargo install --list | grep -Ev '^ ' | cut -d':' -f1 | sed 's/ v/@/g' 1> /tmp/cargo.txt
 check "/tmp/cargo.txt" "packages/cargo.txt"
 
 # npm
