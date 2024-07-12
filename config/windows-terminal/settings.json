@@ -18,7 +18,15 @@
         },
         {
             "command": "paste",
+            "keys": "ctrl+shift+v"
+        },
+        {
+            "command": "unbound",
             "keys": "ctrl+v"
+        },
+        {
+            "command": "unbound",
+            "keys": "alt+enter"
         },
         {
             "command": 
@@ -45,14 +53,18 @@
     {
         "defaults": 
         {
+            "adjustIndistinguishableColors": "indexed",
             "cursorShape": "filledBox",
             "font": 
             {
-                "face": "Hack Nerd Font"
+                "cellHeight": "1.15",
+                "face": "Hack Nerd Font Mono",
+                "size": 12.0
             },
             "historySize": 500000,
-            "opacity": 85,
-            "padding": "4",
+            "intenseTextStyle": "bright",
+            "opacity": 90,
+            "padding": "0",
             "useAcrylic": true
         },
         "list": 
@@ -82,12 +94,6 @@
                 "hidden": false,
                 "name": "Ubuntu",
                 "source": "CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc"
-            },
-            {
-                "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
-                "hidden": true,
-                "name": "Ubuntu",
-                "source": "Windows.Terminal.Wsl"
             },
             {
                 "guid": "{16208362-94fc-5b1f-a491-5b2624d5ab56}",
@@ -376,7 +382,8 @@
             "yellow": "#808000"
         }
     ],
+    "tabWidthMode": "compact",
     "theme": "dark",
     "themes": [],
-    "useAcrylicInTabRow": true
+    "useAcrylicInTabRow": false
 }
