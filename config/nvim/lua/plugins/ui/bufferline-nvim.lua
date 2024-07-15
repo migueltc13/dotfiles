@@ -8,14 +8,17 @@ return {
         bufferline.setup({
             options = {
                 mode = "tabs",
-                style_preset = bufferline.style_preset.minimal, -- default
+                style_preset = {
+                    bufferline.style_preset.minimal, -- default
+                    bufferline.style_preset.no_italic, -- disable italics
+                },
                 themable = true,
                 indicator = {
                     icon = "│",
                     style = "icon",
                 },
                 max_name_length = 30,
-                diagnostics = "nvim_lsp",
+                diagnostics = false,
                 diagnostics_update_in_insert = false,
                 offsets = {
                     {

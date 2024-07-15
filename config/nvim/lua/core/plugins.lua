@@ -26,7 +26,7 @@ require("lazy").setup(
     { import = "plugins.lsp" },
     { import = "plugins.nav" },
     { import = "plugins.practice" },
-    { import = "plugins.sql" },
+    -- { import = "plugins.sql" },
     { import = "plugins.terminal" },
     { import = "plugins.ui" },
     { import = "plugins.util" },
