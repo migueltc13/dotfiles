@@ -2,7 +2,6 @@ amberol
 audacity
 bare
 canonical-livepatch
-code
 core
 core18
 core20
