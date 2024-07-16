@@ -20,6 +20,7 @@ beautifulsoup4
 berserk
 binwalk
 blinker
+board
 Brlapi
 bs4
 BTrees
@@ -136,6 +137,7 @@ pydantic
 pydantic_core
 pydub
 pyee
+pygame
 Pygments
 PyGObject
 pyinotify
