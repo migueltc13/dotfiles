@@ -31,6 +31,5 @@ searchsploit
 seclists
 snapd
 snapd-desktop-integration
-termius-app
 utorrent
 whatsie

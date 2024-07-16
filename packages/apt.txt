@@ -425,7 +425,6 @@ texlive-lang-portuguese
 texlive-latex-recommended
 texlive-xetex
 thefuck
-thunderbird
 tk
 tldr
 tmux
