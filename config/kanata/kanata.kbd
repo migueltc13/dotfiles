@@ -1,4 +1,4 @@
 (defsrc)
 (deflayermap (base-layer)
-  caps (tap-hold 200 200 esc caps)
+  caps (tap-hold 0 250 esc caps)
 )
