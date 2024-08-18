@@ -8,7 +8,6 @@ core20
 core22
 core24
 crackmapexec
-cups
 dust
 gnome-3-28-1804
 gnome-3-38-2004
@@ -26,7 +25,6 @@ onionshare
 qt5-core20
 qt515-core20
 radare2
-screenkey
 searchsploit
 seclists
 snapd
