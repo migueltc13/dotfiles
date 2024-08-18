@@ -7,6 +7,7 @@ alsa-ucm-conf
 alsa-utils
 anacron
 apparmor
+apport-gtk
 appstream
 apt-config-icons-hidpi
 apt-utils
@@ -37,6 +38,7 @@ cheese
 cmake-data
 cmake
 cmatrix
+code
 composer
 console-setup
 coreutils
@@ -44,6 +46,7 @@ cowsay
 crunch
 cups-bsd
 cups-client
+curl
 dash
 dconf-editor
 debconf-i18n
@@ -80,6 +83,7 @@ ffmpeg
 figlet
 file-roller
 findutils
+firefox
 firmware-sof-signed
 fonts-dejavu-core
 fonts-font-awesome
@@ -147,6 +151,7 @@ gnome-settings-daemon
 gnome-shell-extension-appindicator
 gnome-shell-extension-ubuntu-dock
 gnome-shell-extensions
+gnome-shell
 gnome-sudoku
 gnome-sushi
 gnome-system-monitor
@@ -220,6 +225,7 @@ libc6
 libc6
 libcanberra-gtk-module
 libconfig-dev
+libcurl4-gnutls-dev
 libdebconfclient0
 libegl1
 libegl1
@@ -243,6 +249,7 @@ libgtk-3-dev
 libimage-exiftool-perl
 libjansson-dev
 libjpeg62
+libkrb5-dev
 libllvm13
 liblua5.2-dev
 libmagickwand-dev
@@ -267,6 +274,7 @@ libreoffice
 libsasl2-modules
 libsdl2-dev
 libslirp-dev
+libssl-dev
 libtool
 libu2f-udev
 libwmf0.2-7-gtk
@@ -280,6 +288,7 @@ lolcat
 lp-solve
 lsb-release
 lua5.2
+lua5.4
 luajit
 luarocks
 macchanger
@@ -292,6 +301,8 @@ mount
 mousetweaks
 mssql-server
 mutter-common
+mysql-client
+mysql-server
 nano
 nautilus-sendto
 nautilus-share
@@ -317,6 +328,8 @@ nix-bin
 nmap
 npm
 obs-studio
+openjdk-21-jdk
+openjdk-21-jre
 openprinting-ppds
 openvpn
 orca
@@ -364,6 +377,7 @@ python3-software-properties
 python3-tk
 python3-update-manager
 python3-venv
+python3.10-venv
 python3
 qpdf
 qtbase5-dev
@@ -389,6 +403,7 @@ shotwell
 slop
 smbclient
 snap
+snapd
 socat
 software-properties-common
 software-properties-gtk
@@ -428,12 +443,14 @@ ubuntu-advantage-tools
 ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
+ubuntu-minimal
 ubuntu-release-upgrader-core
 ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
 ubuntu-session
 ubuntu-settings
+ubuntu-standard
 ubuntu-wallpapers
 udev
 unrar
@@ -449,6 +466,7 @@ valgrind
 vim-runtime
 vim-tiny
 vim
+virtualbox-qt
 vlc
 w3m
 wfuzz
@@ -464,6 +482,7 @@ winetricks
 wireless-tools
 wireshark
 wmctrl
+wpasupplicant
 x11-xserver-utils
 xclip
 xcursor-themes
