@@ -529,6 +529,15 @@ else
     echo -e "${R}kanata was not installed.${N}"
 fi
 
+# Config BetterDiscord
+if ask "Do you want to copy BetterDiscord config files?"; then
+    echo -e "${G}Copying config/BetterDiscord/...${N}"
+    mkdir -p "$HOME"/.config/BetterDiscord/
+    cp -r config/BetterDiscord/* "$HOME"/.config/BetterDiscord/
+else
+    echo -e "${R}BetterDiscord config files were not copied.${N}"
+fi
+
 ### Miscellaneous
 
 # Gnome extensions

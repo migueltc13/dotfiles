@@ -53,6 +53,10 @@ changes_count=0
 
 ### Packages
 
+# apt sources list
+# check "/etc/apt/sources.list"    "packages/apt-sources/sources.list"
+check "/etc/apt/sources.list.d/" "packages/apt-sources/sources.list.d/"
+
 # apt
 apt list --installed 2>/dev/null | grep '\[installed\]' | cut -d'/' -f1 1> /tmp/apt.txt
 check "/tmp/apt.txt" "packages/apt.txt"
@@ -73,10 +77,6 @@ check "/tmp/cargo.txt" "packages/cargo.txt"
 npm ls -g --json | jq -r '.. | select(.dependencies? // .) | .dependencies? | objects | keys_unsorted[] // .name?' 1> /tmp/npm.txt
 check "/tmp/npm.txt" "packages/npm.txt"
 
-# apt sources
-# check "/etc/apt/sources.list"    "packages/apt-sources/sources.list"
-check "/etc/apt/sources.list.d/" "packages/apt-sources/sources.list.d/"
-
 ### Config
 
 # bash
@@ -84,22 +84,22 @@ check "$HOME/.profile"               "config/bash/.profile"
 check "$HOME/.bashrc"                "config/bash/.bashrc"
 check "$HOME/.bash/"                 "config/bash/.bash/"
 
+# git
+check "$HOME/.gitconfig"             "config/git/.gitconfig"
+
+# delta
+check "$HOME/.config/delta/"         "config/delta/"
+
 # nano
 check "$HOME/.nanorc"                "config/nano/.nanorc"
 
 # xterm
 check "$HOME/.Xresources"            "config/xterm/.Xresources"
 
-# git
-check "$HOME/.gitconfig"             "config/git/.gitconfig"
-
 # tmux
 # check "$HOME/.tmux.conf"             "config/tmux/.tmux.conf"
 check "/etc/tmux.conf"               "config/tmux/tmux.conf"
 check "$HOME/.config/.gitmux.conf"   "config/tmux/gitmux.conf"
-
-# nvim
-check "$HOME/.config/nvim/"          "config/nvim/"
 
 # terminator
 check "$HOME/.config/terminator/"    "config/terminator/"
@@ -107,11 +107,11 @@ check "$HOME/.config/terminator/"    "config/terminator/"
 # bat
 check "$HOME/.config/bat/"           "config/bat/"
 
-# BetterDiscord
-check "$HOME/.config/BetterDiscord/" "config/betterdiscord/"
-
 # btop
 check "$HOME/.config/btop/"          "config/btop/"
+
+# nvim
+check "$HOME/.config/nvim/"          "config/nvim/"
 
 # lsd
 check "$HOME/.config/lsd/"           "config/lsd/"
@@ -119,12 +119,12 @@ check "$HOME/.config/lsd/"           "config/lsd/"
 # vivid
 check "$HOME/.config/vivid/"         "config/vivid/"
 
-# delta
-check "$HOME/.config/delta/"         "config/delta/"
-
 # kanata
 check "$HOME/.config/kanata/kanata.kbd"    "config/kanata/kanata.kbd"
 check "/etc/systemd/system/kanata.service" "config/kanata/kanata.service"
+
+# BetterDiscord
+check "$HOME/.config/BetterDiscord/" "config/BetterDiscord/"
 
 # gnome extensions settings
 dconf dump /org/gnome/shell/extensions/ 1> /tmp/gnome-extensions-settings.conf
