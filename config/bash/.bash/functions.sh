@@ -108,7 +108,7 @@ function grc() {
         echo "Usage: grc <file_to_rm> <file_to_add>"
         return 1
     fi
-    git rm "$1" && git add "$2" && git commit -m "Rename $1 to $2" || return $?
+    git rm -r "$1" && git add "$2" && git commit -m "Rename $1 to $2" || return $?
 }
 
 # Get a raw link from a github link
