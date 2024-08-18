@@ -41,6 +41,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# default editor
+export EDITOR=nvim
+
 # less pager
 export LESS='-R --mouse'
 
