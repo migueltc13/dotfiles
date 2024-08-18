@@ -46,7 +46,7 @@ function explode() {
 
 # # fzf: find files
 function f() {
-    find . -type f 2>/dev/null | fzf --preview="batcat --color=always --style=rule {}"
+    find . -type f 2>/dev/null | fzf --preview="bat --color=always --style=rule {}"
 }
 
 # fzf: find directories
@@ -54,7 +54,7 @@ function d() {
     find . -type d  2>/dev/null | fzf
 }
 
-# fzf: find files and open them with batcat
+# fzf: find files and open them with bat
 function b() {
     local result
     result=$(f)
@@ -62,7 +62,7 @@ function b() {
         return 130
     fi
     # shellcheck disable=SC2086
-    batcat --style=rule $result
+    bat --style=rule $result
 }
 
 # fzf: find files/directories and open them with xdg-open
@@ -81,7 +81,7 @@ function n() {
     result=$(find .  2>/dev/null | \
         fzf --preview="\
         if [ -f {} ]; then\
-            batcat --color=always --style=rule {};\
+            bat --color=always --style=rule {};\
         else\
             lsd --icon=always --color=always -A {};\
         fi")
@@ -157,6 +157,11 @@ function gho() {
     echo "$repos" | cut -f1 | eval fzf "$FZF_FLAGS" | xargs -I {} gh repo view --web {}
 }
 
+# Open current github repository in browser
+function ghoc() {
+    gh repo view --web &>/dev/null
+}
+
 # Extract any type of archive
 function extract() {
     if [ -z "$1" ]; then
@@ -183,7 +188,7 @@ function extract() {
             *.Z)                uncompress "$f";;
             *.7z)               7z x "$f"      ;;
             *.xz)               xz -d "$f"     ;;
-            *)                  echo "$0: cannot extract $f: unknown archive format" && return 3;;
+            *)                  echo "$0: can't extract $f: unknown archive format" && return 3;;
         esac
     done
 }
