@@ -1,6 +1,7 @@
 bat@0.24.0
 cargo-update@13.4.0
 git-delta@0.17.0
+kanata@1.6.1
 lsd@1.1.2
 toipe@0.5.0
 tree-sitter-cli@0.22.6

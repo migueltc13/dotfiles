@@ -505,6 +505,30 @@ else
     echo -e "${R}vivid was not installed.${N}"
 fi
 
+# Config kanata
+if ask "Do you want to copy kanata config and service files?"; then
+    echo -e "${G}Copying config/kanata/kanata.kbd...${N}"
+    mkdir -p "$HOME"/.config/kanata/
+    cp config/kanata/kanata.kbd "$HOME"/.config/kanata/
+    echo -e "${G}Copying config/kanata/kanata.service to /etc/systemd/system/...${N}"
+    sudo cp config/kanata/kanata.service /etc/systemd/system/
+else
+    echo -e "${R}Kanata config and service files were not copied.${N}"
+fi
+
+# Install kanata
+if ask "Do you want to install kanata?"; then
+    echo -e "${G}Installing kanata...${N}"
+    check_command "cargo" "cargo"
+    eval "cargo install kanata $debug"
+    check_success
+    echo -e "${G}Enabling and starting kanata service...${N}"
+    eval "sudo systemctl enable --now kanata.service $debug"
+    check_success
+else
+    echo -e "${R}kanata was not installed.${N}"
+fi
+
 ### Miscellaneous
 
 # Gnome extensions
