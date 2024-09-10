@@ -8,7 +8,6 @@ core20
 core22
 core24
 crackmapexec
-dust
 gnome-3-28-1804
 gnome-3-38-2004
 gnome-42-2204
@@ -19,15 +18,11 @@ mapscii
 marksman
 mdl
 mdview
-metasploit-framework
 ngrok
 onionshare
 qt5-core20
 qt515-core20
 radare2
-searchsploit
-seclists
 snapd
 snapd-desktop-integration
-utorrent
 whatsie

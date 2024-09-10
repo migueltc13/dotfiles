@@ -1,5 +1,6 @@
 bat@0.24.0
 cargo-update@13.4.0
+du-dust@1.1.1
 git-delta@0.17.0
 kanata@1.6.1
 lsd@1.1.2

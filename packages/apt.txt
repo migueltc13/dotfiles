@@ -281,6 +281,7 @@ libwmf0.2-7-gtk
 libxml2-dev
 libzstd-dev
 lighttpd
+linux-generic-hwe-22.04
 lldb
 locales
 login
@@ -324,7 +325,6 @@ nfs-common
 nftables
 nikto
 ninja-build
-nix-bin
 nmap
 npm
 obs-studio
