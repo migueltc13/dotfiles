@@ -73,13 +73,13 @@ if [ "$color_prompt" = yes ]; then
     fi
 
     # git branch symbol
+    _git_symbol=""
+    # _git_symbol=""
     # _git_symbol="⎇ "
     # _git_symbol=""
     # _git_symbol=""
     # _git_symbol=""
     # _git_symbol=""
-    _git_symbol=""
-    # _git_symbol=""
 
     # jobs symbol
     _jobs_symbol=""
