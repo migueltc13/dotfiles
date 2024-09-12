@@ -81,7 +81,7 @@ return {
 
         -- use a custom Markdown style. Must be an absolute path
         -- like '/Users/username/markdown.css' or expand('~/markdown.css')
-        vim.g.mkdp_markdown_css = ''
+        vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/markdown/markdown.css")
 
         -- use a custom highlight style. Must be an absolute path
         -- like '/Users/username/highlight.css' or expand('~/highlight.css')
@@ -92,7 +92,7 @@ return {
 
         -- preview page title
         -- ${name} will be replace with the file name
-        vim.g.mkdp_page_title = '${name}'
+        vim.g.mkdp_page_title = '${name}.md'
 
         -- use a custom location for images
         -- vim.g.mkdp_images_path = /home/user/.markdown_images
