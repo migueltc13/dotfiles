@@ -60,16 +60,19 @@ export PERL_MB_OPT="--install_base \"$HOME/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 
 # PATH for local binaries
-export PATH="$HOME/.local/bin:$PATH"
-
-# PATH for go binaries
-export PATH="$HOME/go/bin:$PATH"
-
-# PATH for cargo binaries
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin"
 
 # PATH for custom scripts
-export PATH="$HOME/scripts:$PATH"
+export PATH="$PATH:$HOME/scripts"
+
+# PATH for cargo binaries
+export PATH="$PATH:$HOME/.cargo/bin"
+
+# PATH for go binaries
+export PATH="$PATH:$HOME/go/bin"
+
+# PATH for haskell binaries
+export PATH="$PATH:$HOME/.ghcup/bin"
 
 # PATH for core
 export PATH="$PATH:/opt/core/venv/bin/"
