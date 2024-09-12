@@ -300,7 +300,6 @@ meson
 mokutil
 mount
 mousetweaks
-mssql-server
 mutter-common
 mysql-client
 mysql-server
@@ -375,7 +374,6 @@ python3-pip
 python3-setuptools
 python3-software-properties
 python3-tk
-python3-update-manager
 python3-venv
 python3.10-venv
 python3
@@ -400,6 +398,7 @@ sharutils
 shellcheck
 shim-signed
 shotwell
+slack-desktop
 slop
 smbclient
 snap
@@ -444,8 +443,6 @@ ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
-ubuntu-release-upgrader-core
-ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
 ubuntu-session
@@ -455,8 +452,6 @@ ubuntu-wallpapers
 udev
 unrar
 unzip
-update-manager-core
-update-manager
 update-notifier
 usb-creator-gtk
 usrmerge
