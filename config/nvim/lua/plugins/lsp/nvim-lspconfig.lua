@@ -42,7 +42,7 @@ return {
 		})
 
 		-- configure typescript server with plugin
-		lspconfig["tsserver"].setup({
+		lspconfig["ts_ls"].setup({
 			capabilities = capabilities,
 			on_attach = lsp_on_attach,
 			handlers = handlers,
@@ -141,9 +141,17 @@ return {
 
 		-- configure sqls server
 		-- lspconfig["sqls"].setup({
-		-- 	capabilities = capabilities,
-		-- 	on_attach = lsp_on_attach,
-		-- 	handlers = handlers,
+        --     capabilities = capabilities,
+        --     on_attach = lsp_on_attach,
+        --     handlers = handlers,
 		-- })
+
+        -- confige haskell language server (hls)
+        lspconfig["hls"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
+            filetypes = { "haskell", "lhaskell", "cabal" },
+        })
 	end,
 }
