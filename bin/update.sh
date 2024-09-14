@@ -35,6 +35,7 @@ check () {
         echo -e "\nCopying changes..."
         sudo rm -rf "$FILE2"
         sudo cp -r "$FILE1" "$FILE2"
+        sudo chown -R "$USER":"$USER" "$FILE2"
     elif [[ "$choice" =~ [dD] ]]; then
         diff -r --color=always "$2" "$1" | less -R -x 4 --mouse
         # Clear previous output lines
@@ -154,9 +155,6 @@ check "$HOME/.mozilla/firefox/release/chrome"      "misc/firefox/chrome/"
 
 if (( changes_count == 0 )); then
     echo "No changes detected"
-else
-    # change owner and group to current user
-    sudo chown -R "$USER":"$USER" .
 fi
 
 exit 0
