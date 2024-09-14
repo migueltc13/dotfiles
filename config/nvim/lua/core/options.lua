@@ -10,6 +10,7 @@ o.number = true                      -- Show line numbers
 o.relativenumber = true              -- Show relative line numbers
 o.signcolumn = "yes"                 -- Keep signcolumn on by default
 o.scrolloff = 8                      -- Minimal number of lines to keep above/below the cursor
+g.lazyredraw = true                  -- Enable lazyredraw
 
 -- Indentation settings
 o.autoindent = true                  -- Enable auto-indentation
