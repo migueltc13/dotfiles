@@ -443,6 +443,8 @@ ubuntu-docs
 ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
+ubuntu-release-upgrader-core
+ubuntu-release-upgrader-gtk
 ubuntu-report
 ubuntu-restricted-addons
 ubuntu-session
