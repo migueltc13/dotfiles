@@ -1,9 +1,11 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GjsPrivate = imports.gi.GjsPrivate;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GjsPrivate from 'gi://GjsPrivate';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
 
 /*
@@ -13,12 +15,6 @@ function toDBusCase(string) {
     return string.replace(/(?:^\w|[A-Z]|\b\w)/g, (ltr, offset) => {
         return ltr.toUpperCase();
     }).replace(/[\s_-]+/g, '');
-}
-
-function toHyphenCase(string) {
-    return string.replace(/(?:[A-Z])/g, (ltr, offset) => {
-        return (offset > 0) ? `-${ltr.toLowerCase()}` : ltr.toLowerCase();
-    }).replace(/[\s_]+/g, '');
 }
 
 function toUnderscoreCase(string) {
@@ -35,7 +31,7 @@ function toUnderscoreCase(string) {
  * DBus.Interface represents a DBus interface bound to an object instance, meant
  * to be exported over DBus.
  */
-var Interface = GObject.registerClass({
+export const Interface = GObject.registerClass({
     GTypeName: 'GSConnectDBusInterface',
     Implements: [Gio.DBusInterface],
     Properties: {
@@ -230,26 +226,6 @@ var Interface = GObject.registerClass({
     }
 });
 
-
-/**
- * Get the DBus connection on @busType
- *
- * @param {Gio.BusType} [busType] - a Gio.BusType constant
- * @param {Gio.Cancellable} [cancellable] - an optional Gio.Cancellable
- * @return {Promise<Gio.DBusConnection>} A DBus connection
- */
-function getConnection(busType = Gio.BusType.SESSION, cancellable = null) {
-    return new Promise((resolve, reject) => {
-        Gio.bus_get(busType, cancellable, (connection, res) => {
-            try {
-                resolve(Gio.bus_get_finish(res));
-            } catch (e) {
-                reject(e);
-            }
-        });
-    });
-}
-
 /**
  * Get a new, dedicated DBus connection on @busType
  *
@@ -257,7 +233,7 @@ function getConnection(busType = Gio.BusType.SESSION, cancellable = null) {
  * @param {Gio.Cancellable} [cancellable] - an optional Gio.Cancellable
  * @return {Promise<Gio.DBusConnection>} A new DBus connection
  */
-function newConnection(busType = Gio.BusType.SESSION, cancellable = null) {
+export function newConnection(busType = Gio.BusType.SESSION, cancellable = null) {
     return new Promise((resolve, reject) => {
         Gio.DBusConnection.new_for_address(
             Gio.dbus_address_get_for_bus_sync(busType, cancellable),

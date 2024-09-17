@@ -23,41 +23,49 @@
  * Create the correct manager and enable/disable it.
  */
 
-const ExtensionImports = imports.misc.extensionUtils.getCurrentExtension().imports;
+import * as Manager from './manager.js';
+import * as Platform from './platform.js';
+import * as Keybinder from './keybinder.js';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-const Manager = ExtensionImports.manager;
-const Platform = ExtensionImports.platform;
-const Keybinder = ExtensionImports.keybinder;
+import {CoverflowLogger} from './logger.js';
 
-let manager = null;
-
-function init() {
-}
-
-function enable() {
-    if (!manager) {
-        /*
-         * As there are restricted Gnome versions the current extension support (that
-         * are specified in metadata.json file), only the API related to those supported
-         * versions must be used, not anything else. As a result, performing checks for
-         * keeping backward-compatiblity with old unsupported versions is a wrong
-         * decision.
-         *
-         * To support older versions of Gnome, first, add the version to the metadata
-         * file, then, if needed, include backward-compatible API here for each
-         * version.
-         */
-        manager = new Manager.Manager(
-            new Platform.PlatformGnomeShell(),
-            new Keybinder.Keybinder330Api()
-        );
+export default class CoverflowAltTabExtension extends Extension {
+    constructor(metadata) {
+        super(metadata);
+        this.manager = null;
+        this.logger = null;
     }
 
-    manager.enable();
-}
+    enable() {
+        if (this.logger === null) {
+            this.logger = new CoverflowLogger(this.getSettings());
+        }
+        this.logger.log("Enabling");
+        this.logger.increaseIndent();
+        if (!this.manager) {
+            this.logger.log("Creating New Manager");
+            this.manager = new Manager.Manager(
+                new Platform.PlatformGnomeShell(this.getSettings(), this.logger),
+                new Keybinder.Keybinder330Api(this.getSettings()),
+                this.logger
+            );
+            this.logger.log("Creating New Manager DONE");
+        }   
+        this.manager.enable();
+        this.logger.decreaseIndent();
+        this.logger.log("Enabling DONE");
+    }
 
-function disable() {
-    if (manager) {
-        manager.disable();
+    disable() {
+        this.logger.log("Disabling");
+        this.logger.increaseIndent();
+        if (this.manager) {
+            this.manager.disable();
+            this.manager = null;
+        }
+        this.logger.decreaseIndent();
+        this.logger.log("Disabling DONE");
+        this.logger = null;
     }
 }

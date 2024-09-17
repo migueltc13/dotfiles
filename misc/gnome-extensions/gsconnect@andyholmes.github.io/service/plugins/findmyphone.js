@@ -1,15 +1,17 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gdk = imports.gi.Gdk;
-const Gio = imports.gi.Gio;
-const GObject = imports.gi.GObject;
-const Gtk = imports.gi.Gtk;
+import Gdk from 'gi://Gdk';
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const Components = imports.service.components;
-const PluginBase = imports.service.plugin;
+import * as Components from '../components/index.js';
+import Plugin from '../plugin.js';
 
 
-var Metadata = {
+export const Metadata = {
     label: _('Find My Phone'),
     description: _('Ring your paired device'),
     id: 'org.gnome.Shell.Extensions.GSConnect.Plugin.FindMyPhone',
@@ -32,9 +34,9 @@ var Metadata = {
  * FindMyPhone Plugin
  * https://github.com/KDE/kdeconnect-kde/tree/master/plugins/findmyphone
  */
-var Plugin = GObject.registerClass({
+const FindMyPhonePlugin = GObject.registerClass({
     GTypeName: 'GSConnectFindMyPhonePlugin',
-}, class Plugin extends PluginBase.Plugin {
+}, class FindMyPhonePlugin extends Plugin {
 
     _init(device) {
         super._init(device, 'findmyphone');
@@ -243,3 +245,5 @@ const Dialog = GObject.registerClass({
         this._plugin = plugin;
     }
 });
+
+export default FindMyPhonePlugin;

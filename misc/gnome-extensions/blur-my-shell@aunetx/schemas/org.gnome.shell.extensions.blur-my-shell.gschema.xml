@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
     <!-- GENERAL -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell" path="/org/gnome/shell/extensions/blur-my-shell/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell"
+        path="/org/gnome/shell/extensions/blur-my-shell/">
+        <!-- SETTINGS VERSION -->
+        <key type="i" name="settings-version">
+            <default>1</default>
+            <summary>The version of the settings to update from.</summary>
+        </key>
+        <!-- PIPELINES -->
+        <key type="a{sa{sv}}" name="pipelines">
+            <default> <![CDATA[
+                {
+                    'pipeline_default': {
+                        'name': <'Default'>,
+                        'effects': <[
+                            <{
+                                'type': <'native_static_gaussian_blur'>,
+                                'id': <'effect_000000000000'>,
+                                'params': <{
+                                    'radius': <30>,
+                                    'brightness': <0.6>
+                                }>
+                            }>
+                        ]>
+                    },
+                    'pipeline_default_rounded': {
+                        'name': <'Default rounded'>,
+                        'effects': <[
+                            <{
+                                'type': <'native_static_gaussian_blur'>,
+                                'id': <'effect_000000000001'>,
+                                'params': <{
+                                    'radius': <30>,
+                                    'brightness': <0.6>
+                                }>
+                            }>,
+                            <{
+                                'type': <'corner'>,
+                                'id': <'effect_000000000002'>,
+                                'params': <{
+                                    'radius': <24>
+                                }>
+                            }>
+                        ]>
+                    }
+                }
+            ]]></default>
+            <summary>A dictionnary describing the different pipelines and their effects.</summary>
+        </key>
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Global sigma (gaussian blur radius) to use</summary>
+            <summary>Global gaussian sigma to use</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -35,7 +82,7 @@
         <!-- HACKS LEVEL -->
         <key type="i" name="hacks-level">
             <default>1</default>
-            <summary>Level of hacks to use (from 0 to 3, 3 disabling clipped redraws entirely)</summary>
+            <summary>Level of hacks to use (from 0 to 2, 2 disabling clipped redraws entirely)</summary>
         </key>
         <!-- DEBUG -->
         <key type="b" name="debug">
@@ -51,16 +98,23 @@
         <child name='screenshot' schema='org.gnome.shell.extensions.blur-my-shell.screenshot'></child>
         <child name='lockscreen' schema='org.gnome.shell.extensions.blur-my-shell.lockscreen'></child>
         <child name='window-list' schema='org.gnome.shell.extensions.blur-my-shell.window-list'></child>
+        <child name='coverflow-alt-tab' schema='org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab'></child>
         <child name='hidetopbar' schema='org.gnome.shell.extensions.blur-my-shell.hidetopbar'></child>
         <child name='dash-to-panel' schema='org.gnome.shell.extensions.blur-my-shell.dash-to-panel'></child>
     </schema>
 
     <!-- OVERVIEW -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.overview" path="/org/gnome/shell/extensions/blur-my-shell/overview/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.overview"
+        path="/org/gnome/shell/extensions/blur-my-shell/overview/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -70,7 +124,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -100,7 +154,8 @@
     </schema>
 
     <!-- APPFOLDER -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.appfolder" path="/org/gnome/shell/extensions/blur-my-shell/appfolder/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.appfolder"
+        path="/org/gnome/shell/extensions/blur-my-shell/appfolder/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
@@ -114,7 +169,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -144,11 +199,17 @@
     </schema>
 
     <!-- PANEL -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.panel" path="/org/gnome/shell/extensions/blur-my-shell/panel/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.panel"
+        path="/org/gnome/shell/extensions/blur-my-shell/panel/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -158,7 +219,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -190,6 +251,11 @@
             <default>true</default>
             <summary>Boolean, whether to disable blur from this component when opening the overview or not</summary>
         </key>
+        <!-- FORCE LIGHT TEXT -->
+        <key type="b" name="force-light-text">
+            <default>false</default>
+            <summary>Boolean, whether or not to force the panel to have light text, useful when using light theme</summary>
+        </key>
         <!-- OVERRIDE BACKGROUND -->
         <key type="b" name="override-background">
             <default>true</default>
@@ -208,11 +274,17 @@
     </schema>
 
     <!-- DASH TO DOCK -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.dash-to-dock" path="/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.dash-to-dock"
+        path="/org/gnome/shell/extensions/blur-my-shell/dash-to-dock/">
         <!-- BLUR -->
         <key type="b" name="blur">
-            <default>false</default>
+            <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default_rounded"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -222,7 +294,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -256,7 +328,7 @@
         </key>
         <!-- STYLE DASH TO DOCK -->
         <key type="i" name="style-dash-to-dock">
-            <default>1</default>
+            <default>0</default>
             <summary>Enum to select the style of dash to dock (0 transparent, 1 light, 2 dark)</summary>
         </key>
         <!-- UNBLUR IN OVERVIEW -->
@@ -264,13 +336,19 @@
             <default>false</default>
             <summary>Boolean, whether to disable blur from this component when opening the overview or not</summary>
         </key>
+        <!-- CORNER RADIUS -->
+        <key type="i" name="corner-radius">
+            <default>12</default>
+            <summary>Radius for the corner rounding effect</summary>
+        </key>
     </schema>
 
     <!-- APPLICATIONS -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.applications" path="/org/gnome/shell/extensions/blur-my-shell/applications/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.applications"
+        path="/org/gnome/shell/extensions/blur-my-shell/applications/">
         <!-- BLUR -->
         <key type="b" name="blur">
-            <default>true</default>
+            <default>false</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
         </key>
         <!-- CUSTOMIZE -->
@@ -281,7 +359,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -305,8 +383,13 @@
         </key>
         <!-- OPACITY -->
         <key type="i" name="opacity">
-            <default>230</default>
+            <default>215</default>
             <summary>Opacity of the window actor on top of the blur effect</summary>
+        </key>
+        <!-- DYNAMIC OPACITY -->
+        <key type="b" name="dynamic-opacity">
+            <default>true</default>
+            <summary>Wether or not to make the focused window opaque</summary>
         </key>
         <!-- BLUR ON OVERVIEW -->
         <key type="b" name="blur-on-overview">
@@ -325,17 +408,23 @@
         </key>
         <!-- BLACKLIST -->
         <key type="as" name="blacklist">
-            <default>["Plank"]</default>
+            <default>["Plank","com.desktop.ding", "Conky"]</default>
             <summary>List of applications not to blur</summary>
         </key>
     </schema>
 
     <!-- SCREENSHOT -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.screenshot" path="/org/gnome/shell/extensions/blur-my-shell/screenshot/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.screenshot"
+        path="/org/gnome/shell/extensions/blur-my-shell/screenshot/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -345,7 +434,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -370,11 +459,17 @@
     </schema>
 
     <!-- LOCKSCREEN -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.lockscreen" path="/org/gnome/shell/extensions/blur-my-shell/lockscreen/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.lockscreen"
+        path="/org/gnome/shell/extensions/blur-my-shell/lockscreen/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -384,7 +479,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -409,11 +504,17 @@
     </schema>
 
     <!-- WINDOW LIST -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.window-list" path="/org/gnome/shell/extensions/blur-my-shell/window-list/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.window-list"
+        path="/org/gnome/shell/extensions/blur-my-shell/window-list/">
         <!-- BLUR -->
         <key type="b" name="blur">
             <default>true</default>
             <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
         </key>
         <!-- CUSTOMIZE -->
         <key type="b" name="customize">
@@ -423,7 +524,7 @@
         <!-- SIGMA -->
         <key type="i" name="sigma">
             <default>30</default>
-            <summary>Sigma (gaussian blur radius) to use for the blur effect</summary>
+            <summary>Gaussian sigma to use for the blur effect</summary>
         </key>
         <!-- BRIGHTNESS -->
         <key type="d" name="brightness">
@@ -447,8 +548,24 @@
         </key>
     </schema>
 
+    <!-- COVERFLOW ALT-TAB -->
+    <schema id="org.gnome.shell.extensions.blur-my-shell.coverflow-alt-tab"
+        path="/org/gnome/shell/extensions/blur-my-shell/coverflow-alt-tab/">
+        <!-- BLUR -->
+        <key type="b" name="blur">
+            <default>true</default>
+            <summary>Boolean, whether to blur activate the blur for this component or not</summary>
+        </key>
+        <!-- PIPELINE -->
+        <key type="s" name="pipeline">
+            <default>"pipeline_default"</default>
+            <summary>String, the name of the pipeline to use. It must exist, else "pipeline_default" will be used</summary>
+        </key>
+    </schema>
+
     <!-- HIDETOPBAR -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.hidetopbar" path="/org/gnome/shell/extensions/blur-my-shell/hidetopbar/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.hidetopbar"
+        path="/org/gnome/shell/extensions/blur-my-shell/hidetopbar/">
         <!-- COMPATIBILITY -->
         <key type="b" name="compatibility">
             <default>false</default>
@@ -457,7 +574,8 @@
     </schema>
 
     <!-- DASH TO PANEL -->
-    <schema id="org.gnome.shell.extensions.blur-my-shell.dash-to-panel" path="/org/gnome/shell/extensions/blur-my-shell/dash-to-panel/">
+    <schema id="org.gnome.shell.extensions.blur-my-shell.dash-to-panel"
+        path="/org/gnome/shell/extensions/blur-my-shell/dash-to-panel/">
         <!-- COMPATIBILITY -->
         <key type="b" name="blur-original-panel">
             <default>true</default>

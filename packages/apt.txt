@@ -1,4 +1,3 @@
-acpi-support
 adduser
 aircrack-ng
 alacarte
@@ -63,7 +62,6 @@ distro-info-data
 dmz-cursor-theme
 docker-compose
 docker.io
-docker
 doxygen
 dput
 e2fsprogs
@@ -72,7 +70,6 @@ eject
 eog
 ethtool
 evince
-exa
 expect
 extra-cmake-modules
 fancontrol
@@ -85,7 +82,10 @@ file-roller
 findutils
 firefox
 firmware-sof-signed
+fonts-crosextra-caladea
+fonts-crosextra-carlito
 fonts-dejavu-core
+fonts-dejavu
 fonts-font-awesome
 fonts-freefont-ttf
 fonts-indic
@@ -94,11 +94,17 @@ fonts-khmeros-core
 fonts-lao
 fonts-liberation2
 fonts-liberation
+fonts-linuxlibertine
 fonts-lklug-sinhala
 fonts-noto-cjk
 fonts-noto-color-emoji
+fonts-noto-core
+fonts-noto-extra
+fonts-noto-mono
+fonts-noto-ui-core
 fonts-opensymbol
 fonts-sil-abyssinica
+fonts-sil-gentium-basic
 fonts-sil-padauk
 fonts-stix
 fonts-thai-tlwg
@@ -123,11 +129,9 @@ gdm3
 gedit
 gettext
 gh
-ghostscript-x
 gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
-gir1.2-mutter-10
 git-lfs
 git
 gjs
@@ -149,6 +153,7 @@ gnome-power-manager
 gnome-session-canberra
 gnome-settings-daemon
 gnome-shell-extension-appindicator
+gnome-shell-extension-manager
 gnome-shell-extension-ubuntu-dock
 gnome-shell-extensions
 gnome-shell
@@ -181,7 +186,6 @@ gtk2-engines-murrine
 gtypist
 gzip
 haguichi
-hashcat
 hashid
 hcxdumptool
 hcxtools
@@ -189,7 +193,6 @@ hostname
 htop
 hub
 hxtools
-hydra
 ibus-gtk3
 ibus-gtk
 icnsutils
@@ -242,18 +245,16 @@ libgl1
 libgl1
 libglib2.0-bin
 libgmp-dev
-libgpgme11
-libgpgmepp6
+libgpgme11t64
+libgpgmepp6t64
 libgraphicsmagick1-dev
 libgtk-3-dev
 libimage-exiftool-perl
 libjansson-dev
 libjpeg62
 libkrb5-dev
-libllvm13
 liblua5.2-dev
 libmagickwand-dev
-libmutter-10-0
 libnotify-bin
 libnss-mdns
 libnss3-dev
@@ -270,7 +271,6 @@ libprotobuf-dev
 libproxy1-plugin-gsettings
 libproxy1-plugin-networkmanager
 libreadline-dev
-libreoffice
 libsasl2-modules
 libsdl2-dev
 libslirp-dev
@@ -281,8 +281,7 @@ libwmf0.2-7-gtk
 libxml2-dev
 libzstd-dev
 lighttpd
-linux-generic-hwe-22.04
-lldb
+linux-generic
 locales
 login
 lolcat
@@ -314,7 +313,6 @@ neofetch
 net-tools
 netbase
 netcat-openbsd
-netcat
 netplan.io
 network-manager-config-connectivity-ubuntu
 network-manager-openvpn-gnome
@@ -330,6 +328,7 @@ obs-studio
 openjdk-21-jdk
 openjdk-21-jre
 openprinting-ppds
+openssh-server
 openvpn
 orca
 os-prober
@@ -359,10 +358,7 @@ procps
 protobuf-compiler
 proxychains4
 proxychains
-pulseaudio-module-bluetooth
-pulseaudio
 putty-tools
-python2
 python3-babel
 python3-cairo
 python3-dbus
@@ -374,8 +370,8 @@ python3-pip
 python3-setuptools
 python3-software-properties
 python3-tk
+python3-update-manager
 python3-venv
-python3.10-venv
 python3
 qpdf
 qtbase5-dev
@@ -398,7 +394,6 @@ sharutils
 shellcheck
 shim-signed
 shotwell
-slack-desktop
 slop
 smbclient
 snap
@@ -429,8 +424,6 @@ texlive-xetex
 thefuck
 tk
 tldr
-tlp-rdw
-tlp
 tmux
 totem
 traceroute
@@ -454,9 +447,10 @@ ubuntu-wallpapers
 udev
 unrar
 unzip
+update-manager-core
+update-manager
 update-notifier
 usb-creator-gtk
-usrmerge
 util-linux
 uuid-dev
 valgrind
@@ -499,7 +493,6 @@ yaru-theme-gtk
 yaru-theme-icon
 yaru-theme-sound
 yelp
-youtube-dl
 zenity
 zip
 zmap

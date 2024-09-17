@@ -1,0 +1,13 @@
+{
+  "name": "Lock Keys",
+  "description": "Numlock & Capslock status on the panel.",
+  "gettext-domain": "org.gnome.shell.extensions.lockkeys",
+  "settings-schema": "org.gnome.shell.extensions.lockkeys",
+  "shell-version": [
+    "45",
+    "46"
+  ],
+  "url": "https://github.com/kazysmaster/gnome-shell-extension-lockkeys",
+  "uuid": "lockkeys@migueltc13.github.io",
+  "version": 58
+}

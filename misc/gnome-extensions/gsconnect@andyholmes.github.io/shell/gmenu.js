@@ -1,16 +1,18 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Atk = imports.gi.Atk;
-const Clutter = imports.gi.Clutter;
-const Gio = imports.gi.Gio;
-const GObject = imports.gi.GObject;
-const St = imports.gi.St;
+import Atk from 'gi://Atk';
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
 
-const PopupMenu = imports.ui.popupMenu;
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
+import {getIcon} from './utils.js';
 
-const Tooltip = Extension.imports.shell.tooltip;
+import Tooltip from './tooltip.js';
 
 
 /**
@@ -38,7 +40,7 @@ function getItemInfo(model, index) {
                 value = Gio.Icon.deserialize(value);
 
                 if (value instanceof Gio.ThemedIcon)
-                    value = Extension.getIcon(value.names[0]);
+                    value = getIcon(value.names[0]);
 
                 info[name] = value;
                 break;
@@ -69,7 +71,7 @@ function getItemInfo(model, index) {
 /**
  *
  */
-var ListBox = class ListBox extends PopupMenu.PopupMenuSection {
+export class ListBox extends PopupMenu.PopupMenuSection {
 
     constructor(params) {
         super();
@@ -199,11 +201,10 @@ var ListBox = class ListBox extends PopupMenu.PopupMenuSection {
             );
         }
 
-        // Modify the ::activate callback to invoke the GAction or submenu
-        item.disconnect(item._activateId);
-        item._activateId = item.connect(
+        item.connectObject(
             'activate',
-            this._onGMenuItemActivate.bind(this)
+            this._onGMenuItemActivate.bind(this),
+            this
         );
 
         return item;
@@ -280,16 +281,13 @@ var ListBox = class ListBox extends PopupMenu.PopupMenuSection {
             const prev = new PopupMenu.PopupMenuItem(this.submenu_for.label.text);
             prev.label.style = 'font-weight: bold;';
             const prevArrow = PopupMenu.arrowIcon(St.Side.LEFT);
-            prev.replace_child(prev._ornamentLabel, prevArrow);
+            prev.replace_child(prev._ornamentIcon, prevArrow);
             this.addMenuItem(prev, 0);
 
-            // Modify the ::activate callback to close the submenu
-            prev.disconnect(prev._activateId);
-
-            prev._activateId = prev.connect('activate', (item, event) => {
+            prev.connectObject('activate', (item, event) => {
                 this.emit('activate', item);
                 this._parent.submenu = null;
-            });
+            }, this);
         }
     }
 
@@ -370,13 +368,13 @@ var ListBox = class ListBox extends PopupMenu.PopupMenuSection {
 
         super.destroy();
     }
-};
+}
 
 
 /**
  * A St.Button subclass for iconic GMenu items
  */
-var IconButton = GObject.registerClass({
+export const IconButton = GObject.registerClass({
     GTypeName: 'GSConnectShellIconButton',
 }, class Button extends St.Button {
 
@@ -395,7 +393,7 @@ var IconButton = GObject.registerClass({
             this.action_target = params.info.target;
 
         if (params.info.hasOwnProperty('label')) {
-            this.tooltip = new Tooltip.Tooltip({
+            this.tooltip = new Tooltip({
                 parent: this,
                 markup: params.info.label,
             });
@@ -459,7 +457,7 @@ var IconButton = GObject.registerClass({
 });
 
 
-var IconBox = class IconBox extends PopupMenu.PopupMenuSection {
+export class IconBox extends PopupMenu.PopupMenuSection {
 
     constructor(params) {
         super();
@@ -645,5 +643,5 @@ var IconBox = class IconBox extends PopupMenu.PopupMenuSection {
         super._setParent(parent);
         this._onItemsChanged(this.model, 0, 0, this.model.get_n_items());
     }
-};
+}
 

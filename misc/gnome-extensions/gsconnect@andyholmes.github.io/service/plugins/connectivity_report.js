@@ -1,14 +1,15 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
-const Components = imports.service.components;
-const PluginBase = imports.service.plugin;
+import Plugin from '../plugin.js';
 
 
-var Metadata = {
+export const Metadata = {
     label: _('Connectivity Report'),
     description: _('Display connectivity status'),
     id: 'org.gnome.Shell.Extensions.GSConnect.Plugin.ConnectivityReport',
@@ -26,9 +27,9 @@ var Metadata = {
  * Connectivity Report Plugin
  * https://invent.kde.org/network/kdeconnect-kde/-/tree/master/plugins/connectivity_report
  */
-var Plugin = GObject.registerClass({
+const ConnectivityReportPlugin = GObject.registerClass({
     GTypeName: 'GSConnectConnectivityReportPlugin',
-}, class Plugin extends PluginBase.Plugin {
+}, class ConnectivityReportPlugin extends Plugin {
 
     _init(device) {
         super._init(device, 'connectivity_report');
@@ -90,10 +91,8 @@ var Plugin = GObject.registerClass({
             return 'network-cellular-gprs-symbolic';
         else if (this.network_type === 'HSPA')
             return 'network-cellular-hspa-symbolic';
-        // FIXME: No icon for this!
-        // https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/issues/114
         else if (this.network_type === '5G')
-            return 'network-cellular-symbolic';
+            return 'network-cellular-5g-symbolic';
 
         return 'network-cellular-symbolic';
     }
@@ -160,3 +159,5 @@ var Plugin = GObject.registerClass({
         super.destroy();
     }
 });
+
+export default ConnectivityReportPlugin;

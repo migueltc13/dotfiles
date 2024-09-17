@@ -1,11 +1,11 @@
-'use strict';
+import Meta from 'gi://Meta';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Signals from 'resource:///org/gnome/shell/misc/signals.js';
 
-const { St, Shell, GLib } = imports.gi;
-const Main = imports.ui.main;
-const Signals = imports.signals;
+import { PaintSignals } from '../conveniences/paint_signals.js';
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const { PaintSignals } = Me.imports.effects.paint_signals;
+import { Pipeline } from '../conveniences/pipeline.js';
+import { DummyPipeline } from '../conveniences/dummy_pipeline.js';
 
 const DASH_STYLES = [
     "transparent-dash",
@@ -19,86 +19,194 @@ const DASH_STYLES = [
 ///
 /// This allows to dynamically track the created dashes for each screen.
 class DashInfos {
-    constructor(dash_blur, dash, background_parent, effect, prefs) {
+    constructor(
+        dash_blur, dash, dash_container, dash_background,
+        background, background_group, bg_manager
+    ) {
         // the parent DashBlur object, to communicate
         this.dash_blur = dash_blur;
-        // the blurred dash
         this.dash = dash;
-        this.background_parent = background_parent;
-        this.effect = effect;
-        this.prefs = prefs;
+        this.dash_container = dash_container;
+        this.dash_background = dash_background;
+        this.background = background;
+        this.background_group = background_group;
+        this.bg_manager = bg_manager;
+        this.settings = dash_blur.settings;
         this.old_style = this.dash._background.style;
 
-        dash_blur.connections.connect(dash_blur, 'remove-dashes', () => {
-            this._log("removing blur from dash");
-            this.dash.get_parent().remove_child(this.background_parent);
-            this.dash._background.style = this.old_style;
+        this.dash_destroy_id = dash.connect('destroy', () => this.remove_dash_blur(false));
+        this.dash_blur_connections_ids = [];
+        this.dash_blur_connections_ids.push(
+            this.dash_blur.connect('remove-dashes', () => this.remove_dash_blur()),
+            this.dash_blur.connect('override-style', () => this.override_style()),
+            this.dash_blur.connect('remove-style', () => this.remove_style()),
+            this.dash_blur.connect('show', () => this.background_group.show()),
+            this.dash_blur.connect('hide', () => this.background_group.hide()),
+            this.dash_blur.connect('update-size', () => this.update_size()),
+            this.dash_blur.connect('change-blur-type', () => this.change_blur_type()),
+            this.dash_blur.connect('update-pipeline', () => this.update_pipeline())
+        );
+    }
 
-            DASH_STYLES.forEach(
-                style => this.dash.remove_style_class_name(style)
-            );
-        });
+    // IMPORTANT: do never call this in a mutable `this.dash_blur.forEach`
+    remove_dash_blur(dash_not_already_destroyed = true) {
+        // remove the style and destroy the effects
+        this.remove_style();
+        this.destroy_dash(dash_not_already_destroyed);
 
-        dash_blur.connections.connect(dash_blur, 'update-sigma', () => {
-            this.effect.sigma = this.dash_blur.sigma;
-        });
+        // remove the dash infos from their list
+        const dash_infos_index = this.dash_blur.dashes.indexOf(this);
+        if (dash_infos_index >= 0)
+            this.dash_blur.dashes.splice(dash_infos_index, 1);
 
-        dash_blur.connections.connect(dash_blur, 'update-brightness', () => {
-            this.effect.brightness = this.dash_blur.brightness;
-        });
+        // disconnect everything
+        this.dash_blur_connections_ids.forEach(id => { if (id) this.dash_blur.disconnect(id); });
+        this.dash_blur_connections_ids = [];
+        if (this.dash_destroy_id)
+            this.dash.disconnect(this.dash_destroy_id);
+        this.dash_destroy_id = null;
+    }
 
-        dash_blur.connections.connect(dash_blur, 'override-background', () => {
-            this.dash._background.style = null;
+    override_style() {
+        this.remove_style();
 
-            DASH_STYLES.forEach(
-                style => this.dash.remove_style_class_name(style)
-            );
+        this.dash.set_style_class_name(
+            DASH_STYLES[this.settings.dash_to_dock.STYLE_DASH_TO_DOCK]
+        );
+    }
 
-            this.dash.set_style_class_name(
-                DASH_STYLES[this.prefs.dash_to_dock.STYLE_DASH_TO_DOCK]
-            );
-        });
+    remove_style() {
+        this.dash._background.style = this.old_style;
 
-        dash_blur.connections.connect(dash_blur, 'reset-background', () => {
-            this.dash._background.style = this.old_style;
+        DASH_STYLES.forEach(
+            style => this.dash.remove_style_class_name(style)
+        );
+    }
 
-            DASH_STYLES.forEach(
-                style => this.dash.remove_style_class_name(style)
-            );
-        });
+    destroy_dash(dash_not_already_destroyed = true) {
+        if (!dash_not_already_destroyed)
+            this.bg_manager.backgroundActor = null;
 
-        dash_blur.connections.connect(dash_blur, 'show', () => {
-            this.effect.sigma = this.dash_blur.sigma;
-        });
+        this.paint_signals?.disconnect_all();
+        this.dash.get_parent().remove_child(this.background_group);
+        this.bg_manager._bms_pipeline.destroy();
+        this.bg_manager.destroy();
+        this.background_group.destroy();
+    }
 
-        dash_blur.connections.connect(dash_blur, 'hide', () => {
-            this.effect.sigma = 0;
-        });
+    change_blur_type() {
+        this.destroy_dash();
+
+        let [
+            background, background_group, bg_manager, paint_signals
+        ] = this.dash_blur.add_blur(this.dash);
+
+        this.background = background;
+        this.background_group = background_group;
+        this.bg_manager = bg_manager;
+        this.paint_signals = paint_signals;
+
+        this.dash.get_parent().insert_child_at_index(this.background_group, 0);
+
+        this.update_size();
+    }
+
+    update_pipeline() {
+        this.bg_manager._bms_pipeline.change_pipeline_to(
+            this.settings.dash_to_dock.PIPELINE
+        );
+    }
+
+    update_size() {
+        if (this.dash_blur.is_static) {
+            let [x, y] = this.get_dash_position(this.dash_container, this.dash_background);
+
+            this.background.x = -x;
+            this.background.y = -y;
+
+            if (this.dash_container.get_style_class_name().includes("top"))
+                this.background.set_clip(
+                    x,
+                    y + this.dash.y + this.dash_background.y,
+                    this.dash_background.width,
+                    this.dash_background.height
+                );
+            else if (this.dash_container.get_style_class_name().includes("bottom"))
+                this.background.set_clip(
+                    x,
+                    y + this.dash.y + this.dash_background.y,
+                    this.dash_background.width,
+                    this.dash_background.height
+                );
+            else if (this.dash_container.get_style_class_name().includes("left"))
+                this.background.set_clip(
+                    x + this.dash.x + this.dash_background.x,
+                    y + this.dash.y + this.dash_background.y,
+                    this.dash_background.width,
+                    this.dash_background.height
+                );
+            else if (this.dash_container.get_style_class_name().includes("right"))
+                this.background.set_clip(
+                    x + this.dash.x + this.dash_background.x,
+                    y + this.dash.y + this.dash_background.y,
+                    this.dash_background.width,
+                    this.dash_background.height
+                );
+        } else {
+            this.background.width = this.dash_background.width;
+            this.background.height = this.dash_background.height;
+
+            this.background.x = this.dash_background.x;
+            this.background.y = this.dash_background.y + this.dash.y;
+        }
+    }
+
+    get_dash_position(dash_container, dash_background) {
+        var x, y;
+
+        let monitor = Main.layoutManager.findMonitorForActor(dash_container);
+        let dash_box = dash_container._slider.get_child();
+
+        if (dash_container.get_style_class_name().includes("top")) {
+            x = (monitor.width - dash_background.width) / 2;
+            y = dash_box.y;
+        } else if (dash_container.get_style_class_name().includes("bottom")) {
+            x = (monitor.width - dash_background.width) / 2;
+            y = monitor.height - dash_container.height;
+        } else if (dash_container.get_style_class_name().includes("left")) {
+            x = dash_box.x;
+            y = dash_container.y + (dash_container.height - dash_background.height) / 2 - dash_background.y;
+        } else if (dash_container.get_style_class_name().includes("right")) {
+            x = monitor.width - dash_container.width;
+            y = dash_container.y + (dash_container.height - dash_background.height) / 2 - dash_background.y;
+        }
+
+        return [x, y];
     }
 
     _log(str) {
-        if (this.prefs.DEBUG)
-            log(`[Blur my Shell > dash]         ${str}`);
+        if (this.settings.DEBUG)
+            console.log(`[Blur my Shell > dash]         ${str}`);
+    }
+
+    _warn(str) {
+        console.warn(`[Blur my Shell > dash] ${str}`);
     }
 }
 
-var DashBlur = class DashBlur {
-    constructor(connections, prefs) {
+export const DashBlur = class DashBlur extends Signals.EventEmitter {
+    constructor(connections, settings, _) {
+        super();
         this.dashes = [];
         this.connections = connections;
-        this.prefs = prefs;
+        this.settings = settings;
         this.paint_signals = new PaintSignals(connections);
-        this.sigma = this.prefs.dash_to_dock.CUSTOMIZE
-            ? this.prefs.dash_to_dock.SIGMA
-            : this.prefs.SIGMA;
-        this.brightness = this.prefs.dash_to_dock.CUSTOMIZE
-            ? this.prefs.dash_to_dock.BRIGHTNESS
-            : this.prefs.BRIGHTNESS;
+        this.is_static = this.settings.dash_to_dock.STATIC_BLUR;
         this.enabled = false;
     }
 
     enable() {
-        this.connections.connect(Main.uiGroup, 'actor-added', (_, actor) => {
+        this.connections.connect(Main.uiGroup, 'child-added', (_, actor) => {
             if (
                 (actor.get_name() === "dashtodockContainer") &&
                 (actor.constructor.name === 'DashToDock')
@@ -108,6 +216,8 @@ var DashBlur = class DashBlur {
 
         this.blur_existing_dashes();
         this.connect_to_overview();
+
+        this.update_size();
 
         this.enabled = true;
     }
@@ -121,7 +231,7 @@ var DashBlur = class DashBlur {
         Main.uiGroup.get_children().filter((child) => {
             return (child.get_name() === "dashtodockContainer") &&
                 (child.constructor.name === 'DashToDock');
-        }).forEach(this.try_blur.bind(this));
+        }).forEach(dash_container => this.try_blur(dash_container));
     }
 
     // Tries to blur the dash contained in the given actor
@@ -129,9 +239,9 @@ var DashBlur = class DashBlur {
         let dash_box = dash_container._slider.get_child();
 
         // verify that we did not already blur that dash
-        if (!dash_box.get_children().some((child) => {
-            return child.get_name() === "dash-blurred-background-parent";
-        })) {
+        if (!dash_box.get_children().some(child =>
+            child.get_name() === "bms-dash-backgroundgroup"
+        )) {
             this._log("dash to dock found, blurring it");
 
             // finally blur the dash
@@ -145,126 +255,121 @@ var DashBlur = class DashBlur {
 
     // Blurs the dash and returns a `DashInfos` containing its information
     blur_dash_from(dash, dash_container) {
-        // the effect to be applied
-        let effect = new Shell.BlurEffect({
-            brightness: this.brightness,
-            sigma: this.sigma,
-            mode: Shell.BlurMode.BACKGROUND
-        });
+        let [background, background_group, bg_manager, paint_signals] = this.add_blur(dash);
 
-        // dash background parent, not visible
-        let background_parent = new St.Widget({
-            name: 'dash-blurred-background-parent',
-            style_class: 'dash-blurred-background-parent',
-            width: 0,
-            height: 0
-        });
-
-        // dash background widget
-        let background = new St.Widget({
-            name: 'dash-blurred-background',
-            style_class: 'dash-blurred-background',
-            x: 0,
-            y: dash_container._slider.y,
-            width: dash.width,
-            height: dash.height,
-        });
+        // insert the background group to the right element
+        dash.get_parent().insert_child_at_index(background_group, 0);
 
         // updates size and position on change
-        this.connections.connect(dash_container._slider, 'notify::y', _ => {
-            background.y = dash_container._slider.y;
+        this.connections.connect(
+            dash,
+            ['notify::width', 'notify::height'],
+            _ => this.update_size()
+        );
+        this.connections.connect(
+            dash_container,
+            ['notify::width', 'notify::height', 'notify::y', 'notify::x'],
+            _ => this.update_size()
+        );
+
+        const dash_background = dash.get_children().find(child => {
+            return child.get_style_class_name() === 'dash-background';
         });
-        this.connections.connect(dash, 'notify::width', _ => {
-            background.width = dash.width;
-        });
-        this.connections.connect(dash, 'notify::height', _ => {
-            background.height = dash.height;
-        });
-
-        // add the widget to the dash
-        background.add_effect(effect);
-        background_parent.add_child(background);
-        dash.get_parent().insert_child_at_index(background_parent, 0);
-
-        // HACK
-        //
-        //`Shell.BlurEffect` does not repaint when shadows are under it. [1]
-        //
-        // This does not entirely fix this bug (shadows caused by windows
-        // still cause artifacts), but it prevents the shadows of the panel
-        // buttons to cause artifacts on the panel itself
-        //
-        // [1]: https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2857
-
-        if (this.prefs.HACKS_LEVEL === 1) {
-            this._log("dash hack level 1");
-            this.paint_signals.disconnect_all();
-
-            let rp = () => {
-                effect.queue_repaint();
-            };
-
-            dash._box.get_children().forEach((icon) => {
-                try {
-                    let zone = icon.get_child_at_index(0);
-
-                    this.connections.connect(zone, [
-                        'enter-event', 'leave-event', 'button-press-event'
-                    ], rp);
-                } catch (e) {
-                    this._log(`${e}, continuing`);
-                }
-            });
-
-            this.connections.connect(dash._box, 'actor-added', (_, actor) => {
-                try {
-                    let zone = actor.get_child_at_index(0);
-
-                    this.connections.connect(zone, [
-                        'enter-event', 'leave-event', 'button-press-event'
-                    ], rp);
-                } catch (e) {
-                    this._log(`${e}, continuing`);
-                }
-            });
-
-            let show_apps = dash._showAppsIcon;
-
-            this.connections.connect(show_apps, [
-                'enter-event', 'leave-event', 'button-press-event'
-            ], rp);
-
-            this.connections.connect(dash, 'leave-event', rp);
-        } else if (this.prefs.HACKS_LEVEL === 2) {
-            this._log("dash hack level 2");
-
-            this.paint_signals.connect(background, effect);
-        } else {
-            this.paint_signals.disconnect_all();
-        }
 
         // create infos
         let infos = new DashInfos(
-            this, dash, background_parent, effect, this.prefs
+            this,
+            dash,
+            dash_container,
+            dash_background,
+            background,
+            background_group,
+            bg_manager,
+            paint_signals
         );
 
-        // update the background
+        this.update_size();
         this.update_background();
 
         // returns infos
         return infos;
     }
 
+    add_blur(dash) {
+        const monitor = Main.layoutManager.findMonitorForActor(dash);
+        if (!monitor)
+            return;
+
+        const background_group = new Meta.BackgroundGroup({
+            name: 'bms-dash-backgroundgroup', width: 0, height: 0
+        });
+
+        let background, bg_manager, paint_signals;
+        let static_blur = this.settings.dash_to_dock.STATIC_BLUR;
+        if (static_blur) {
+            let bg_manager_list = [];
+            const pipeline = new Pipeline(
+                global.blur_my_shell._effects_manager,
+                global.blur_my_shell._pipelines_manager,
+                this.settings.dash_to_dock.PIPELINE
+            );
+            background = pipeline.create_background_with_effects(
+                monitor.index, bg_manager_list,
+                background_group, 'bms-dash-blurred-widget'
+            );
+            bg_manager = bg_manager_list[0];
+        }
+        else {
+            const pipeline = new DummyPipeline(
+                global.blur_my_shell._effects_manager,
+                this.settings.dash_to_dock
+            );
+            [background, bg_manager] = pipeline.create_background_with_effect(
+                background_group, 'bms-dash-blurred-widget'
+            );
+
+            paint_signals = new PaintSignals(this.connections);
+
+            // HACK
+            //
+            //`Shell.BlurEffect` does not repaint when shadows are under it. [1]
+            //
+            // This does not entirely fix this bug (shadows caused by windows
+            // still cause artifacts), but it prevents the shadows of the dash
+            // buttons to cause artifacts on the dash itself
+            //
+            // [1]: https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/2857
+
+            if (this.settings.HACKS_LEVEL === 1) {
+                this._log("hack level 1");
+
+                paint_signals.disconnect_all();
+                paint_signals.connect(background, pipeline.effect);
+            } else {
+                paint_signals.disconnect_all();
+            }
+        }
+
+        return [background, background_group, bg_manager, paint_signals];
+    }
+
+    change_blur_type() {
+        this.is_static = this.settings.dash_to_dock.STATIC_BLUR;
+        this.emit('change-blur-type');
+
+        this.update_background();
+    }
+
     /// Connect when overview if opened/closed to hide/show the blur accordingly
     connect_to_overview() {
         this.connections.disconnect_all_for(Main.overview);
 
-        if (this.prefs.dash_to_dock.UNBLUR_IN_OVERVIEW) {
+        if (this.settings.dash_to_dock.UNBLUR_IN_OVERVIEW) {
             this.connections.connect(
-                Main.overview, 'showing', this.hide.bind(this)
+                Main.overview, 'showing', _ => this.hide()
             );
             this.connections.connect(
-                Main.overview, 'hidden', this.show.bind(this)
+                Main.overview, 'hidden', _ => this.show()
             );
         }
     };
@@ -272,31 +377,32 @@ var DashBlur = class DashBlur {
     /// Updates the background to either remove it or not, according to the
     /// user preferences.
     update_background() {
-        if (this.prefs.dash_to_dock.OVERRIDE_BACKGROUND)
-            this.emit('override-background', true);
+        this._log("updating background");
+        if (this.settings.dash_to_dock.OVERRIDE_BACKGROUND)
+            this.emit('override-style');
         else
-            this.emit('reset-background', true);
+            this.emit('remove-style');
     }
 
-    set_sigma(sigma) {
-        this.sigma = sigma;
-        this.emit('update-sigma', true);
+    update_pipeline() {
+        this.emit('update-pipeline');
     }
 
-    set_brightness(brightness) {
-        this.brightness = brightness;
-        this.emit('update-brightness', true);
+    update_size() {
+        this.emit('update-size');
     }
 
-    // not implemented for dynamic blur
-    set_color(c) { }
-    set_noise_amount(n) { }
-    set_noise_lightness(l) { }
+    show() {
+        this.emit('show');
+    }
+    hide() {
+        this.emit('hide');
+    }
 
     disable() {
         this._log("removing blur from dashes");
 
-        this.emit('remove-dashes', true);
+        this.emit('remove-dashes');
 
         this.dashes = [];
         this.connections.disconnect_all();
@@ -304,17 +410,12 @@ var DashBlur = class DashBlur {
         this.enabled = false;
     }
 
-    show() {
-        this.emit('show', true);
-    }
-    hide() {
-        this.emit('hide', true);
+    _log(str) {
+        if (this.settings.DEBUG)
+            console.log(`[Blur my Shell > dash manager] ${str}`);
     }
 
-    _log(str) {
-        if (this.prefs.DEBUG)
-            log(`[Blur my Shell > dash manager] ${str}`);
+    _warn(str) {
+        console.warn(`[Blur my Shell > dash manager] ${str}`);
     }
 };
-
-Signals.addSignalMethods(DashBlur.prototype);

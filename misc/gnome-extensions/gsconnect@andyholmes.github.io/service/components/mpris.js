@@ -1,11 +1,13 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
 
-var Player = GObject.registerClass({
+export const Player = GObject.registerClass({
     GTypeName: 'GSConnectMediaPlayerInterface',
     Properties: {
         // Application Properties
@@ -579,30 +581,6 @@ const PlayerProxy = GObject.registerClass({
         }
     }
 
-    initPromise() {
-        const application = new Promise((resolve, reject) => {
-            this._application.init_async(0, this._cancellable, (proxy, res) => {
-                try {
-                    resolve(proxy.init_finish(res));
-                } catch (e) {
-                    reject(e);
-                }
-            });
-        });
-
-        const player = new Promise((resolve, reject) => {
-            this._player.init_async(0, this._cancellable, (proxy, res) => {
-                try {
-                    resolve(proxy.init_finish(res));
-                } catch (e) {
-                    reject(e);
-                }
-            });
-        });
-
-        return Promise.all([application, player]);
-    }
-
     /*
      * The org.mpris.MediaPlayer2 Interface
      */
@@ -810,7 +788,7 @@ const PlayerProxy = GObject.registerClass({
 /**
  * A manager for media players
  */
-var Manager = GObject.registerClass({
+const Manager = GObject.registerClass({
     GTypeName: 'GSConnectMPRISManager',
     Signals: {
         'player-added': {
@@ -852,27 +830,18 @@ var Manager = GObject.registerClass({
 
     async _loadPlayers() {
         try {
-            const names = await new Promise((resolve, reject) => {
-                this._connection.call(
-                    'org.freedesktop.DBus',
-                    '/org/freedesktop/DBus',
-                    'org.freedesktop.DBus',
-                    'ListNames',
-                    null,
-                    null,
-                    Gio.DBusCallFlags.NONE,
-                    -1,
-                    this._cancellable,
-                    (connection, res) => {
-                        try {
-                            res = connection.call_finish(res);
-                            resolve(res.deepUnpack()[0]);
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }
-                );
-            });
+            const reply = await this._connection.call(
+                'org.freedesktop.DBus',
+                '/org/freedesktop/DBus',
+                'org.freedesktop.DBus',
+                'ListNames',
+                null,
+                null,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                this._cancellable);
+
+            const names = reply.deepUnpack()[0];
 
             for (let i = 0, len = names.length; i < len; i++) {
                 const name = names[i];
@@ -905,7 +874,12 @@ var Manager = GObject.registerClass({
         try {
             if (!this._players.has(name)) {
                 const player = new PlayerProxy(name);
-                await player.initPromise();
+                await Promise.all([
+                    player._application.init_async(GLib.PRIORITY_DEFAULT,
+                        this._cancellable),
+                    player._player.init_async(GLib.PRIORITY_DEFAULT,
+                        this._cancellable),
+                ]);
 
                 player.connect('notify',
                     (player) => this.emit('player-changed', player));
@@ -1025,5 +999,5 @@ var Manager = GObject.registerClass({
 /**
  * The service class for this component
  */
-var Component = Manager;
+export default Manager;
 

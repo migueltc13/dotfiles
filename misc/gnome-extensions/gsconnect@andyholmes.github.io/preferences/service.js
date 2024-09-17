@@ -1,15 +1,19 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gdk = imports.gi.Gdk;
-const GdkPixbuf = imports.gi.GdkPixbuf;
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
-const Gtk = imports.gi.Gtk;
+import Gdk from 'gi://Gdk';
+import GdkPixbuf from 'gi://GdkPixbuf';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
 
-const Config = imports.config;
-const Device = imports.preferences.device;
-const Remote = imports.utils.remote;
+import system from 'system';
+
+import Config from '../config.js';
+import {Panel, rowSeparators} from './device.js';
+import {Service} from '../utils/remote.js';
 
 
 /*
@@ -17,7 +21,7 @@ const Remote = imports.utils.remote;
  */
 const LOG_HEADER = new GLib.Bytes(`
 GSConnect: ${Config.PACKAGE_VERSION} (${Config.IS_USER ? 'user' : 'system'})
-GJS:       ${imports.system.version}
+GJS:       ${system.version}
 Session:   ${GLib.getenv('XDG_SESSION_TYPE')}
 OS:        ${GLib.get_os_info('PRETTY_NAME')}
 --------------------------------------------------------------------------------
@@ -87,7 +91,7 @@ async function generateSupportLog(time) {
 /**
  * "Connect to..." Dialog
  */
-var ConnectDialog = GObject.registerClass({
+const ConnectDialog = GObject.registerClass({
     GTypeName: 'GSConnectConnectDialog',
     Template: 'resource:///org/gnome/Shell/Extensions/GSConnect/ui/connect-dialog.ui',
     Children: [
@@ -128,22 +132,7 @@ var ConnectDialog = GObject.registerClass({
 });
 
 
-function rowSeparators(row, before) {
-    const header = row.get_header();
-
-    if (before === null) {
-        if (header !== null)
-            header.destroy();
-
-        return;
-    }
-
-    if (header === null)
-        row.set_header(new Gtk.Separator({visible: true}));
-}
-
-
-var Window = GObject.registerClass({
+export const Window = GObject.registerClass({
     GTypeName: 'GSConnectPreferencesWindow',
     Properties: {
         'display-mode': GObject.ParamSpec.string(
@@ -184,7 +173,7 @@ var Window = GObject.registerClass({
         });
 
         // Service Proxy
-        this.service = new Remote.Service();
+        this.service = new Service();
 
         this._deviceAddedId = this.service.connect(
             'device-added',
@@ -222,6 +211,9 @@ var Window = GObject.registerClass({
 
         // Application Menu
         this._initMenu();
+
+        // Setting: Keep Alive When Locked
+        this.add_action(this.settings.create_action('keep-alive-when-locked'));
 
         // Broadcast automatically every 5 seconds if there are no devices yet
         this._refreshSource = GLib.timeout_add_seconds(
@@ -588,7 +580,7 @@ var Window = GObject.registerClass({
         try {
             if (!this.stack.get_child_by_name(device.id)) {
                 // Add the device preferences
-                const prefs = new Device.Panel(device);
+                const prefs = new Panel(device);
                 this.stack.add_titled(prefs, device.id, device.name);
 
                 // Add a row to the device list
@@ -654,4 +646,3 @@ var Window = GObject.registerClass({
             this.device_list_placeholder.label = _('Waiting for service…');
     }
 });
-

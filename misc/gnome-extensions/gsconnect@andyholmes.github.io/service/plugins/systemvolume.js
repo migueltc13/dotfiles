@@ -1,13 +1,15 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const GObject = imports.gi.GObject;
+import GObject from 'gi://GObject';
 
-const Components = imports.service.components;
-const Config = imports.config;
-const PluginBase = imports.service.plugin;
+import * as Components from '../components/index.js';
+import Config from '../../config.js';
+import Plugin from '../plugin.js';
 
 
-var Metadata = {
+export const Metadata = {
     label: _('System Volume'),
     description: _('Enable the paired device to control the system volume'),
     id: 'org.gnome.Shell.Extensions.GSConnect.Plugin.SystemVolume',
@@ -22,9 +24,9 @@ var Metadata = {
  * https://github.com/KDE/kdeconnect-kde/tree/master/plugins/systemvolume
  * https://github.com/KDE/kdeconnect-android/tree/master/src/org/kde/kdeconnect/Plugins/SystemvolumePlugin/
  */
-var Plugin = GObject.registerClass({
+const SystemVolumePlugin = GObject.registerClass({
     GTypeName: 'GSConnectSystemVolumePlugin',
-}, class Plugin extends PluginBase.Plugin {
+}, class SystemVolumePlugin extends Plugin {
 
     _init(device) {
         super._init(device, 'systemvolume');
@@ -198,3 +200,5 @@ var Plugin = GObject.registerClass({
         super.destroy();
     }
 });
+
+export default SystemVolumePlugin;

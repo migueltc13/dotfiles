@@ -1,28 +1,32 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const Gtk = imports.gi.Gtk;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import Adw from 'gi://Adw';
 
 // Bootstrap
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const Utils = Extension.imports.shell.utils;
+import * as Utils from './shell/utils.js';
+import setup from './utils/setup.js';
+import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-function init() {
-    Utils.installService();
-}
+export default class GSConnectExtensionPreferences extends ExtensionPreferences {
+    constructor(metadata) {
+        super(metadata);
+        setup(this.path);
+        Utils.installService();
+    }
 
-function buildPrefsWidget() {
-    // Destroy the window once the mainloop starts
-    const widget = new Gtk.Box();
+    fillPreferencesWindow(window) {
+        const widget = new Adw.PreferencesPage();
+        window.add(widget);
 
-    GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-        widget.get_root().destroy();
-        return false;
-    });
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            window.close();
+        });
 
-    Gio.Subprocess.new([`${Extension.path}/gsconnect-preferences`], 0);
-
-    return widget;
+        Gio.Subprocess.new([`${this.path}/gsconnect-preferences`], 0);
+    }
 }
 

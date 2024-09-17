@@ -1,13 +1,14 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
 const SERVICE_NAME = 'org.gnome.Shell.Extensions.GSConnect';
 const SERVICE_PATH = '/org/gnome/Shell/Extensions/GSConnect';
 const DEVICE_NAME = 'org.gnome.Shell.Extensions.GSConnect.Device';
-const DEVICE_PATH = '/org/gnome/Shell/Extensions/GSConnect/Device';
 
 
 const _PROPERTIES = {
@@ -47,7 +48,7 @@ function _proxyInit(proxy, cancellable = null) {
 /**
  * A simple proxy wrapper for devices exported over DBus.
  */
-var Device = GObject.registerClass({
+export const Device = GObject.registerClass({
     GTypeName: 'GSConnectRemoteDevice',
     Implements: [Gio.DBusInterface],
     Properties: {
@@ -218,7 +219,7 @@ var Device = GObject.registerClass({
 /**
  * A simple proxy wrapper for the GSConnect service.
  */
-var Service = GObject.registerClass({
+export const Service = GObject.registerClass({
     GTypeName: 'GSConnectRemoteService',
     Implements: [Gio.DBusInterface],
     Properties: {
@@ -513,4 +514,3 @@ var Service = GObject.registerClass({
         }
     }
 });
-

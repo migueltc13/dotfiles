@@ -21,34 +21,32 @@
     https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator
     https://extensions.gnome.org/extension/779/clipboard-indicator/
 */
-const GObject = imports.gi.GObject;
-const Gtk = imports.gi.Gtk;
-const Gio = imports.gi.Gio;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const Utils = Me.imports.utils;
+import GObject from 'gi://GObject';
+import Gtk from 'gi://Gtk';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import * as Utils from './utils.js';
 
-const Gettext = imports.gettext;
-const _ = Gettext.domain('notification-banner-reloaded').gettext;
+import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-// API change 3 -> 4
-function addBox(box, child) {
-    if (imports.gi.versions.Gtk.startsWith("3")) {
-        box.add(child);
+export default class NotificationExtensionPreferences extends ExtensionPreferences {
+    constructor(metadata) {
+        super(metadata);
     }
-    else {
-        box.append(child);
+
+    getPreferencesWidget() {
+        let frame = new Gtk.Box();
+        let widget = new Preferences(this.getSettings());
+        frame.append(widget.main);
+        if (frame.show_all)
+            frame.show_all();
+        return frame;
     }
 }
 
-function init() {
-    let localeDir = Me.dir.get_child('locale');
-    if (localeDir.query_exists(null))
-        Gettext.bindtextdomain('notification-banner-reloaded', localeDir.get_path());
-}
-
-class Preferences {
-    constructor() {
+class Preferences{
+    constructor(settings) {
+        this.settings = settings
         this.main = new Gtk.Grid({
             margin_top: 10,
             margin_bottom: 10,
@@ -93,6 +91,30 @@ class Preferences {
         this.alwaysMinimize = new Gtk.ComboBox({
           model: this._create_options([ _('false'), _('true')])
         });
+        this.testButton = new Gtk.Button({ label: _("Test") });
+        this.testButton.connect('clicked', () => {
+            const notification = new GLib.Variant('(susssasa{sv}i)', [
+                'Notification Banner Reloaded',
+                0,
+                'dialog-information-symbolic',
+                'Notification Banner Reloaded',
+                'Test',
+                [],
+                {},
+                -1,
+            ]);
+            Gio.DBus.session.call(
+                'org.freedesktop.Notifications',
+                '/org/freedesktop/Notifications',
+                'org.freedesktop.Notifications',
+                'Notify',
+                notification,
+                null,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                null,
+                null);
+        });
 
         let rendererText = new Gtk.CellRendererText();
         for (const widget of [this.anchorHorizontal, this.anchorVertical, this.animationDirection, this.alwaysMinimize]) {
@@ -136,6 +158,12 @@ class Preferences {
           halign: Gtk.Align.START
         });
 
+        const testButtonLabel = new Gtk.Label({
+            label: _("Send Test Notification"),
+            hexpand: true,
+            halign: Gtk.Align.START
+        });
+
         const addRow = ((main) => {
             let row = 0;
             return (label, input) => {
@@ -165,8 +193,8 @@ class Preferences {
         addRow(animationDirectionLabel,   this.animationDirection);
         addRow(animationTimeLabel,        this.animationTime);
         addRow(alwaysMinimizeLabel,       this.alwaysMinimize);
+        addRow(testButtonLabel,           this.testButton);
 
-        const settings = ExtensionUtils.getSettings();
         settings.bind(Utils.PrefFields.ANCHOR_HORIZONTAL,   this.anchorHorizontal,      'active', Gio.SettingsBindFlags.DEFAULT);
         settings.bind(Utils.PrefFields.ANCHOR_VERTICAL,     this.anchorVertical,        'active', Gio.SettingsBindFlags.DEFAULT);
         settings.bind(Utils.PrefFields.PADDING_HORIZONTAL,  this.paddingHorizontal,     'value',  Gio.SettingsBindFlags.DEFAULT);
@@ -188,13 +216,3 @@ class Preferences {
         return liststore;
     }
 };
-
-function buildPrefsWidget() {
-    let frame = new Gtk.Box();
-    let widget = new Preferences();
-    addBox(frame, widget.main);
-    if (frame.show_all)
-	    frame.show_all();
-    return frame;
-}
-

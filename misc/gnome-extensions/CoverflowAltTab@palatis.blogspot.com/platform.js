@@ -23,29 +23,64 @@
  * Originally, created to be helper classes to handle Gnome Shell and Cinnamon differences.
  */
 
-const St = imports.gi.St;
-const Gio = imports.gi.Gio;
-const Config = imports.misc.config;
-const Main = imports.ui.main;
-const Meta = imports.gi.Meta;
-const Clutter = imports.gi.Clutter;
-const Lightbox = imports.ui.lightbox;
+import St from 'gi://St';
+import GObject from 'gi://GObject';
+import Gio from 'gi://Gio';
+import Meta from 'gi://Meta';
+import Clutter from 'gi://Clutter';
+import Shell from 'gi://Shell';
+import GLib from 'gi://GLib';
 
-const ExtensionImports = imports.misc.extensionUtils.getCurrentExtension().imports;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Background from 'resource:///org/gnome/shell/ui/background.js';
+import {__ABSTRACT_METHOD__} from './lib.js'
 
-const {__ABSTRACT_METHOD__} = ExtensionImports.lib;
-
-const {Switcher} = ExtensionImports.switcher;
-const {CoverflowSwitcher} = ExtensionImports.coverflowSwitcher;
-const {TimelineSwitcher} = ExtensionImports.timelineSwitcher;
+import {Switcher} from './switcher.js';
+import {CoverflowSwitcher} from './coverflowSwitcher.js';
+import {TimelineSwitcher} from './timelineSwitcher.js';
 
 const POSITION_TOP = 1;
 const POSITION_BOTTOM = 7;
-const SHELL_SCHEMA = "org.gnome.shell.extensions.coverflowalttab";
 const DESKTOP_INTERFACE_SCHEMA = 'org.gnome.desktop.interface';
 const KEY_TEXT_SCALING_FACTOR = 'text-scaling-factor';
+const DESKTOP_TOUCHPAD_SCHEMA = 'org.gnome.desktop.peripherals.touchpad';
+const KEY_NATURAL_SCROLL = 'natural-scroll';
 
 const TRANSITION_TYPE = 'easeOutQuad';
+
+const modes = [
+    Clutter.AnimationMode.EASE_IN_BOUNCE,
+    Clutter.AnimationMode.EASE_OUT_BOUNCE,
+    Clutter.AnimationMode.EASE_IN_OUT_BOUNCE,
+    Clutter.AnimationMode.EASE_IN_BACK,
+    Clutter.AnimationMode.EASE_OUT_BACK,
+    Clutter.AnimationMode.EASE_IN_OUT_BACK,
+    Clutter.AnimationMode.EASE_IN_ELASTIC,
+    Clutter.AnimationMode.EASE_OUT_ELASTIC,
+    Clutter.AnimationMode.EASE_IN_OUT_ELASTIC,
+    Clutter.AnimationMode.EASE_IN_QUAD,
+    Clutter.AnimationMode.EASE_OUT_QUAD,
+    Clutter.AnimationMode.EASE_IN_OUT_QUAD,
+    Clutter.AnimationMode.EASE_IN_CUBIC,
+    Clutter.AnimationMode.EASE_OUT_CUBIC,
+    Clutter.AnimationMode.EASE_IN_OUT_CUBIC,
+    Clutter.AnimationMode.EASE_IN_QUART,
+    Clutter.AnimationMode.EASE_OUT_QUART,
+    Clutter.AnimationMode.EASE_IN_OUT_QUART,
+    Clutter.AnimationMode.EASE_IN_QUINT,
+    Clutter.AnimationMode.EASE_OUT_QUINT,
+    Clutter.AnimationMode.EASE_IN_OUT_QUINT,
+    Clutter.AnimationMode.EASE_IN_SINE,
+    Clutter.AnimationMode.EASE_OUT_SINE,
+    Clutter.AnimationMode.EASE_IN_OUT_SINE,
+    Clutter.AnimationMode.EASE_IN_EXPO,
+    Clutter.AnimationMode.EASE_OUT_EXPO,
+    Clutter.AnimationMode.EASE_IN_OUT_EXPO,
+    Clutter.AnimationMode.EASE_IN_CIRC,
+    Clutter.AnimationMode.EASE_OUT_CIRC,
+    Clutter.AnimationMode.EASE_IN_OUT_CIRC,
+    Clutter.AnimationMode.LINEAR
+];
 
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -66,31 +101,55 @@ class AbstractPlatform {
 
     getDefaultSettings() {
         return {
-            animation_time: 0.25,
+            animation_time: 0.2,
             randomize_animation_times: false,
-            dim_factor: 0.4,
+            dim_factor: 0,
             title_position: POSITION_BOTTOM,
             icon_style: 'Classic',
             icon_has_shadow: false,
-            overlay_icon_size: 128,
             overlay_icon_opacity: 1,
             text_scaling_factor: 1,
             offset: 0,
             hide_panel: true,
             enforce_primary_monitor: true,
+            switcher_style: "Coverflow",
             switcher_class: Switcher,
             easing_function: 'ease-out-cubic',
             current_workspace_only: '1',
             switch_per_monitor: false,
-            preview_to_monitor_ratio: 50,
-            preview_scaling_factor: 75,
+            preview_to_monitor_ratio: 0.5,
+            preview_scaling_factor: 0.75,
+            bind_to_switch_applications: true,
+            bind_to_switch_windows: true,
+            perspective_correction_method: "Move Camera",
+            highlight_mouse_over: false,
+            raise_mouse_over: true,
+            switcher_looping_method: 'Flip Stack',
+            switch_application_behaves_like_switch_windows: false,
+            blur_radius: 0,
+            desaturate_factor: 0.0,
+            tint_color: (0., 0., 0.),
+            switcher_background_color: (0., 0., 0.),
+            tint_blend: 0.0,
+            use_glitch_effect: false,
+            use_tint: false,
+            invert_swipes: false,
+            overlay_icon_size: 128,
+            highlihght_color:(1., 1., 1.),
+            coverflow_switch_windows: [""],
+            coverflow_switch_applications: [""],
+            prefs_default_width: 700,
+            prefs_default_height: 600,
+            verbose_logging: false,
+            natural_scrolling: true,
+            icon_add_remove_effects: "Fade Only",
         };
     }
 
     initBackground() {
-    	this._background = Meta.BackgroundActor.new_for_screen(global.screen);
-		this._background.hide();
-        global.overlay_group.add_actor(this._background);
+        this._background = Meta.BackgroundActor.new_for_screen(global.screen);
+        this._background.hide();
+        global.overlay_group.add_child(this._background);
     }
 
     dimBackground() {
@@ -103,28 +162,57 @@ class AbstractPlatform {
     }
 
     removeBackground() {
-    	global.overlay_group.remove_actor(this._background);
+        global.overlay_group.remove_child(this._background);
     }
 }
 
-var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
-    constructor(...args) {
+export class PlatformGnomeShell extends AbstractPlatform {
+    constructor(settings, logger,  ...args) {
         super(...args);
 
         this._settings = null;
         this._connections = null;
-        this._extensionSettings = null;
+        this._extensionSettings = settings;
         this._desktopSettings = null;
+        this._touchpadSettings = null;
+        this._backgroundColor = null;
+        this._settings_changed_callbacks = null;
+        this._themeContext = null;
+        this._logger = logger;
     }
 
+    _getSwitcherBackgroundColor() {
+        if (this._backgroundColor === null) {
+            let widgetClass = this.getWidgetClass();
+            let parent = new widgetClass({ visible: false, reactive: false, style_class: 'switcher-list'});
+            let actor = new widgetClass({ visible: false, reactive: false, style_class: 'item-box' });
+            parent.add_child(actor);
+            actor.add_style_pseudo_class('selected');
+            Main.uiGroup.add_child(parent);
+            this._backgroundColor = actor.get_theme_node().get_background_color();
+            Main.uiGroup.remove_child(parent);
+            parent = null;
+            let color = new GLib.Variant("(ddd)", [this._backgroundColor.red/255, this._backgroundColor.green/255, this._backgroundColor.blue/255]);
+            this._extensionSettings.set_value("switcher-background-color", color);
+        }
+        return this._backgroundColor;
+    }
+    
     enable() {
-        this.disable();
+        this._themeContext = St.ThemeContext.get_for_stage(global.stage);
+        this._themeContextChangedID = this._themeContext.connect("changed", (themeContext) => {
+            this._backgroundColor = null;
+            this._getSwitcherBackgroundColor();
+        });
 
-        if (this._extensionSettings == null)
-            this._extensionSettings = ExtensionImports.lib.getSettings(SHELL_SCHEMA);
+        this._settings_changed_callbacks = [];
 
-        if (this._desktopSettings == null)
+        if (this._desktopSettings === null)
             this._desktopSettings = new Gio.Settings({ schema_id: DESKTOP_INTERFACE_SCHEMA });
+
+        if (this._touchpadSettings === null) {
+            this._touchpadSettings = new Gio.Settings({ schema_id: DESKTOP_TOUCHPAD_SCHEMA });
+        }
 
         let keys = [
             "animation-time",
@@ -144,27 +232,63 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
             "switcher-style",
             "preview-to-monitor-ratio",
             "preview-scaling-factor",
+            "bind-to-switch-applications",
+            "bind-to-switch-windows",
+            "perspective-correction-method",
+            "highlight-mouse-over",
+            "raise-mouse-over",
+            "desaturate-factor",
+            "blur-radius",
+            "switcher-looping-method",
+            "switch-application-behaves-like-switch-windows",
+            "use-tint",
+            "tint-color",
+            "tint-blend",
+            "switcher-background-color",
+            "use-glitch-effect",
+            "invert-swipes",
+            "highlight-color",
+            "coverflow-switch-applications",
+            "coverflow-switch-windows",
+            "prefs-default-width",
+            "prefs-default-height",
+            "verbose-logging",
+            "icon-add-remove-effects",
         ];
 
         let dkeys = [
             KEY_TEXT_SCALING_FACTOR,
         ];
 
+        let touchpadkeys = [
+            KEY_NATURAL_SCROLL,
+        ];
+
         this._connections = [];
-        let bind = this._onSettingsChanged.bind(this);
         for (let key of keys) {
+            let bind = this._onSettingsChanged.bind(this, key);
             this._connections.push(this._extensionSettings.connect('changed::' + key, bind));
         }
 
         this._dconnections = [];
         for (let dkey of dkeys) {
+            let bind = this._onSettingsChanged.bind(this, dkey);
             this._dconnections.push(this._desktopSettings.connect('changed::' + dkey, bind));
         }
 
+        this._touchpadConnections = [];
+        for (let key of touchpadkeys) {
+            let bind = this._onSettingsChanged.bind(this, key);
+            this._touchpadConnections.push(this._touchpadSettings.connect('changed::' + key, bind));
+        }
+
         this._settings = this._loadSettings();
+ 
     }
 
+
     disable() {
+        this.showPanels(0);
         if (this._connections) {
             for (let connection of this._connections) {
                 this._extensionSettings.disconnect(connection);
@@ -175,20 +299,39 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
             for (let dconnection of this._dconnections) {
                 this._desktopSettings.disconnect(dconnection);
             }
+            this._dconnections = null;
         }
+        if (this._touchpadConnections) {
+            for (let connection of this._touchpadConnections) {
+                this._touchpadSettings.disconnect(connection);
+            }
+            this._touchpadConnections = null;
+        }
+        this._themeContext.disconnect(this._themeContextChangedID);
+        this._themeContext = null;
+        this._logger = null;
         this._settings = null;
     }
+
 
     getWidgetClass() {
         return St.Widget;
     }
 
     getWindowTracker() {
-        return imports.gi.Shell.WindowTracker.get_default();
+        return Shell.WindowTracker.get_default();
     }
 
     getPrimaryModifier(mask) {
-        return imports.ui.switcherPopup.primaryModifier(mask);
+        if (mask === 0)
+            return 0;
+    
+        let primary = 1;
+        while (mask > 1) {
+            mask >>= 1;
+            primary <<= 1;
+        }
+        return primary;
     }
 
     getSettings() {
@@ -198,45 +341,82 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         return this._settings;
     }
 
-    _onSettingsChanged() {
-        this._settings = null;
+    addSettingsChangedCallback(cb) {
+        cb(this._extensionSettings);
+        this._settings_changed_callbacks.push(cb);
     }
+
+    _onSettingsChanged(key) {
+        this._settings = this._loadSettings();
+        for (let cb of this._settings_changed_callbacks) {
+            cb(this._extensionSettings, key);
+        }
+    }
+
 
     _loadSettings() {
         try {
             let settings = this._extensionSettings;
             let dsettings = this._desktopSettings;
+            let touchpadSettings = this._touchpadSettings;
+
             return {
-                animation_time: Math.max(settings.get_int("animation-time") / 1000, 0),
+                animation_time: settings.get_double("animation-time"),
                 randomize_animation_times: settings.get_boolean("randomize-animation-times"),
-                dim_factor: clamp(settings.get_int("dim-factor") / 10, 0, 1),
+                dim_factor: clamp(settings.get_double("dim-factor"), 0, 1),
                 title_position: (settings.get_string("position") == 'Top' ? POSITION_TOP : POSITION_BOTTOM),
-                icon_style: (settings.get_string("icon-style") == 'Overlay' ? 'Overlay' : 'Classic'),
+                icon_style: (settings.get_string("icon-style")),
                 icon_has_shadow: settings.get_boolean("icon-has-shadow"),
-                overlay_icon_size: clamp(settings.get_int("overlay-icon-size"), 64, 1024),
-                overlay_icon_opacity: clamp(settings.get_int("overlay-icon-opacity") / 100, 0, 1),
+                overlay_icon_size: clamp(settings.get_double("overlay-icon-size"), 16, 65536),
+                overlay_icon_opacity: clamp(settings.get_double("overlay-icon-opacity"), 0, 1),
                 text_scaling_factor: dsettings.get_double(KEY_TEXT_SCALING_FACTOR),
                 offset: settings.get_int("offset"),
                 hide_panel: settings.get_boolean("hide-panel"),
                 enforce_primary_monitor: settings.get_boolean("enforce-primary-monitor"),
                 easing_function: settings.get_string("easing-function"),
+                switcher_style: settings.get_string("switcher-style"),
                 switcher_class: settings.get_string("switcher-style") === 'Timeline'
                     ? TimelineSwitcher : CoverflowSwitcher,
                 current_workspace_only: settings.get_string("current-workspace-only"),
                 switch_per_monitor: settings.get_boolean("switch-per-monitor"),
-                preview_to_monitor_ratio: clamp(settings.get_int("preview-to-monitor-ratio") / 100, 0, 1),
-                preview_scaling_factor: clamp(settings.get_int("preview-scaling-factor") / 100, 0, 1),
+                preview_to_monitor_ratio: clamp(settings.get_double("preview-to-monitor-ratio"), 0, 1),
+                preview_scaling_factor: clamp(settings.get_double("preview-scaling-factor"), 0, 1),
+                bind_to_switch_applications: settings.get_boolean("bind-to-switch-applications"),
+                bind_to_switch_windows: settings.get_boolean("bind-to-switch-windows"),
+                perspective_correction_method: settings.get_string("perspective-correction-method"),
+                highlight_mouse_over: settings.get_boolean("highlight-mouse-over"),
+                raise_mouse_over: settings.get_boolean("raise-mouse-over"),
+                desaturate_factor: settings.get_double("desaturate-factor") === 1.0 ? 0.999 : settings.get_double("desaturate-factor"),
+                blur_radius: settings.get_double("blur-radius"),
+                switcher_looping_method: settings.get_string("switcher-looping-method"),
+                switch_application_behaves_like_switch_windows: settings.get_boolean("switch-application-behaves-like-switch-windows"),
+                tint_color: settings.get_value("tint-color").deep_unpack(),
+                tint_blend: settings.get_double("tint-blend"),
+                switcher_background_color: settings.get_value("switcher-background-color").deep_unpack(),
+                use_glitch_effect: settings.get_boolean("use-glitch-effect"),
+                use_tint: settings.get_boolean("use-tint"),
+                invert_swipes: settings.get_boolean("invert-swipes"),
+                highlight_color: settings.get_value("highlight-color").deep_unpack(),
+                coverflow_switch_windows: settings.get_strv("coverflow-switch-windows")[0],
+                coverflow_switch_applications: settings.get_strv("coverflow-switch-applications")[0],
+                prefs_default_width: settings.get_double("prefs-default-width"),
+                prefs_default_height: settings.get_double("prefs-default-height"),
+                verbose_logging: settings.get_boolean("verbose-logging"),
+                natural_scrolling: touchpadSettings.get_boolean(KEY_NATURAL_SCROLL),
+                icon_add_remove_effects: settings.get_string("icon-add-remove-effects"),
             };
         } catch (e) {
-            global.log(e);
+            this._logger.log(e);
         }
-
         return this.getDefaultSettings();
     }
 
     tween(actor, params) {
         params.duration = params.time * 1000;
-        if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-bounce" ||
+        if (params.transition == 'userChoice' && this.getSettings().easing_function == 'random' ||
+            params.transition == 'Random') {
+            params.mode = modes[Math.floor(Math.random()*modes.length)];
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-bounce" ||
             params.transition == 'easeInBounce') {
             params.mode = Clutter.AnimationMode.EASE_IN_BOUNCE;
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-bounce" ||
@@ -263,6 +443,15 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-elastic" ||
             params.transition == 'easeInOutElastic') {
             params.mode = Clutter.AnimationMode.EASE_IN_OUT_ELASTIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quad" ||
+            params.transition == 'easeInQuad') {
+            params.mode = Clutter.AnimationMode.EASE_IN_QUAD;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-quad" ||
+            params.transition == 'easeOutQuad') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_QUAD;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quad" ||
+            params.transition == 'easeInOutQuad') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUAD;
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-cubic" ||
             params.transition == 'easeInCubic') {
             params.mode = Clutter.AnimationMode.EASE_IN_CUBIC;
@@ -272,15 +461,15 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-cubic" ||
             params.transition == 'easeInOutCubic') {
             params.mode = Clutter.AnimationMode.EASE_IN_OUT_CUBIC;
-        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quad" ||
-            params.transition == 'easeInQuad') {
-            params.mode = Clutter.AnimationMode.EASE_IN_QUAD;
-        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out_quad" ||
-            params.transition == 'easeOutQuad') {
-            params.mode = Clutter.AnimationMode.EASE_OUT_QUAD;
-        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quad" ||
-            params.transition == 'easeInOutQuad') {
-            params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quart" ||
+            params.transition == 'easeInQuart') {
+            params.mode = Clutter.AnimationMode.EASE_IN_QUART;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-quart" ||
+            params.transition == 'easeOutQuart') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_QUART;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quart" ||
+            params.transition == 'easeInOutQuart') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUART;
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quint" ||
             params.transition == 'easeInQuint') {
             params.mode = Clutter.AnimationMode.EASE_IN_QUINT;
@@ -290,8 +479,38 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quint" ||
             params.transition == 'easeInOutQuint') {
             params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
-        } else if (params.transition == 'Linear') {
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-sine" ||
+            params.transition == 'easeInSine') {
+            params.mode = Clutter.AnimationMode.EASE_IN_SINE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-sine" ||
+            params.transition == 'easeOutSine') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_SINE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-sine" ||
+            params.transition == 'easeInOutSine') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_SINE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-expo" ||
+            params.transition == 'easeInExpo') {
+            params.mode = Clutter.AnimationMode.EASE_IN_EXPO;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-expo" ||
+            params.transition == 'easeOutExpo') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_EXPO;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-expo" ||
+            params.transition == 'easeInOutExpo') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_EXPO;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-circ" ||
+            params.transition == 'easeInCirc') {
+            params.mode = Clutter.AnimationMode.EASE_IN_CIRC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-circ" ||
+            params.transition == 'easeOutCirc') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_CIRC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-circ" ||
+            params.transition == 'easeInOutCirc') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_CIRC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-linear" ||
+            params.transition == 'easeLinear') {
             params.mode = Clutter.AnimationMode.LINEAR;
+        } else {
+            log("Could not find Clutter AnimationMode", params.transition, this.getSettings().easing_function);
         }
 
         if (params.onComplete) {
@@ -312,26 +531,33 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
     }
 
     initBackground() {
-        this._vignette_sharpness_backup = Lightbox.VIGNETTE_SHARPNESS;
-        this._vignette_brigtness_backup = Lightbox.VIGNETTE_SHARPNESS;
-
-        Lightbox.VIGNETTE_SHARPNESS = 1 - this._settings.dim_factor;
-        Lightbox.VIGNETTE_BRIGHTNESS = 1;
-
-    	let Background = imports.ui.background;
-
-    	this._backgroundGroup = new Meta.BackgroundGroup();
+        this._backgroundGroup = new Meta.BackgroundGroup();
+        this._backgroundGroup.set_name("coverflow-alt-tab-background-group");
         Main.layoutManager.uiGroup.add_child(this._backgroundGroup);
-    	if (this._backgroundGroup.lower_bottom) {
-	        this._backgroundGroup.lower_bottom();
+        if (this._backgroundGroup.lower_bottom) {
+            this._backgroundGroup.lower_bottom();
         } else {
-	        Main.uiGroup.set_child_below_sibling(this._backgroundGroup, null);
+            Main.uiGroup.set_child_below_sibling(this._backgroundGroup, null);
         }
-         this._lightbox = new Lightbox.Lightbox(this._backgroundGroup, {
-             inhibitEvents: true,
-             radialEffect: true,
+        
+        this._backgroundShade = new Clutter.Actor({ 
+            opacity: 0, 
+            reactive: false
         });
-        this._lightbox.opacity = 0;
+
+        let constraint = Clutter.BindConstraint.new(this._backgroundGroup,
+            Clutter.BindCoordinate.ALL, 0);
+        this._backgroundShade.add_constraint(constraint);
+
+        let shade = new MyRadialShaderEffect({name: 'shade'});
+        shade.brightness = 1;
+        shade.sharpness = this._settings.dim_factor;
+
+        this._backgroundShade.add_effect(shade);
+        
+        this._backgroundGroup.add_child(this._backgroundShade);
+        this._backgroundGroup.set_child_above_sibling(this._backgroundShade, null);
+    
         this._backgroundGroup.hide();
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
             new Background.BackgroundManager({
@@ -342,25 +568,28 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         }
     }
 
-     dimBackground() {
+    hidePanels() {
         let panels = this.getPanels();
         for (let panel of panels) {
             try {
                 let panelActor = (panel instanceof Clutter.Actor) ? panel : panel.actor;
                 panelActor.set_reactive(false);
-                if (this._settings.hide_panel) {
-                    this.tween(panelActor, {
-                        opacity: 0,
-                        time: this._settings.animation_time,
-                        transition: 'easeInOutQuint'
-                    });
-                }
+                this.tween(panelActor, {
+                    opacity: 0,
+                    time: this._settings.animation_time,
+                    transition: 'easeInOutQuint'
+                });
             } catch (e) {
                 log(e);
                 // ignore fake panels
             }
         }
+    }
 
+     dimBackground() {
+        if (this._settings.hide_panel) {
+            this.hidePanels();
+        }
         // hide gnome-shell legacy tray
         try {
             if (Main.legacyTray) {
@@ -370,15 +599,14 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
             // ignore missing legacy tray
         }
         this._backgroundGroup.show();
-        this._lightbox.lightOn();
-        this.tween(this._lightbox, {
+        this.tween(this._backgroundShade, {
             opacity: 255,
             time: this._settings.animation_time,
             transition: 'easeInOutQuint',
         });
     }
 
-    lightenBackground() {
+    showPanels(time) {
         // panels
         let panels = this.getPanels();
         for (let panel of panels){
@@ -389,13 +617,19 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
                     this.removeTweens(panelActor);
                     this.tween(panelActor, {
                         opacity: 255,
-                        time: this._settings.animation_time,
+                        time: time,
                         transition: 'easeInOutQuint'
                     });
                 }
             } catch (e) {
                 //ignore fake panels
             }
+        }
+    }
+
+    lightenBackground() {
+        if (this._settings.hide_panel) {
+            this.showPanels(this._settings.animation_time);
         }
         // show gnome-shell legacy trayconn
         try {
@@ -406,24 +640,26 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
             //ignore missing legacy tray
         }
 
-        this.tween(this._lightbox, {
+        this.tween(this._backgroundShade, {
             time: this._settings.animation_time * 0.95,
             transition: 'easeInOutQuint',
             opacity: 0,
-            onComplete: this._lightbox.lightOff.bind(this._lightbox),
         });
+
     }
 
     removeBackground() {
-        Lightbox.VIGNETTE_SHARPNESS = this._vignette_sharpness_backup;
-        Lightbox.VIGNETTE_BRIGHTNESS = this._vignette_brigtness_backup;
-        Main.layoutManager.uiGroup.remove_child(this._backgroundGroup);
-	}
+        this._backgroundGroup.destroy();
+    }
 
     getPanels() {
-        let panels = [Main.panel];
-        if (Main.panel2)
-            panels.push(Main.panel2);
+        let panels = [];
+        for (let child of Main.layoutManager.uiGroup.get_children()) {
+            if (child.get_name() === "panelBox") {
+                panels.push(child);
+            }
+        }
+
         // gnome-shell dash
         if (Main.overview._dash)
             panels.push(Main.overview._dash);
@@ -432,3 +668,76 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
 
 
 }
+
+const VIGNETTE_DECLARATIONS = '                                              \
+uniform float brightness;                                                  \n\
+uniform float vignette_sharpness;                                          \n\
+float rand(vec2 p) {                                                       \n\
+  return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);        \n\
+}                                                                          \n';
+
+const VIGNETTE_CODE = '                                                      \
+cogl_color_out.a = cogl_color_in.a;                                        \n\
+cogl_color_out.rgb = vec3(0.0, 0.0, 0.0);                                  \n\
+vec2 position = cogl_tex_coord_in[0].xy - 0.5;                             \n\
+float t = clamp(length(1.41421 * position), 0.0, 1.0);                     \n\
+float pixel_brightness = mix(1.0, 1.0 - vignette_sharpness, t);            \n\
+cogl_color_out.a *= 1.0 - pixel_brightness * brightness;                   \n\
+cogl_color_out.a += (rand(position) - 0.5) / 100.0;                        \n';
+
+const MyRadialShaderEffect = GObject.registerClass({
+    Properties: {
+        'brightness': GObject.ParamSpec.float(
+            'brightness', 'brightness', 'brightness',
+            GObject.ParamFlags.READWRITE,
+            0, 1, 1),
+        'sharpness': GObject.ParamSpec.float(
+            'sharpness', 'sharpness', 'sharpness',
+            GObject.ParamFlags.READWRITE,
+            0, 1, 0),
+    },
+}, class MyRadialShaderEffect extends Shell.GLSLEffect {
+    _init(params) {
+        this._brightness = undefined;
+        this._sharpness = undefined;
+
+        super._init(params);
+
+        this._brightnessLocation = this.get_uniform_location('brightness');
+        this._sharpnessLocation = this.get_uniform_location('vignette_sharpness');
+
+        this.brightness = 1.0;
+        this.sharpness = 0.0;
+    }
+
+    vfunc_build_pipeline() {
+        this.add_glsl_snippet(Shell.SnippetHook.FRAGMENT,
+            VIGNETTE_DECLARATIONS, VIGNETTE_CODE, true);
+    }
+
+    get brightness() {
+        return this._brightness;
+    }
+
+    set brightness(v) {
+        if (this._brightness === v)
+            return;
+        this._brightness = v;
+        this.set_uniform_float(this._brightnessLocation,
+            1, [this._brightness]);
+        this.notify('brightness');
+    }
+
+    get sharpness() {
+        return this._sharpness;
+    }
+
+    set sharpness(v) {
+        if (this._sharpness === v)
+            return;
+        this._sharpness = v;
+        this.set_uniform_float(this._sharpnessLocation,
+            1, [this._sharpness]);
+        this.notify('sharpness');
+    }
+});

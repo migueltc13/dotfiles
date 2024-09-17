@@ -1,9 +1,7 @@
-'use strict';
-
-const GObject = imports.gi.GObject;
+import GObject from 'gi://GObject';
 
 /// An object to easily manage signals.
-var Connections = class Connections {
+export const Connections = class Connections {
     constructor() {
         this.buffer = [];
     }
@@ -55,6 +53,7 @@ var Connections = class Connections {
                     this.buffer.splice(index, 1);
                 }
             });
+            infos.destroy_id = destroy_id;
         }
 
         this.buffer.push(infos);
@@ -68,12 +67,14 @@ var Connections = class Connections {
         );
 
         // remove each of them
-        actor_connections.forEach((connection) => {
+        actor_connections.forEach(connection => {
             // disconnect
             try {
                 connection.actor.disconnect(connection.id);
+                if ('destroy_id' in connection)
+                    connection.actor.disconnect(connection.destroy_id);
             } catch (e) {
-                this._log(`error removing connection: ${e}; continuing`);
+                this._warn(`error removing connection: ${e}; continuing`);
             }
 
             // remove from buffer
@@ -84,12 +85,14 @@ var Connections = class Connections {
 
     /// Disconnect every connection for each actor.
     disconnect_all() {
-        this.buffer.forEach((connection) => {
+        this.buffer.forEach(connection => {
             // disconnect
             try {
                 connection.actor.disconnect(connection.id);
+                if ('destroy_id' in connection)
+                    connection.actor.disconnect(connection.destroy_id);
             } catch (e) {
-                this._log(`error removing connection: ${e}; continuing`);
+                this._warn(`error removing connection: ${e}; continuing`);
             }
         });
 
@@ -97,8 +100,7 @@ var Connections = class Connections {
         this.buffer = [];
     }
 
-    _log(str) {
-        // no need to check if DEBUG here as this._log is only used on error
-        log(`[Blur my Shell > connections]  ${str}`);
+    _warn(str) {
+        console.warn(`[Blur my Shell > connections]  ${str}`);
     }
 };

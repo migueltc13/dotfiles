@@ -1,9 +1,10 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Config = imports.misc.config;
-const Main = imports.ui.main;
-const Meta = imports.gi.Meta;
-const Shell = imports.gi.Shell;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
 
 
 /**
@@ -21,7 +22,7 @@ const Shell = imports.gi.Shell;
  *     https://developer.gnome.org/meta/stable/meta-MetaKeybinding.html
  *     https://gitlab.gnome.org/GNOME/gnome-shell/blob/master/js/ui/windowManager.js#L1093-1112
  */
-var Manager = class Manager {
+export class Manager {
 
     constructor() {
         this._keybindings = new Map();
@@ -98,5 +99,5 @@ var Manager = class Manager {
         global.display.disconnect(this._acceleratorActivatedId);
         this.removeAll();
     }
-};
+}
 

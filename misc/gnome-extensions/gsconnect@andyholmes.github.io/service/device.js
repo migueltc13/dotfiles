@@ -1,13 +1,15 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
-const Config = imports.config;
-const Components = imports.service.components;
-const Core = imports.service.core;
-
+import Config from '../config.js';
+import * as Components from './components/index.js';
+import * as Core from './core.js';
+import plugins from './plugins/index.js';
 
 /**
  * An object representing a remote device.
@@ -16,7 +18,7 @@ const Core = imports.service.core;
  * GActionGroup and GActionMap interfaces, like Gio.Application.
  *
  */
-var Device = GObject.registerClass({
+const Device = GObject.registerClass({
     GTypeName: 'GSConnectDevice',
     Properties: {
         'connected': GObject.ParamSpec.boolean(
@@ -104,6 +106,7 @@ var Device = GObject.registerClass({
             ),
             path: `/org/gnome/shell/extensions/gsconnect/device/${this.id}/`,
         });
+        this._migratePlugins();
 
         // Watch for changes to supported and disabled plugins
         this._disabledPluginsChangedId = this.settings.connect(
@@ -159,8 +162,8 @@ var Device = GObject.registerClass({
 
     // FIXME: backend should do this stuff
     get encryption_info() {
-        let remoteFingerprint = _('Not available');
-        let localFingerprint = _('Not available');
+        let localCert = null;
+        let remoteCert = null;
 
         // Bluetooth connections have no certificate so we use the host address
         if (this.connection_type === 'bluetooth') {
@@ -169,14 +172,14 @@ var Device = GObject.registerClass({
 
         // If the device is connected use the certificate from the connection
         } else if (this.connected) {
-            remoteFingerprint = this.channel.peer_certificate.sha256();
+            remoteCert = this.channel.peer_certificate;
 
         // Otherwise pull it out of the settings
         } else if (this.paired) {
-            remoteFingerprint = Gio.TlsCertificate.new_from_pem(
+            remoteCert = Gio.TlsCertificate.new_from_pem(
                 this.settings.get_string('certificate-pem'),
                 -1
-            ).sha256();
+            );
         }
 
         // FIXME: another ugly reach-around
@@ -186,18 +189,27 @@ var Device = GObject.registerClass({
             lanBackend = this.service.manager.backends.get('lan');
 
         if (lanBackend && lanBackend.certificate)
-            localFingerprint = lanBackend.certificate.sha256();
+            localCert = lanBackend.certificate;
 
-        // TRANSLATORS: Label for TLS Certificate fingerprint
+
+        let verificationKey = '';
+        if (localCert && remoteCert) {
+            let a = localCert.pubkey_der();
+            let b = remoteCert.pubkey_der();
+            if (a.compare(b) < 0)
+                [a, b] = [b, a]; // swap
+            const checksum = new GLib.Checksum(GLib.ChecksumType.SHA256);
+            checksum.update(a.toArray());
+            checksum.update(b.toArray());
+            verificationKey = checksum.get_string();
+        }
+
+        // TRANSLATORS: Label for TLS connection verification key
         //
         // Example:
         //
-        // Google Pixel Fingerprint:
-        // 00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00
-        return _('%s Fingerprint:').format(this.name) + '\n' +
-            remoteFingerprint + '\n\n' +
-            _('%s Fingerprint:').format('GSConnect') + '\n' +
-            localFingerprint;
+        // Verification key: 0123456789abcdef000000000000000000000000
+        return _('Verification key: %s').format(verificationKey);
     }
 
     get id() {
@@ -239,6 +251,15 @@ var Device = GObject.registerClass({
         return this.settings.get_string('type');
     }
 
+    _migratePlugins() {
+        const deprecated = ['photo'];
+        const supported = this.settings
+            .get_strv('supported-plugins')
+            .filter(name => !deprecated.includes(name));
+
+        this.settings.set_strv('supported-plugins', supported);
+    }
+
     _handleIdentity(packet) {
         this.freeze_notify();
 
@@ -274,12 +295,8 @@ var Device = GObject.registerClass({
         // Determine supported plugins by matching incoming to outgoing types
         const supported = [];
 
-        for (const name in imports.service.plugins) {
-            // Exclude mousepad/presenter plugins in unsupported sessions
-            if (!HAVE_REMOTEINPUT && ['mousepad', 'presenter'].includes(name))
-                continue;
-
-            const meta = imports.service.plugins[name].Metadata;
+        for (const name in plugins) {
+            const meta = plugins[name].Metadata;
 
             if (meta === undefined)
                 continue;
@@ -485,6 +502,13 @@ var Device = GObject.registerClass({
         });
         openPath.connect('activate', this.openPath);
         this.add_action(openPath);
+
+        const showPathInFolder = new Gio.SimpleAction({
+            name: 'showPathInFolder',
+            parameter_type: new GLib.VariantType('s'),
+        });
+        showPathInFolder.connect('activate', this.showPathInFolder);
+        this.add_action(showPathInFolder);
 
         // Preference helpers
         const clearCache = new Gio.SimpleAction({
@@ -740,6 +764,32 @@ var Device = GObject.registerClass({
         Gio.AppInfo.launch_default_for_uri_async(uri, null, null, null);
     }
 
+    showPathInFolder(action, parameter) {
+        const path = parameter.unpack();
+        const uri = path.includes('://') ? path : `file://${path}`;
+
+        const connection = Gio.DBus.session;
+        connection.call(
+            'org.freedesktop.FileManager1',
+            '/org/freedesktop/FileManager1',
+            'org.freedesktop.FileManager1',
+            'ShowItems',
+            new GLib.Variant('(ass)', [[uri], 's']),
+            null,
+            Gio.DBusCallFlags.NONE,
+            -1,
+            null,
+            (connection, res) => {
+                try {
+                    connection.call_finish(res);
+                } catch (e) {
+                    Gio.DBusError.strip_remote_error(e);
+                    logError(e);
+                }
+            }
+        );
+    }
+
     _clearCache(action, parameter) {
         for (const plugin of this._plugins.values()) {
             try {
@@ -959,8 +1009,8 @@ var Device = GObject.registerClass({
         try {
             if (this.paired && !this._plugins.has(name)) {
                 // Instantiate the handler
-                handler = imports.service.plugins[name];
-                plugin = new handler.Plugin(this);
+                handler = plugins[name];
+                plugin = new handler.default(this);
 
                 // Register packet handlers
                 for (const packetType of handler.Metadata.incomingCapabilities)
@@ -1001,7 +1051,7 @@ var Device = GObject.registerClass({
         try {
             if (this._plugins.has(name)) {
                 // Unregister packet handlers
-                handler = imports.service.plugins[name];
+                handler = plugins[name];
 
                 for (const type of handler.Metadata.incomingCapabilities)
                     this._handlers.delete(type);
@@ -1052,3 +1102,4 @@ var Device = GObject.registerClass({
     }
 });
 
+export default Device;

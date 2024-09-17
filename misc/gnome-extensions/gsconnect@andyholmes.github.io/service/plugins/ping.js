@@ -1,13 +1,15 @@
-'use strict';
+// SPDX-FileCopyrightText: GSConnect Developers https://github.com/GSConnect
+//
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 
-const PluginBase = imports.service.plugin;
+import Plugin from '../plugin.js';
 
 
-var Metadata = {
+export const Metadata = {
     label: _('Ping'),
     description: _('Send and receive pings'),
     id: 'org.gnome.Shell.Extensions.GSConnect.Plugin.Ping',
@@ -30,9 +32,9 @@ var Metadata = {
  * Ping Plugin
  * https://github.com/KDE/kdeconnect-kde/tree/master/plugins/ping
  */
-var Plugin = GObject.registerClass({
+const PingPlugin = GObject.registerClass({
     GTypeName: 'GSConnectPingPlugin',
-}, class Plugin extends PluginBase.Plugin {
+}, class PingPlugin extends Plugin {
 
     _init(device) {
         super._init(device, 'ping');
@@ -67,3 +69,5 @@ var Plugin = GObject.registerClass({
         this.device.sendPacket(packet);
     }
 });
+
+export default PingPlugin;
