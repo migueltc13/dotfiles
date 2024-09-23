@@ -119,6 +119,7 @@ fuse2fs
 fuse3
 fwupd-signed
 fwupd
+g++
 gamemode
 gawk
 gcc-12
@@ -129,6 +130,7 @@ gdm3
 gedit
 gettext
 gh
+gimp
 gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
@@ -205,6 +207,7 @@ init
 inotify-tools
 inputattach
 ipcalc
+iperf
 iproute2
 iputils-ping
 isc-dhcp-client
@@ -358,6 +361,7 @@ procps
 protobuf-compiler
 proxychains4
 proxychains
+psmisc
 putty-tools
 python3-babel
 python3-cairo
