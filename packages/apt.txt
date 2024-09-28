@@ -43,8 +43,6 @@ console-setup
 coreutils
 cowsay
 crunch
-cups-bsd
-cups-client
 curl
 dash
 dconf-editor
@@ -370,6 +368,8 @@ python3-distutils-extra
 python3-gi-cairo
 python3-gi
 python3-gpg
+python3-matplotlib
+python3-networkx
 python3-pip
 python3-setuptools
 python3-software-properties
@@ -482,7 +482,6 @@ x11-xserver-utils
 xclip
 xcursor-themes
 xdg-desktop-portal-gtk
-xdg-desktop-portal
 xdg-user-dirs-gtk
 xdg-user-dirs
 xdg-utils
@@ -496,6 +495,7 @@ yaru-theme-gnome-shell
 yaru-theme-gtk
 yaru-theme-icon
 yaru-theme-sound
+ydotool
 yelp
 zenity
 zip
