@@ -72,11 +72,16 @@ return {
 		})
 
 		-- configure python server
-		lspconfig["pyright"].setup({
+		--[[ lspconfig["pyright"].setup({
 			capabilities = capabilities,
 			on_attach = lsp_on_attach,
 			handlers = handlers,
-		})
+		}) ]]
+        lspconfig["pylsp"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
+        })
 
 		-- configure lua server (with special settings)
 		lspconfig["lua_ls"].setup({
