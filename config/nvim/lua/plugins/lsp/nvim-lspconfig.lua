@@ -72,15 +72,19 @@ return {
 		})
 
 		-- configure python server
-		--[[ lspconfig["pyright"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-		}) ]]
         lspconfig["pylsp"].setup({
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
+            settings = {
+                pylsp = {
+                    plugins = {
+                        pycodestyle = {
+                            maxLineLength = 100 -- default: 79
+                        }
+                    }
+                }
+            }
         })
 
 		-- configure lua server (with special settings)
