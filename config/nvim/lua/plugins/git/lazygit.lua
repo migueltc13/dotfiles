@@ -3,10 +3,10 @@ return {
     lazy = true,
     cmd = {
         "LazyGit",
-        "LazyGitConfig",
-        "LazyGitCurrentFile",
-        "LazyGitFilter",
-        "LazyGitFilterCurrentFile",
+        -- "LazyGitConfig",
+        -- "LazyGitCurrentFile",
+        -- "LazyGitFilter",
+        -- "LazyGitFilterCurrentFile",
     },
     dependencies = {
         "nvim-lua/plenary.nvim",
