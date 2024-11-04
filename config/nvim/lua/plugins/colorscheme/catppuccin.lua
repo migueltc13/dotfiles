@@ -1,8 +1,8 @@
 return {
     "catppuccin/nvim",
     name = "catppuccin",
-    -- lazy = true,
     priority = 1000,
+    -- lazy = true,
     config = function()
         require("catppuccin").setup({
             transparent_background = true,
@@ -15,7 +15,11 @@ return {
                 gitsigns = true,
                 headlines = true,
                 illuminate = true,
-                indent_blankline = { enabled = true },
+                indent_blankline = {
+                    enabled = true,
+                    scope_color = "",
+                    colored_indent_levels = false,
+                },
                 leap = true,
                 lsp_trouble = true,
                 mason = true,
@@ -34,7 +38,7 @@ return {
                 neotest = true,
                 neotree = true,
                 noice = true,
-                notify = true,
+                notify = false,
                 semantic_tokens = true,
                 telescope = true,
                 treesitter = true,
