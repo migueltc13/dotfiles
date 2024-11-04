@@ -66,7 +66,14 @@ return {
         -- disable_filename: if disable filename header for preview page, default: 0
         vim.g.mkdp_preview_options = {
             mkit = {},
-            katex = {},
+            katex = {
+                macros = {
+                    ['\\Z'] = '\\mathbb{Z}',
+                    ['\\N'] = '\\mathbb{N}',
+                    ['\\lb'] = '(\\hspace{-.2em}|',
+                    ['\\rb'] = '|\\hspace{-.2em})',
+                }
+            },
             uml = {},
             maid = {},
             disable_sync_scroll = 0,
@@ -88,7 +95,7 @@ return {
         vim.g.mkdp_highlight_css = ''
 
         -- use a custom port to start server or empty for random
-        vim.g.mkdp_port = '8888'
+        vim.g.mkdp_port = '4217'
 
         -- preview page title
         -- ${name} will be replace with the file name
