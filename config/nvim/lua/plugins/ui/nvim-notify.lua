@@ -4,6 +4,8 @@ return {
     config = function()
         require("notify").setup({
             timeout = 1000, -- default 3000 (ms)
+            fps = 60,
+            render = "default", -- "default" | "minimal" | "simple" | "compact" | "wrapped-compact"
             stages = "fade_in_slide_out", -- "fade_in_slide_out" | "fade" | "slide" | "static"
             background_colour = "#000",
             max_height = function()
@@ -15,6 +17,7 @@ return {
             on_open = function(win)
                 vim.api.nvim_win_set_config(win, { zindex = 100 })
             end,
+            top_down = false,
         })
         vim.notify = require("notify")
     end,
