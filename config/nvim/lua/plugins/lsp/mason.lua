@@ -41,10 +41,8 @@ return {
         mason_lspconfig.setup({
             -- list of servers for mason to install
             ensure_installed = {
-                "ts_ls",
                 "html",
                 "cssls",
-                "tailwindcss",
                 "lua_ls",
                 "graphql",
                 "emmet_ls",
@@ -54,7 +52,7 @@ return {
                 "clangd",
                 "marksman",
                 "hls",
-                -- "sqls",
+                "sqls",
             },
             -- auto-install configured servers (with lspconfig)
             automatic_installation = true,
@@ -64,15 +62,11 @@ return {
             ensure_installed = {
                 "prettier", -- prettier formatter
                 "stylua", -- lua formatter
-                -- "isort", -- python formatter
-                -- "black", -- python formatter
-                -- "pylint", -- python linter
                 "eslint_d", -- js linter
             },
         })
 
         local install_all_opts = {
-            "typescript-language-server",
             "html-lsp",
             "css-lsp",
             "lua-language-server",
@@ -84,9 +78,6 @@ return {
             "marksman",
             "prettier", -- prettier formatter
             "stylua", -- lua formatter
-            -- "isort", -- python formatter
-            -- "black", -- python formatter
-            -- "pylint", -- python linter
             "eslint_d", -- js linter
         }
 
