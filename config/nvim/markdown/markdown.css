@@ -3,6 +3,13 @@
  * https://github.com/iamcco/markdown.css/blob/master/dest/github/markdown.css
  */
 
+/* when printing make sure the underline is visible */
+@media print {
+    .katex * {
+        color: black !important;
+    }
+}
+
 :root {
     --color-text-primary: #333;
     --color-text-tertiary: #777;
