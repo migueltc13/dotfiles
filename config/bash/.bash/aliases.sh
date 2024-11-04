@@ -63,6 +63,7 @@ alias gds='git diff --staged'
 alias gl='git log'
 alias gp='git pull'
 alias gf='git fetch'
+alias gb='git branch'
 alias gpush='git push'
 alias gundo='git reset --soft HEAD^'                           # undo the last commit (keep changes)
 alias lg='lazygit'
