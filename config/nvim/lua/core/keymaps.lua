@@ -184,11 +184,11 @@ map({ 'i', 'c' }, '<A-j>', '<down>',  desc('Move down',  { remap = true }))
 map({ 'i', 'c' }, '<A-k>', '<up>',    desc('Move up',    { remap = true }))
 map({ 'i', 'c' }, '<A-l>', '<right>', desc('Move right', { remap = true }))
 
--- Allow moving on wrapped lines
-map('n', 'j',      'v:count ? "j" : "gj"',      { expr = true, remap = true })
-map('n', 'k',      'v:count ? "k" : "gk"',      { expr = true, remap = true })
-map('n', '<down>', 'v:count ? "<down>" : "gj"', { expr = true, remap = true })
-map('n', '<up>',   'v:count ? "<up>"   : "gk"', { expr = true, remap = true })
+-- Allow moving on wrapped lines (Disabled as it causes lag)
+-- map('n', 'j',      'v:count ? "j" : "gj"',      { expr = true, remap = true })
+-- map('n', 'k',      'v:count ? "k" : "gk"',      { expr = true, remap = true })
+-- map('n', '<down>', 'v:count ? "<down>" : "gj"', { expr = true, remap = true })
+-- map('n', '<up>',   'v:count ? "<up>"   : "gk"', { expr = true, remap = true })
 
 -- Allow moving selected line(s) of text
 map('v', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
@@ -210,12 +210,14 @@ map('v', '>', '>gv', desc('Indent right', { remap = true }))
 map('n', '<leader>ui', vim.show_pos, desc('Inspect position under cursor'))
 
 -- File operations
-map({ 'i', 'v', 'n' }, '<C-s>', '<cmd>w<cr><esc>',  desc('Save file'))
-map({ 'i', 'v', 'n' }, '<C-q>', '<cmd>wq<cr><esc>', desc('Save file and quit'))
-map('n', '<leader>n', '<cmd>enew<cr>',              desc('New File'))
+map({ 'i', 'v', 'n' }, '<C-s>', '<cmd>w<cr><esc>',          desc('Save file'))
+map({ 'i', 'v', 'n' }, '<C-q>', '<cmd>wq<cr><esc>',         desc('Save file and quit'))
+map('n', '<leader>n',  '<cmd>enew<cr>',                     desc('New file'))
+map('n', '<leader>o',  '<cmd>sil !xdg-open % & disown<cr>', desc('Open file with system default'))
+map('n', '<leader>x',   Misc.make_executable,               desc('Make file executable'))
 
 -- Ctrl + click to open links
-map({'i', 'v', 'c', 't', 'n'}, '<C-LeftMouse>', '', desc('Open link'), { remap = true })
+map({'i', 'v', 'c', 't', 'n'}, '<C-LeftMouse>', '', desc('Open link', { remap = true }))
 
 -- Allow Ctrl + ^ in insert mode
 map('i', '<C-^>', '<esc><C-^>', desc('[<C-^>]', { remap = true }))
