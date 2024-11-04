@@ -10,7 +10,7 @@ o.number = true                      -- Show line numbers
 o.relativenumber = true              -- Show relative line numbers
 o.signcolumn = "yes"                 -- Keep signcolumn on by default
 o.colorcolumn = "80"                 -- Set color column to 80
-o.scrolloff = 8                      -- Minimal number of lines to keep above/below the cursor
+o.scrolloff = 4                      -- Minimal number of lines to keep above/below the cursor
 g.lazyredraw = true                  -- Enable lazyredraw
 
 -- Indentation settings
