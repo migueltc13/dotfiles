@@ -5,7 +5,11 @@ end, {})
 
 -- Trim spaces in the of the line
 vim.api.nvim_create_user_command("TrimSpaces", function()
+    local before = vim.fn.join(vim.fn.getline(1, '$'), '\n')
     vim.cmd("silent! :%s/\\s\\+$//e")
+    local after = vim.fn.join(vim.fn.getline(1, '$'), '\n')
+    local removed = #before - #after
+    print("Removed " .. removed .. " trailing spaces")
 end, {})
 
 -- Show keymaps using telescope
