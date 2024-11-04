@@ -1,7 +1,11 @@
 return {
     "folke/twilight.nvim",
     lazy = true,
-    cmd = { "Twilight", "TwilightEnable", "TwilightDisable" },
+    cmd = {
+        "Twilight",
+        -- "TwilightEnable",
+        -- "TwilightDisable"
+    },
     opts = {
         dimming = {
             alpha = 0.25, -- amount of dimming
