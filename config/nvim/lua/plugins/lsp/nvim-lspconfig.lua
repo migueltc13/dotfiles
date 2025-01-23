@@ -76,11 +76,20 @@ return {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
+            -- ignore E221
             settings = {
                 pylsp = {
                     plugins = {
                         pycodestyle = {
-                            maxLineLength = 100 -- default: 79
+                            maxLineLength = 100, -- default: 79
+                            ignore = {
+                                "E202", -- whitespace before ')'
+                                "E221", -- spaces before operator
+                                "E241", -- multiple spaces after ','
+                                "E272", -- multiple spaces before keyword
+                                "W503", -- line break before binary operator
+                                "W504", -- line break after binary operator
+                            }
                         }
                     }
                 }
@@ -161,6 +170,13 @@ return {
             on_attach = lsp_on_attach,
             handlers = handlers,
             filetypes = { "haskell", "lhaskell", "cabal" },
+        })
+
+        -- configure csharp_ls server
+        lspconfig["csharp_ls"].setup({
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
         })
 	end,
 }

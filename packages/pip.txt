@@ -15,6 +15,7 @@ chardet
 charset-normalizer
 click
 colorama
+colorlog
 command-not-found
 configobj
 contourpy
@@ -39,6 +40,7 @@ Flask
 fonttools
 fs
 gpg
+graphviz
 gyp
 hashID
 html5lib
@@ -46,6 +48,7 @@ httplib2
 idna
 impacket
 importlib-metadata
+iperf3
 itsdangerous
 jaraco.classes
 jeepney
@@ -76,7 +79,6 @@ more-itertools
 mpmath
 mysql-connector-python
 netaddr
-netifaces
 networkx
 numpy
 oauthlib
@@ -85,6 +87,7 @@ packaging
 paramiko
 pexpect
 pillow
+ping3
 pip
 protobuf
 psutil

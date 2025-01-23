@@ -68,10 +68,18 @@ return {
             mkit = {},
             katex = {
                 macros = {
+                    -- math symbols
                     ['\\Z'] = '\\mathbb{Z}',
                     ['\\N'] = '\\mathbb{N}',
-                    ['\\lb'] = '(\\hspace{-.2em}|',
-                    ['\\rb'] = '|\\hspace{-.2em})',
+                    -- catamorphisms
+                    ['\\lb'] = '(\\hspace{-.175em}|',
+                    ['\\rb'] = '|\\hspace{-.175em})',
+                    -- anamorphisms
+                    ['\\la'] = '[\\hspace{-.175em}(',
+                    ['\\ra'] = ')\\hspace{-.175em}]',
+                    -- hylomorphisms
+                    ['\\lh'] = '[\\hspace{-.175em}[',
+                    ['\\rh'] = ']\\hspace{-.175em}]',
                 }
             },
             uml = {},

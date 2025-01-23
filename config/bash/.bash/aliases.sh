@@ -98,8 +98,7 @@ alias pi='echo 3.1415926535'                                   # Get the value o
 alias euler='echo 2.7182818284'                                # Get the value of Euler's number to 10 decimal places
 
 # File Viewing
-alias view='bat'                                               # Shortcut for bat
-alias v='bat'                                                  # Shortcut for bat
+alias cat='bat'
 
 # File Editing
 alias edit='nvim'                                              # Edit a file with Neovim
