@@ -67,7 +67,7 @@ snap list | tail -n +2 | cut -d' ' -f1 1> /tmp/snap.txt
 check "/tmp/snap.txt" "packages/snap.txt"
 
 # pip
-pip list --format=freeze 2> /dev/null | cut -d'=' -f1 1> /tmp/pip.txt
+pip list --format=freeze 2> /dev/null | cut -d'=' -f1 | sort -u 1> /tmp/pip.txt
 check "/tmp/pip.txt" "packages/pip.txt"
 
 # cargo
