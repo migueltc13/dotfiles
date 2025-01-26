@@ -390,7 +390,11 @@ if ! command -v "bat" &> /dev/null && ask "Do you want to install bat?"; then
     eval "cargo install bat $debug"
     check_success
 else
-    echo -e "${R}bat was not installed.${N}"
+    if command -v "bat" &> /dev/null; then
+        echo -e "${C}INFO${N}: bat is already installed"
+    else
+        echo -e "${R}bat was not installed.${N}"
+    fi
 fi
 
 # config/bat/
@@ -503,7 +507,11 @@ if ! command -v "vivid" &> /dev/null && ask "Do you want to install vivid?"; the
     eval "cargo install vivid $debug"
     check_success
 else
-    echo -e "${R}vivid was not installed.${N}"
+    if command -v "vivid" &> /dev/null; then
+        echo -e "${C}INFO${N}: vivid is already installed"
+    else
+        echo -e "${R}vivid was not installed.${N}"
+    fi
 fi
 
 # config/vivid/
@@ -525,7 +533,11 @@ if ! command -v "kanata" &> /dev/null && ask "Do you want to install kanata?"; t
     eval "sudo systemctl enable --now kanata.service $debug"
     check_success
 else
-    echo -e "${R}kanata was not installed.${N}"
+    if command -v "kanata" &> /dev/null; then
+        echo -e "${C}INFO${N}: kanata is already installed"
+    else
+        echo -e "${R}kanata was not installed.${N}"
+    fi
 fi
 
 # config/kanata/
