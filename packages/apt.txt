@@ -2,6 +2,7 @@ adduser
 aircrack-ng
 alacarte
 alsa-base
+alsa-ucm-conf
 alsa-utils
 anacron
 apparmor
@@ -27,6 +28,7 @@ bc
 binwalk
 bluez
 branding-ubuntu
+bsdutils
 btop
 build-essential
 ca-certificates
@@ -64,6 +66,7 @@ doxygen
 dput
 e2fsprogs
 efibootmgr
+eject
 eog
 ethtool
 evince
@@ -301,6 +304,7 @@ mawk
 memtest86+
 meson
 mokutil
+mount
 mousetweaks
 mutter-common
 mysql-client
@@ -392,6 +396,7 @@ qtmultimedia5-dev
 ranger
 redis-tools
 remmina
+rfkill
 rig
 ripgrep
 ronn
@@ -465,6 +470,8 @@ update-manager-core
 update-manager
 update-notifier
 usb-creator-gtk
+util-linux
+uuid-dev
 valgrind
 vim-runtime
 vim-tiny
