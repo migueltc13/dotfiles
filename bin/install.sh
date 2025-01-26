@@ -43,6 +43,18 @@ function check_command() {
     fi
 }
 
+function print_usage() {
+    cat << EOF
+Usage: $0 [OPTION]
+
+Install all the packages and config files
+
+  -r, --root      force installation as root user
+  -d, --debug     enable debug mode (verbose)
+  -h, --help      show this help message
+EOF
+}
+
 # Default values
 root=false
 debug="&>/dev/null"
@@ -61,12 +73,7 @@ for arg in "$@"; do
             shift
             ;;
         -h|--help)
-            echo "Usage: $0 [OPTION]"
-            echo "Install all the packages and config files"
-            echo ""
-            echo "  -r, --root      force installation as root user"
-            echo "  -d, --debug     enable debug mode (verbose)"
-            echo "  -h, --help      show this help message"
+            print_usage
             exit 0
             ;;
         *)
