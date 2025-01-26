@@ -170,4 +170,14 @@ function M.copilot()
     end
 end
 
+-- copilot chat
+
+function M.copilot_chat()
+    -- lazy load copilot chat plugin
+    require("lazy").load({ plugins = { "CopilotChat.nvim" } })
+
+    -- toggle copilot chat
+    require('CopilotChat').toggle()
+end
+
 return M

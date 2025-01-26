@@ -148,8 +148,8 @@ map('n', '<leader>gs', ':Telescope git_status\n',  desc('Git: status'))
 map('n', '<leader>cc', Toggle.copilot,      desc('copilot: toggle'))
 map('n', '<leader>cs', ':Copilot status\n', desc('copilot: status'))
 
--- CopilotChat
-map('n', '<leader>ct', ':CopilotChatToggle\n', desc('copilot-chat: toggle'))
+-- Copilot Chat
+map('n', '<leader>ct', Toggle.copilot_chat, desc('copilot-chat: toggle'))
 
 -- Markdown-preview
 map('n', '<leader>cp', ':MarkdownPreviewToggle\n', desc('markdown-preview: toggle'))

@@ -17,8 +17,6 @@ function M.grep_selection()
 end
 
 ---@param opts table @options for the search
----@class TodoOptions
----@field cf boolean @If true, only search in the current file.
 function M.todos(opts)
     -- Keywords to search for
     local keywords = {

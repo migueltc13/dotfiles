@@ -3,6 +3,7 @@ return {
     event = "LazyFile",
     cmd = {
         "Mason",
+        --[[
         "MasonInstall",
         "MasonInstallAll",
         "MasonLog",
@@ -12,6 +13,7 @@ return {
         "MasonUninstall",
         "MasonUninstallAll",
         "MasonUpdate",
+        ]]
     },
     dependencies = {
         "williamboman/mason-lspconfig.nvim",

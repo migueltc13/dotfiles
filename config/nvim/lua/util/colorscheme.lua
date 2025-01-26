@@ -9,7 +9,7 @@ local function main(opts)
     local action_state = require('telescope.actions.state')
     local conf = require('telescope.config').values
 
-    local initial_color = vim.api.nvim_command_output('colorscheme')
+    local initial_color = vim.g.colors_name
     local function escape(bufnr)
         actions.close(bufnr)
         local cmd = 'colorscheme ' .. initial_color

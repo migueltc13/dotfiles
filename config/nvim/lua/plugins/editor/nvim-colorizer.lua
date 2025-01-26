@@ -4,9 +4,12 @@ return {
     ft = {
         "markdown",
         "html",
-        "css", "scss",
-        "javascript", "typescript",
-        "vue", "svelte"
+        "css",
+        -- "scss",
+        "javascript",
+        "typescript",
+        -- "vue",
+        -- "svelte"
     },
     config = function()
         require("colorizer").setup()
