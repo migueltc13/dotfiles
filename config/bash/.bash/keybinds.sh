@@ -4,6 +4,10 @@ bind '"\eh": "\C-k\C-ushow_keybinds\n"' &>/dev/null
 # Ctrl+backspace: delete word backward
 bind '"\C-h": backward-kill-word' &>/dev/null
 
+# Ctrl+s: switch last two characters
+# NOTE flow control is disabled at .bashrc with stty -ixon
+bind '"\C-s": transpose-chars' &>/dev/null
+
 # Ctrl+p: copy current line to clipboard (xclip)
 bind '"\C-p": "\C-e\C-uxclip -selection clipboard <<EOTFF\n\C-y\nEOTFF\n"' &>/dev/null
 
@@ -23,7 +27,7 @@ for i in {0..9}; do
 done
 # Alt+*: insert all arguments at cursor
 bind '"\e*": "!:*\e\C-e"' &>/dev/null
-# Alt+^: insert first argument at cursor # I can't use carets .-.
+# Alt+^: insert first argument at cursor # No carets for pt keyboards .-.
 bind '"\e^": "!^\e\C-e"' &>/dev/null
 # Alt+$: insert last argument at cursor
 bind '"\e$": "!$\e\C-e"' &>/dev/null
@@ -40,11 +44,13 @@ bind '"\C-go": "\C-k\C-ughoc\n"' &>/dev/null
 function show_keybinds() {
 bat <<EOF
 Custom Keybinds:
-    Ctrl+S      show this help message
+    Alt+H       show this help message
+    Ctrl+H      delete word backward (Ctrl+backspace)
+    Ctrl+S      switch last two characters
     Ctrl+P      copy current line to clipboard (xclip)
     Alt+L       clear screen
     Alt+S       run ssh-menu
-    Alt+H       run cht, a cheat sheet tool
+    Alt+M       run cht, a cheat sheet tool
 
 Vim Movement Keybinds:
     Alt+K       search history backward
@@ -57,7 +63,7 @@ Arguments Keybinds:
     Alt+^       insert first argument at cursor
 
 GitHub Keybinds:
-    Ctrl+G O    open current repository in browser
+    Ctrl+G O    open current GitHub repo in browser
     Ctrl+G F    files
     Ctrl+G B    branches
     Ctrl+G T    tags

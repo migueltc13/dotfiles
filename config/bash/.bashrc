@@ -23,6 +23,11 @@ PROMPT_COMMAND+="pwd>~/.bash/OLDPWD;"
 # load OLDPWD from file
 [ -f ~/.bash/OLDPWD ] && OLDPWD=$(cat ~/.bash/OLDPWD)
 
+# disables XON/XOFF flow control as Ctrl-S is being used in bash/keybinds.sh
+# https://unix.stackexchange.com/questions/137842/what-is-the-point-of-ctrl-s
+# Alternatively rebind the flow control keys with `stty start ^Q` and `stty stop ^S`
+stty -ixon
+
 # update the values of LINES and COLUMNS. (window size)
 shopt -s checkwinsize
 
