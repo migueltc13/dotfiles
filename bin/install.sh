@@ -383,13 +383,23 @@ else
     echo -e "${R}config/terminator/config was not copied.${N}"
 fi
 
+# Install bat
+if ! command -v "bat" &> /dev/null && ask "Do you want to install bat?"; then
+    echo -e "${G}Installing bat...${N}"
+    check_command "cargo" "cargo"
+    eval "cargo install bat $debug"
+    check_success
+else
+    echo -e "${R}bat was not installed.${N}"
+fi
+
 # config/bat/
 if ask "Do you want to copy config/bat/?"; then
     echo -e "${G}Copying config/bat/...${N}"
     mkdir -p "$HOME"/.config/bat/
     cp -r config/bat/* "$HOME"/.config/bat/
     # build bat cache (require to load custom themes)
-    eval "bat cache --build $debug || batcat cache --build $debug"
+    eval "bat cache --build $debug"
     check_success
 else
     echo -e "${R}config/bat/ was not copied.${N}"
@@ -463,15 +473,6 @@ else
     echo -e "${C}INFO${N}: You may want to remove nvm exports from .bashrc"
 fi
 
-# config/lsd/
-if ask "Do you want to copy config/lsd/?"; then
-    echo -e "${G}Copying config/lsd/...${N}"
-    mkdir -p "$HOME"/.config/lsd/
-    cp config/lsd/* "$HOME"/.config/lsd/
-else
-    echo -e "${R}config/lsd/ was not copied.${N}"
-fi
-
 # Install lsd
 if ! command -v "lsd" &> /dev/null && ask "Do you want to install lsd?"; then
     echo -e "${G}Installing lsd...${N}"
@@ -486,6 +487,25 @@ else
     fi
 fi
 
+# config/lsd/
+if ask "Do you want to copy config/lsd/?"; then
+    echo -e "${G}Copying config/lsd/...${N}"
+    mkdir -p "$HOME"/.config/lsd/
+    cp config/lsd/* "$HOME"/.config/lsd/
+else
+    echo -e "${R}config/lsd/ was not copied.${N}"
+fi
+
+# Install vivid
+if ! command -v "vivid" &> /dev/null && ask "Do you want to install vivid?"; then
+    echo -e "${G}Installing vivid...${N}"
+    check_command "cargo" "cargo"
+    eval "cargo install vivid $debug"
+    check_success
+else
+    echo -e "${R}vivid was not installed.${N}"
+fi
+
 # config/vivid/
 if ask "Do you want to copy config/vivid/?"; then
     echo -e "${G}Copying config/vivid/...${N}"
@@ -495,29 +515,8 @@ else
     echo -e "${R}config/vivid/ was not copied.${N}"
 fi
 
-# Install vivid
-if ask "Do you want to install vivid?"; then
-    echo -e "${G}Installing vivid...${N}"
-    check_command "cargo" "cargo"
-    eval "cargo install vivid $debug"
-    check_success
-else
-    echo -e "${R}vivid was not installed.${N}"
-fi
-
-# Config kanata
-if ask "Do you want to copy kanata config and service files?"; then
-    echo -e "${G}Copying config/kanata/kanata.kbd...${N}"
-    mkdir -p "$HOME"/.config/kanata/
-    cp config/kanata/kanata.kbd "$HOME"/.config/kanata/
-    echo -e "${G}Copying config/kanata/kanata.service to /etc/systemd/system/...${N}"
-    sudo cp config/kanata/kanata.service /etc/systemd/system/
-else
-    echo -e "${R}Kanata config and service files were not copied.${N}"
-fi
-
 # Install kanata
-if ask "Do you want to install kanata?"; then
+if ! command -v "kanata" &> /dev/null && ask "Do you want to install kanata?"; then
     echo -e "${G}Installing kanata...${N}"
     check_command "cargo" "cargo"
     eval "cargo install kanata $debug"
@@ -527,6 +526,17 @@ if ask "Do you want to install kanata?"; then
     check_success
 else
     echo -e "${R}kanata was not installed.${N}"
+fi
+
+# config/kanata/
+if ask "Do you want to copy kanata config and service files?"; then
+    echo -e "${G}Copying config/kanata/kanata.kbd...${N}"
+    mkdir -p "$HOME"/.config/kanata/
+    cp config/kanata/kanata.kbd "$HOME"/.config/kanata/
+    echo -e "${G}Copying config/kanata/kanata.service to /etc/systemd/system/...${N}"
+    sudo cp config/kanata/kanata.service /etc/systemd/system/
+else
+    echo -e "${R}Kanata config and service files were not copied.${N}"
 fi
 
 # Config BetterDiscord
