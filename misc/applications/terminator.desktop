@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name=Terminator
+Comment=Multiple terminals in one window
+TryExec=terminator
+#Exec=terminator -mb
+Exec=terminator -mbx "/home/z0d1ac/Animations/start-terminator.sh"
+#Exec=terminator -mbx 'echo "Z0d1ac" | figlet-toilet | lolcat; exec bash'
+Icon=terminator
+Type=Application
+Categories=GNOME;GTK;Utility;TerminalEmulator;System;
+StartupNotify=true
+X-Ubuntu-Gettext-Domain=terminator
+X-Ayatana-Desktop-Shortcuts=NewWindow;
+Keywords=terminal;shell;prompt;command;commandline;
+[NewWindow Shortcut Group]
+Name=Open a New Window
+Exec=terminator
+TargetEnvironment=Unity
+

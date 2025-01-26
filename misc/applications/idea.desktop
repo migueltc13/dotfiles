@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=IntelliJ IDEA
+GenericName=IDE
+Exec=/opt/idea/bin/idea
+Type=Application
+Keywords=text;editor;java;IDE;development
+Icon=idea
+Categories=Utility;TextEditor;Development;IDE;
+StartupNotify=false
+MimeType=text/english;text/plain;text/x-makefile;text/x-java;

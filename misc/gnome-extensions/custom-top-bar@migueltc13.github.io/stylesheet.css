@@ -1,0 +1,35 @@
+.activities-icon {
+    -st-icon-style: symbolic;
+    icon-size: 16px;
+}
+
+.activities-layout {
+    spacing: 6px;
+}
+
+.activities-label {
+    text-align: center;
+    /*
+        purple: #ff6bff
+        yellow: #adff2f
+        green: #39ff14
+        red: #ff0000
+        pastel-green: #56e845
+    */
+    color: #adff2f;
+    text-shadow: 0px 0px 10px #7aff00;
+}
+
+#panel .panel-button#panellogoActivities StBoxLayout {
+    padding: 0 6px;
+}
+
+.ws-switcher-indicator {
+    padding: 2.6666666667px;
+    margin: 13.3333333333px;
+    border-radius: 32px;
+}
+.ws-switcher-indicator:active {
+    padding: 5.3333333333px;
+    margin: 10.6666666667px;
+}

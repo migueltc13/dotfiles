@@ -1,0 +1,15 @@
+{
+  "description": "Customize your top bar",
+  "donations": {
+    "github": "migueltc13"
+  },
+  "name": "Custom Top Bar",
+  "settings-schema": "org.gnome.shell.extensions.custom-top-bar",
+  "shell-version": [
+    "45",
+    "46"
+  ],
+  "url": "https://github.com/migueltc13/custom-top-bar",
+  "uuid": "custom-top-bar@migueltc13.github.io",
+  "version": 1
+}

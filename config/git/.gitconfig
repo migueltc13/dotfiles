@@ -1,0 +1,29 @@
+[include]
+    path = ~/.config/delta/themes/catppuccin.gitconfig
+[core]
+    pager = delta
+    editor = nvim
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    features = catppuccin-mocha
+    ; features = mellow-barbet
+    syntax-theme = Catppuccin-mocha
+    navigate = true
+    side-by-side = false
+    line-numbers = true
+[merge]
+    conflictStyle = diff3
+    # tool = vimdiff
+[diff]
+    colorMoved = default
+[init]
+    defaultBranch = main
+[commit]
+    gpgsign = true
+[user]
+    email = 73550106+migueltc13@users.noreply.github.com
+    name = migueltc13
+    signingkey = AA0DA4B63E6B2732
+[credential]
+    helper = store

@@ -1,0 +1,100 @@
+#       
+name:
+  .trash: 
+  .cargo: 
+  .emacs.d: 
+  .emacs: 
+  emacs: 
+  .gnome: 
+  music: 
+  library:  # 
+  games: 
+  notes: 󱞁 # 󰎚  
+  go:  # 
+  uminho:  # 
+  ctf: 
+  mk7: 
+  exploits: 
+  books:  #   󱗖 
+  animations: 󰤺 # 󰗘 󰪏 󰤺 󰪐
+  packages: 
+  snap: 
+  .snap: 
+  steam:  # 
+  .steam:  # 
+  java: 
+  .java: 
+  arduino: 
+  .arduino15: 
+  fonts: 
+  .fonts: 
+  mozilla: 
+  .mozilla: 
+  firefox: 
+  .firefox: 
+  git: 
+  .git: 
+  .gitignore: 
+  .gitconfig: 
+  .gitattributes: 
+  .gitmodules: 
+  .gitkeep: 
+  .github: 
+  .copilot-cli-access-token: 
+  .copilot-cli-copilot-token: 
+  .fzf: 󱆃
+  .autojump: 󱆃
+  .bash: 󱆃
+  .bashrc: 󱆃
+  .bash_history: 󱆃
+  .bash_logout: 󱆃
+  .bash_profile: 󱆃
+  .profile: 󱆃
+  .bash_aliases: 󱆃
+  .selected_editor: 
+  .nanorc: 
+  .sudo_as_admin_successful: 
+  .wakatime.cfg: 
+  .wakatime.bdb: 
+  a.out: 
+  nvim: 
+  vim: 
+  nano: 󰬕
+  .dotnet: 󰪮
+  .aspnet: 󰪮
+  .nuget: 󰪮
+  .wine: 󰡶
+  templates:  #  
+  trash:  # 
+  tmux: 
+  .tmux: 
+  tmux.conf: 
+  .tmux.conf: 
+extension:
+  go:  # 
+  py: 
+  js: 
+  json: 
+  md: 
+  m: 
+  c: 
+  h: 
+  # cpp: 
+  # hpp: 
+  hs: 
+  rs: 
+  asc: 
+  gpg: 
+  tex: 󰙩 # 
+  txt: 󰦨
+filetype:
+  dir: 
+  file: 
+  pipe: 󰈲
+  socket: 󰆨
+  executable: 
+  symlink-dir: 
+  symlink-file: 
+  device-char: 
+  device-block: 󰜫
+  special: 

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Returns the ip address of tun0 interface
+
+ip a s tun0 | grep -oP --color=none 'inet \K[\d.]+'

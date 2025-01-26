@@ -1,0 +1,13 @@
+# nano config file
+#set mouse
+#set linenumbers
+set tabsize 4
+set constantshow
+set positionlog
+
+# Colors
+set titlecolor white
+set statuscolor yellow
+set numbercolor green
+set keycolor green
+#set scrollercolor green,white

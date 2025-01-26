@@ -1,0 +1,10 @@
+[Unit]
+Description=Kanata Keyboard Remapper Service
+
+[Service]
+ExecStartPre=/sbin/modprobe uinput
+ExecStart=/home/z0d1ac/.cargo/bin/kanata -c /home/z0d1ac/.config/kanata/kanata.kbd
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
