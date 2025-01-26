@@ -15,7 +15,6 @@ chardet
 charset-normalizer
 click
 colorama
-colorlog
 command-not-found
 configobj
 contourpy
