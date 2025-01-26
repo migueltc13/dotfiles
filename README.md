@@ -1,3 +1,5 @@
+> Comprehensive backup of dotfiles for the year 2024 and prior
+
 <h1 align="center">Dotfiles</h1>
 
 <div align="center">
