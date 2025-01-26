@@ -17,7 +17,7 @@ with most of the features also functioning on other Linux distributions.
 Interactive installation with [bin/install.sh]() script.
 
 ```bash
-git clone https://github.com/migueltc13/dotfiles.git ~/dotfiles
+git clone --single-branch --branch main https://github.com/migueltc13/dotfiles
 cd ~/dotfiles
 bin/install.sh
 ```
