@@ -52,7 +52,7 @@ return {
 				{ name = "path" }, -- file system paths
 				{ name = "nvim_lsp" }, -- nvim lsp
 				{ name = "luasnip" }, -- snippets
-				{ name = "buffer" }, -- text within current buffer
+				{ name = "buffer", option = { keyword_pattern = [[\k\+]] }}
 			}),
 			-- configure lspkind for vs-code like pictograms in completion menu
 			formatting = {
