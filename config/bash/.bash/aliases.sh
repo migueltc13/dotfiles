@@ -92,7 +92,8 @@ alias notes-tmux='tmux attach -t notes 2>/dev/null || tmux new -s notes "cd ~/no
 # Quick References
 alias examples='tldr'                                          # Get command examples with tldr
 alias datetime="date '+%d-%m-%Y %H:%M:%S'"                     # Get clean date and time
-alias alphabet='echo -n {a..i} ""&&echo .{j..z}&&echo {1..26}' # Get the alphabet with index numbers
+alias alphabet='echo {a..z} | sed "s/ \([j-z]\)/  \1/g" &&
+                echo {1..26}'                                  # Get the alphabet with index numbers
 alias ascii='man ascii | grep -m 1 -A 63 --color=never Oct'    # Get the ASCII table
 alias pi='echo 3.1415926535'                                   # Get the value of pi to 10 decimal places
 alias euler='echo 2.7182818284'                                # Get the value of Euler's number to 10 decimal places
