@@ -2,6 +2,7 @@ amberol
 audacity
 bare
 canonical-livepatch
+chromium
 core
 core18
 core20
@@ -11,6 +12,7 @@ crackmapexec
 gnome-3-28-1804
 gnome-3-38-2004
 gnome-42-2204
+gnome-46-2404
 gtk-common-themes
 hnterm
 julia
@@ -18,8 +20,8 @@ mapscii
 marksman
 mdl
 mdview
+multipass
 ngrok
-onionshare
 qt5-core20
 qt515-core20
 radare2

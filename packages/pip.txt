@@ -34,6 +34,7 @@ docker-compose
 dockerpty
 docopt
 duplicity
+exceptiongroup
 fasteners
 Flask
 fonttools
@@ -41,6 +42,7 @@ fs
 gpg
 graphviz
 gyp
+h11
 hashID
 html5lib
 httplib2
@@ -82,12 +84,14 @@ networkx
 numpy
 oauthlib
 olefile
+outcome
 packaging
 paramiko
 pexpect
 pillow
 ping3
 pip
+ply
 protobuf
 psutil
 ptyprocess
@@ -123,9 +127,12 @@ requests
 rich
 SciPy
 SecretStorage
+selenium
 setuptools
 simplejson
 six
+sniffio
+sortedcontainers
 soupsieve
 speedtest-cli
 ssh-import-id
@@ -133,6 +140,9 @@ sympy
 systemd-python
 terminator
 texttable
+trio
+trio-websocket
+typing_extensions
 ubuntu-drivers-common
 ubuntu-pro-client
 ufoLib2
@@ -150,6 +160,7 @@ websocket-client
 Werkzeug
 wfuzz
 wheel
+wsproto
 xdg
 xkit
 youtube-dl
