@@ -6,7 +6,6 @@ return {
         "nvim-lua/plenary.nvim"   -- for curl, log wrapper
     },
     config = function()
-        local prompts = require('CopilotChat.prompts')
         local select = require('CopilotChat.select')
 
         require('CopilotChat').setup({
@@ -14,8 +13,9 @@ return {
             proxy = nil, -- [protocol://]host[:port] Use this proxy
             allow_insecure = false, -- Allow insecure server connections
 
-            system_prompt = prompts.COPILOT_INSTRUCTIONS, -- System prompt to use
-            model = 'gpt-4', -- GPT model to use, 'gpt-3.5-turbo' or 'gpt-4'
+            model = 'gpt-4o', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+            agent = 'copilot', -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
+
             temperature = 0.1, -- GPT temperature
 
             question_header = '### User ', -- Header to use for user questions
