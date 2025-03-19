@@ -30,7 +30,7 @@
         <default>15</default>
         <summary>The number of items to save in history</summary>
         <description></description>
-        <range min="1" max="200"/>
+        <range min="1" max="10000"/>
     </key>
 
     <key type="i" name="display-mode">
@@ -47,6 +47,11 @@
     <key name="clear-on-boot" type="b">
         <default>false</default>
         <summary>Clear clipboard history on every system reboot.</summary>
+    </key>
+
+    <key name="paste-on-select" type="b">
+        <default>false</default>
+        <summary>Paste on select</summary>
     </key>
 
     <key type="i" name="preview-size">
@@ -75,7 +80,7 @@
             If the cache overflows this limit, the file will be overriden.
             High limit might cause slowness of shell startup.
         </description>
-        <range min="1" max="256"/>
+        <range min="1" max="1024"/>
     </key>
 
     <key name="cache-only-favorites" type="b">
@@ -164,6 +169,13 @@
             <summary>Toggle "Private Mode"</summary>
             <description>
                 Key to toggle the private mode
+            </description>
+        </key>
+        <key name="cache-images" type="b">
+            <default>true</default>
+            <summary>Cache images</summary>
+            <description>
+                Allow caching images to disk
             </description>
         </key>
     </schema>

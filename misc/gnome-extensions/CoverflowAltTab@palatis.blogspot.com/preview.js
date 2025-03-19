@@ -55,16 +55,18 @@ export const Preview = GObject.registerClass({
         )
     }
 }, class Preview extends Clutter.Clone {
-    _init(window, switcher, ...args) {
-        super._init(...args);
+    constructor(window, switcher, ...args) {
+        super(...args);
         this.metaWin = window;
         this.switcher = switcher;
         this._icon = null;
         this._highlight = null;
+        this._application_icon_box = null;
         this._flash = null;
         this._entered = false;
         this._effectNames = ['glitch', 'desaturate', 'tint']
         this._effectCounts = {};
+        this._destroying = false;
         for (let effect_name of this._effectNames) {
             this._effectCounts[effect_name] = 0;
         }
@@ -80,13 +82,17 @@ export const Preview = GObject.registerClass({
     make_top_layer(parent) {
         if (this.raise_top) {
             this.raise_top()
+            if (this._highlight) this._highlight.raise_top();
             if (this._application_icon_box) this._application_icon_box.raise_top();
+            this.switcher._raiseIcons();
         } else if (parent.set_child_above_sibling) {
             parent.set_child_above_sibling(this, null);
-            if (this._application_icon_box) parent.set_child_above_sibling(this._application_icon_box, this);
+            if (this._highlight) parent.set_child_above_sibling(this._highlight, null);
+            if (this._application_icon_box) parent.set_child_above_sibling(this._application_icon_box, null);
+            this.switcher._raiseIcons();
         } else {
             // Don't throw anything here, it may cause unstabilities
-            logError("No method found for making preview the top layer");
+            this.switcher._logger.error("No method found for making preview the top layer");
         }
     }
 
@@ -100,13 +106,15 @@ export const Preview = GObject.registerClass({
     make_bottom_layer(parent) {
         if (this.lower_bottom) {
             if (this._application_icon_box) this._application_icon_box.lower_bottom();
+            if (this._highlight) this._highlight.lower_bottom();
             this.lower_bottom()
         } else if (parent.set_child_below_sibling) {
             parent.set_child_below_sibling(this, null);
+            if (this._highlight) parent.set_child_above_sibling(this._highlight, this);
             if (this._application_icon_box) parent.set_child_above_sibling(this._application_icon_box, this);
         } else {
             // Don't throw anything here, it may cause unstabilities
-            logError("No method found for making preview the bottom layer");
+            this.switcher._logger.error("No method found for making preview the bottom layer");
         }
     }
 
@@ -126,10 +134,10 @@ export const Preview = GObject.registerClass({
             transition.set_to(param_value);
             this.get_effect(effect_name)[parameter_name] = 1.0;
             this.add_transition(add_transition_name, transition);
-            transition.connect('new-frame', (timeline, msecs) => {
+            transition.connect('new-frame', (_timeline, _msecs) => {
                 this.queue_redraw();
             });
-        } else if (this._effectCounts[name] == 0) {
+        } else if (this._effectCounts[name] === 0) {
             if (this.get_transition(add_transition_name) === null) {
                 let transition = Clutter.PropertyTransition.new(property_transition_name);
                 transition.progress_mode = Clutter.AnimationMode.LINEAR;
@@ -141,7 +149,7 @@ export const Preview = GObject.registerClass({
                 this.add_effect_with_name(effect_name, new effect_class(constructor_argument));
                 this.add_transition(add_transition_name, transition);
                 this._effectCounts[name] = 1;
-                transition.connect('new-frame', (timeline, msecs) => {
+                transition.connect('new-frame', (_timeline, _msecs) => {
                     this.queue_redraw();
                 });
             }
@@ -157,7 +165,7 @@ export const Preview = GObject.registerClass({
         let remove_transition_name = effect_name + "-remove";
         let property_transition_name = `@effects.${effect_name}.${parameter_name}`;
         if (this._effectCounts[name] > 0) {
-            if (this._effectCounts[name] == 1) {
+            if (this._effectCounts[name] === 1) {
                 this.remove_transition(add_transition_name);
                 if (this.get_transition(remove_transition_name) === null) {
                     let transition = Clutter.PropertyTransition.new(property_transition_name);
@@ -168,7 +176,7 @@ export const Preview = GObject.registerClass({
                     transition.set_to(value);
                     this.get_effect(effect_name)[parameter_name] = 1.0;
                     this.add_transition(remove_transition_name, transition);
-                    transition.connect("completed", (trans) => {
+                    transition.connect("completed", (_trans) => {
                         this.remove_effect_by_name(effect_name);
                         this._effectCounts[name] = 0;
                     });
@@ -180,7 +188,7 @@ export const Preview = GObject.registerClass({
     }
 
     _pulse_highlight() {
-        if (this._highlight == null) return;
+        if (this._highlight === null) return;
         this._highlight.ease({
             opacity: 255,
             duration: 2000,
@@ -199,42 +207,40 @@ export const Preview = GObject.registerClass({
     }
 
     remove_highlight() {
-        if (this._highlight != null) {
+        if (this._highlight !== null) {
             this._highlight.ease({
                 opacity: 0,
                 duration: 300,
                 mode: Clutter.AnimationMode.EASE_IN_OUT_QUINT,
                 onComplete: () => {
-                    if (this._highlight != null) {
+                    if (this._highlight !== null) {
                         this._highlight.destroy()
                         this._highlight = null;
                     }
                 },
             });
         }
-        if (this._flash != null) {
+        if (this._flash !== null) {
             this._flash.destroy();
             this._flash = null;
         }
     }
 
     _getHighlightStyle(alpha) {
-        let color = this.switcher._settings.highlight_color;
+        let color = this.switcher._settings.highlight_use_theme_color ? this.switcher._settings.switcher_background_color : this.switcher._settings.highlight_color;
         let style =`background-color: rgba(${255*color[0]}, ${255*color[1]}, ${255*color[2]}, ${alpha})`;
         return style;
     }
 
     vfunc_enter_event(_crossingEvent) {
-        if (this.switcher._animatingClosed || this._entered == true) {
+        if (this.switcher._animatingClosed || this._entered === true) {
             return Clutter.EVENT_PROPAGATE;
-        } 
+        }
         this._entered = true;
         if (this.switcher._settings.raise_mouse_over) {
             this.make_top_layer(this.switcher.previewActor);
-            this.switcher._raiseIcons();
         }
-        if (this.switcher._settings.highlight_mouse_over) {
-            let window_actor = this.metaWin.get_compositor_private();
+        if (this.switcher._settings.highlight_mouse_over && !this.switcher.gestureInProgress) {
             if (this._highlight === null) {
                     this._highlight = new St.Bin({
                     opacity: 0,
@@ -244,13 +250,25 @@ export const Preview = GObject.registerClass({
                     y: 0,
                     reactive: false,
                 });
-                this._highlight.set_style(this._getHighlightStyle(0.3));
-                let constraint = Clutter.BindConstraint.new(window_actor, Clutter.BindCoordinate.SIZE, 0);
+                this._highlight.set_style(this._getHighlightStyle(0.666));
+                let constraint = Clutter.BindConstraint.new(this, Clutter.BindCoordinate.ALL, 0);
                 this._highlight.add_constraint(constraint);
-                window_actor.add_child(this._highlight);
 
+                this.bind_property('rotation_angle_y', this._highlight, 'rotation_angle_y',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('pivot_point', this._highlight, 'pivot_point',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('translation_x', this._highlight, 'translation_x',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_x', this._highlight, 'scale_x',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_y', this._highlight, 'scale_y',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_z', this._highlight, 'scale_z',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.switcher.previewActor.add_child(this._highlight);
             }
-            if (this._flash == null) {
+            if (this._flash === null) {
                 this._flash = new St.Bin({
                     width: 1,
                     height: 1,
@@ -260,9 +278,27 @@ export const Preview = GObject.registerClass({
                     y: 0,
                 });
                 this._flash.set_style(this._getHighlightStyle(1));
-                let constraint = Clutter.BindConstraint.new(window_actor, Clutter.BindCoordinate.SIZE, 0);
+                let constraint = Clutter.BindConstraint.new(this, Clutter.BindCoordinate.ALL, 0);
                 this._flash.add_constraint(constraint);
-                window_actor.add_child(this._flash);
+                this.bind_property('rotation_angle_y', this._flash, 'rotation_angle_y',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('pivot_point', this._flash, 'pivot_point',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('translation_x', this._flash, 'translation_x',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_x', this._flash, 'scale_x',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_y', this._flash, 'scale_y',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.bind_property('scale_z', this._flash, 'scale_z',
+                    GObject.BindingFlags.SYNC_CREATE);
+                this.switcher.previewActor.add_child(this._flash);
+                if (this._application_icon_box !== null) {
+                    this.switcher.previewActor.set_child_above_sibling(this._application_icon_box,
+                        this._highlight);
+                    this.switcher.previewActor.set_child_above_sibling(this._application_icon_box,
+                        this._flash);
+                }
                 this._flash.ease({
                     opacity: 0,
                     duration: 500,
@@ -273,11 +309,12 @@ export const Preview = GObject.registerClass({
                 });
             }
         }
+        this.switcher._raiseIcons();
         return Clutter.EVENT_PROPAGATE;
     }
-    
+
     addIcon() {
-        let icon_size = BASE_ICON_SIZE; 
+        let icon_size = BASE_ICON_SIZE;
         let target_size = this.switcher._settings.overlay_icon_size;
         let shortest_side_length = Math.min(this.width, this.height)
         let scale =  target_size / Math.min(shortest_side_length, icon_size) / this.scale;
@@ -301,7 +338,7 @@ export const Preview = GObject.registerClass({
             });
 
             let constraint = Clutter.BindConstraint.new(this, Clutter.BindCoordinate.ALL, 0);
-            this._application_icon_box.add_constraint(constraint); 
+            this._application_icon_box.add_constraint(constraint);
             this._application_icon_box.set_child(this._icon);
 
             this._icon.set_pivot_point(0.5, 0.5);
@@ -313,11 +350,11 @@ export const Preview = GObject.registerClass({
             this.bind_property('pivot_point', this._application_icon_box, 'pivot_point',
                 GObject.BindingFlags.SYNC_CREATE);
             this.bind_property('translation_x', this._application_icon_box, 'translation_x',
-                GObject.BindingFlags.SYNC_CREATE); 
+                GObject.BindingFlags.SYNC_CREATE);
             this.bind_property('scale_x', this._application_icon_box, 'scale_x',
                 GObject.BindingFlags.SYNC_CREATE);
             this.bind_property('scale_y', this._application_icon_box, 'scale_y',
-                GObject.BindingFlags.SYNC_CREATE);        
+                GObject.BindingFlags.SYNC_CREATE);
             this.bind_property('scale_z', this._application_icon_box, 'scale_z',
                 GObject.BindingFlags.SYNC_CREATE);
             this.switcher.previewActor.add_child(this._application_icon_box);
@@ -326,36 +363,44 @@ export const Preview = GObject.registerClass({
                 this.switcher._manager.platform.tween(this._icon, {
                     transition: 'easeInOutQuint',
                     scale_x: scale,
-                    scale_y: scale, 
+                    scale_y: scale,
                     time: this.switcher._getRandomTime(),
                 });
             }
 
             this.switcher._manager.platform.tween(this._application_icon_box, {
                 transition: 'easeInOutQuint',
-                opacity: 255, 
+                opacity: 255,
                 time: this.switcher._getRandomTime(),
-                onComplete:  () => { 
+                onComplete:  () => {
                     this.bind_property('opacity', this._application_icon_box, 'opacity',
                         GObject.BindingFlags.DEFAULT);
                 }
             });
         } else {
             this._icon.removing = false;
+
             if (this.switcher._iconScaleUpDown) {
-                this.switcher._manager.platform.tween(this._icon, {
-                    transition: 'easeInOutQuint',
-                    scale_x: scale,
-                    scale_y: scale, 
-                    time: this.switcher._getRandomTime(),
-                });
+                let t = this._application_icon_box.get_transition('scale_x');
+                if (!t || t.get_interval().peek_final_value() !== scale) {
+
+                    this.switcher._manager.platform.tween(this._icon, {
+                        transition: 'easeInOutQuint',
+                        scale_x: scale,
+                        scale_y: scale,
+                        time: this.switcher._getRandomTime(),
+                    });
+                }
             }
 
-            this.switcher._manager.platform.tween(this._application_icon_box, {
-                transition: 'easeInOutQuint',
-                opacity: 255, 
-                time: this.switcher._getRandomTime(),
-            });
+            let t = this._application_icon_box.get_transition('opacity');
+            if (!t || t.get_interval().peek_final_value() !== 255) {
+                this.switcher._manager.platform.tween(this._application_icon_box, {
+                    opacity: 255,
+                    time: this.switcher._getRandomTime(),
+                    transition: 'easeInOutQuint',
+                });
+            }
         }
 
         if (this.switcher._settings.icon_has_shadow) {
@@ -365,17 +410,12 @@ export const Preview = GObject.registerClass({
     }
 
     removeIcon(animation_time) {
-        let icon_size = BASE_ICON_SIZE; 
-        let target_size = this.switcher._settings.overlay_icon_size;
-        let shortest_side_length = Math.min(this.width, this.height)
-        let scale =  target_size / Math.min(shortest_side_length, icon_size) / this.scale;
-
         if (this._icon !== null && !this._icon.removing) {
             this._icon.removing = true;
             if (this.switcher._iconFadeInOut) {
                 this.switcher._manager.platform.tween(this._application_icon_box, {
                     transition: 'easeInOutQuint',
-                    opacity: 0, 
+                    opacity: 0,
                     time: animation_time,
                     onComplete: () => {
                         if (this._icon !== null) {
@@ -387,27 +427,33 @@ export const Preview = GObject.registerClass({
                     },
                 });
             }
-        
+
             if (this.switcher._iconScaleUpDown) {
-                this.switcher._manager.platform.tween(this._icon, {
-                    transition: 'easeInOutQuint',
-                    scale_x: 0,
-                    scale_y: 0,
-                    time: animation_time,
-                    onComplete: () => {
-                        if (this._icon !== null) {
-                            this._icon.destroy()
-                            this._icon = null;
-                            this._application_icon_box.destroy();
-                            this._application_icon_box = null;
-                        }
-                    },
-                });
+                if (this._icon !== null) {
+                    let t = this._icon.get_transition('scale-x');
+                        if (!t || t.get_interval().peek_final_value() !== 0) {
+                        this.switcher._manager.platform.tween(this._icon, {
+                            transition: 'easeInOutQuint',
+                            scale_x: 0,
+                            scale_y: 0,
+                            time: animation_time,
+                            onComplete: () => {
+                                if (this._icon !== null) {
+                                    this._icon.destroy()
+                                    this._icon = null;
+                                    this._application_icon_box.destroy();
+                                    this._application_icon_box = null;
+                                }
+                            },
+                        });
+                    }
+                }
             }
         }
     }
 
     vfunc_leave_event(_crossingEvent) {
+        if (this._destroying) return Clutter.EVENT_PROPAGATE;
         this.remove_highlight();
         this._entered = false;
         if (this.switcher._settings.raise_mouse_over && !this.switcher._animatingClosed) this.switcher._updatePreviews(true, 0);
