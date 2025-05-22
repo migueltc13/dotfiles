@@ -54,6 +54,10 @@
     margin-left: 5px !important;
     margin-top: 1px !important;
 }
+#urlbar[focused]:not([open]) #identity-box { /* padlock icon and permissions box */
+    margin-left: 5px !important;
+    margin-top: 1px !important;
+}
 #urlbar[focused]:not([open]) #urlbar-input {
     margin-left: 0 !important;
     margin-top: 0 !important;
@@ -66,6 +70,11 @@
 
 /* Remove the "go" arrow button */
 #urlbar-go-button {
+  display: none !important;
+}
+
+/* Remove the "Show the address in location bar" button */
+#urlbar-revert-button-container {
   display: none !important;
 }
 
