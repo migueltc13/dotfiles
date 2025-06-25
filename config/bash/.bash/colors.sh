@@ -17,5 +17,6 @@ fi
 # gcc colors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# ls colors
-export LS_COLORS=$(vivid -d "$HOME"/.config/vivid/filetypes.yml  generate "$HOME"/.config/vivid/catppuccin.yml)
+# The contents of the file `LS_COLORS` were generated with the command:
+# vivid -d ~/.config/vivid/filetypes.yml generate ~/.config/vivid/catppuccin.yml
+export LS_COLORS=$(cat ~/.bash/LS_COLORS)

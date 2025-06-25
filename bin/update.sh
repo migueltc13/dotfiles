@@ -81,7 +81,6 @@ check "/tmp/npm.txt" "packages/npm.txt"
 ### Config
 
 # bash
-check "$HOME/.profile"               "config/bash/.profile"
 check "$HOME/.bashrc"                "config/bash/.bashrc"
 check "$HOME/.bash/"                 "config/bash/.bash/"
 

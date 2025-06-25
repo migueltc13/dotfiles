@@ -193,6 +193,16 @@ function extract() {
     done
 }
 
+# Color Picker
+function color-picker() {
+    COLOR=$(zenity --color-selection --title="Color Picker" 2>/dev/null)
+    case $? in
+        0) echo -n "$COLOR" | xclip -i -selection clipboard;;
+        1) echo;;  # No color selected
+        *) echo "An unexpected error has occurred." >/dev/stderr; return 1;;
+    esac
+}
+
 # Send 1 free sms per day with Text Belt
 function send-sms() {
     if [ $# -ne 2 ]; then
