@@ -7,11 +7,8 @@ return {
 		-- { "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
-		-- import lspconfig plugin
 		local lspconfig = require("lspconfig")
-
-		-- import cmp-nvim-lsp plugin
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		-- set rounded borders for floating windows
 		vim.diagnostic.config({
@@ -23,9 +20,9 @@ return {
 		}
 		require("lspconfig.ui.windows").default_options.border = "rounded"
 
-		-- used to enable autocompletion (assign to every lsp server config)
-		local capabilities = cmp_nvim_lsp.default_capabilities()
-		-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+		-- Default LSP capabilities (completions capabilities are overridden by cmp-nvim-lsp)
+		local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities.textDocument.completion = cmp_nvim_lsp.default_capabilities().textDocument.completion
 
 		-- Change the Diagnostic symbols in the sign column (gutter)
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -34,59 +31,45 @@ return {
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
-		-- configure html server
-		lspconfig["html"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-		})
+        -- LSPs with default configurations
+        local servers = {
+            "bashls",
+            "hls",
+            "pylsp",
+            "lua_ls",
+            "jdtls",
+            "marksman",
+            "html",
+            "cssls",
+            "emmet_ls",
+            "graphql",
+            -- "sqls",
+        }
 
-		-- configure typescript server with plugin
-		lspconfig["ts_ls"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-		})
-
-		-- configure css server
-		lspconfig["cssls"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-		})
-
-		-- configure graphql language server
-		lspconfig["graphql"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-			filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-		})
-
-		-- configure emmet language server
-		lspconfig["emmet_ls"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-			filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-		})
+        for _, server in ipairs(servers) do
+            lspconfig[server].setup({
+                capabilities = capabilities,
+                on_attach = lsp_on_attach,
+                handlers = handlers,
+            })
+        end
 
 		-- configure python server
         lspconfig["pylsp"].setup({
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
-            -- ignore E221
             settings = {
                 pylsp = {
                     plugins = {
                         pycodestyle = {
-                            maxLineLength = 100, -- default: 79
+                            -- maxLineLength = 100, -- default: 79 (E501 is ignored)
                             ignore = {
                                 "E202", -- whitespace before ')'
                                 "E221", -- spaces before operator
                                 "E241", -- multiple spaces after ','
                                 "E272", -- multiple spaces before keyword
+                                "E501", -- line too long
                                 "W503", -- line break before binary operator
                                 "W504", -- line break after binary operator
                             }
@@ -96,19 +79,21 @@ return {
             }
         })
 
-		-- configure lua server (with special settings)
+		-- configure lua server
 		lspconfig["lua_ls"].setup({
 			capabilities = capabilities,
 			on_attach = lsp_on_attach,
 			handlers = handlers,
-			settings = { -- custom settings for lua
+			settings = {
 				Lua = {
-					-- make the language server recognize "vim" global
+                    runtime = {
+                        version = 'LuaJIT',
+                    },
 					diagnostics = {
-						globals = { "vim" },
+						globals = { "vim", "require" },
 					},
 					workspace = {
-						-- make language server aware of runtime files
+						-- make LS aware of runtime files
 						library = {
 							[vim.fn.expand("$VIMRUNTIME/lua")] = true,
 							[vim.fn.stdpath("config") .. "/lua"] = true,
@@ -116,13 +101,6 @@ return {
 					},
 				},
 			},
-		})
-
-		-- configure bash server
-		lspconfig["bashls"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
 		})
 
 		-- configure clangd server
@@ -136,47 +114,21 @@ return {
 			},
 		})
 
-		-- configure marksman server
-		lspconfig["marksman"].setup({
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-		})
-
-        -- configure java server
-        -- lspconfig["java-language-server"].setup({
-        --     capabilities = capabilities,
-        --     on_attach = lsp_on_attach,
-        --     handlers = handlers,
-        -- })
-
-        -- configure java server
-        lspconfig["jdtls"].setup({
+        -- configure typescript server with vue support
+        lspconfig["ts_ls"].setup({
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
-        })
-
-		-- configure sqls server
-		-- lspconfig["sqls"].setup({
-        --     capabilities = capabilities,
-        --     on_attach = lsp_on_attach,
-        --     handlers = handlers,
-		-- })
-
-        -- confige haskell language server (hls)
-        lspconfig["hls"].setup({
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
-            filetypes = { "haskell", "lhaskell", "cabal" },
-        })
-
-        -- configure csharp_ls server
-        lspconfig["csharp_ls"].setup({
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
+            init_options = {
+                plugins = {
+                    {
+                        name = "@vue/typescript-plugin",
+                        location = "/usr/local/lib/node_modules/@vue/language-server",
+                        languages = { "vue" },
+                    },
+                }
+            },
+            filetypes = { "javascript", "vue" },
         })
 	end,
 }
