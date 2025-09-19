@@ -1,27 +1,32 @@
 [global_config]
-  title_hide_sizetext = True
-  title_transmit_fg_color = "#7aff00"
-  title_transmit_bg_color = "#131313"
-  title_receive_fg_color = "#000000"
-  title_receive_bg_color = "#56e845"
-  title_inactive_fg_color = "#9a9996"
-  title_inactive_bg_color = "#131313"
-  suppress_multiple_term_dialog = True
-  title_use_system_font = False
-  title_font = Hack Nerd Font Mono 10
+  borderless = True
+  extra_styling = False
+  ask_before_closing = always
   invert_search = True
 [keybindings]
+  cycle_next = ""
+  cycle_prev = ""
   page_up_half = <Primary><Shift>u
   page_down_half = <Primary><Shift>d
+  next_tab = <Primary>Tab
+  prev_tab = <Primary><Shift>Tab
+  switch_to_tab_1 = <Primary>1
+  switch_to_tab_2 = <Primary>2
+  switch_to_tab_3 = <Primary>3
+  switch_to_tab_4 = <Primary>4
+  switch_to_tab_5 = <Primary>5
+  switch_to_tab_6 = <Primary>6
+  switch_to_tab_7 = <Primary>7
+  switch_to_tab_8 = <Primary>8
+  switch_to_tab_9 = <Primary>9
   insert_number = ""
   insert_padded = ""
-  layout_launcher = ""
+  layout_launcher = <Shift><Alt>l
   help = ""
 [profiles]
   [[default]]
     background_darkness = 0.9
     background_type = transparent
-    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
     scrollbar_position = hidden
@@ -29,11 +34,17 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
+    title_hide_sizetext = True
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[green]]
     background_color = "#002000"
     background_darkness = 0.9
     background_type = transparent
-    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
     scrollbar_position = hidden
@@ -45,7 +56,6 @@
     background_color = "#200000"
     background_darkness = 0.9
     background_type = transparent
-    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
     scrollbar_position = hidden
@@ -54,7 +64,6 @@
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
   [[black]]
-    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
     scrollbar_position = hidden
@@ -64,7 +73,6 @@
     use_system_font = False
   [[white]]
     background_color = "#ffffff"
-    cursor_color = "#dc8a78"
     font = Hack Nerd Font Mono 11
     foreground_color = "#4c4f69"
     scrollbar_position = hidden
@@ -75,7 +83,6 @@
   [[_OBS]]
     background_darkness = 0.8
     background_type = transparent
-    cursor_color = "#eeeeee"
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
     show_titlebar = False
@@ -86,10 +93,69 @@
     use_system_font = False
 [layouts]
   [[default]]
-    [[[window0]]]
+    [[[child0]]]
       type = Window
       parent = ""
-    [[[child1]]]
+      order = 0
+      position = 0:32
+      maximised = True
+      fullscreen = False
+      size = 1366, 736
+      title = z0d1ac@acer: ~
+      last_active_term = 468242df-e647-402a-a3a0-03cb055f8969
+      last_active_window = True
+    [[[terminal1]]]
       type = Terminal
-      parent = window0
+      parent = child0
+      order = 0
+      profile = default
+      uuid = 468242df-e647-402a-a3a0-03cb055f8969
+  [[IPM]]
+    [[[child0]]]
+      type = Window
+      parent = ""
+      order = 0
+      position = 0:32
+      maximised = True
+      fullscreen = False
+      size = 1366, 736
+      title = z0d1ac@acer: ~/UMinho/recent/IPM
+      last_active_term = a57f9c43-677d-4007-bf48-074752d33ff4
+      last_active_window = True
+    [[[child1]]]
+      type = HPaned
+      parent = child0
+      order = 0
+      position = 664
+      ratio = 0.4878765613519471
+    [[[terminal2]]]
+      type = Terminal
+      parent = child1
+      order = 0
+      profile = default
+      uuid = ede4a18e-d0a7-4e33-ae90-1ac7991b1773
+      directory = /home/z0d1ac/UMinho/recent/IPM/project-IPM/UMShifts
+      command = nvim .;  bash
+    [[[child3]]]
+      type = VPaned
+      parent = child1
+      order = 1
+      position = 366
+      ratio = 0.5006839945280438
+    [[[terminal4]]]
+      type = Terminal
+      parent = child3
+      order = 0
+      profile = default
+      uuid = a57f9c43-677d-4007-bf48-074752d33ff4
+      directory = /home/z0d1ac/UMinho/recent/IPM/project-IPM
+      command = ./json-server/run; bash
+    [[[terminal5]]]
+      type = Terminal
+      parent = child3
+      order = 1
+      profile = default
+      uuid = 1f1994eb-cb33-4f7b-9b26-63644c3782b0
+      directory = /home/z0d1ac/UMinho/recent/IPM/project-IPM/UMShifts
+      command = npm run dev; bash
 [plugins]
