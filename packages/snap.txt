@@ -19,8 +19,6 @@ julia
 mapscii
 marksman
 mdl
-mdview
-multipass
 ngrok
 qt5-core20
 qt515-core20
@@ -28,3 +26,4 @@ radare2
 snapd
 snapd-desktop-integration
 whatsie
+zig

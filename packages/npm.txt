@@ -1,9 +1,4 @@
 @githubnext/github-copilot-cli
 corepack
-neovim
+json-server
 npm
-peerflix
-prettier-plugin-java
-prettier
-typeracer-cli
-yarn
