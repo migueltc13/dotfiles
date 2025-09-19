@@ -190,6 +190,10 @@ map({ 'i', 'c' }, '<A-l>', '<right>', desc('Move right', { remap = true }))
 -- map('n', '<down>', 'v:count ? "<down>" : "gj"', { expr = true, remap = true })
 -- map('n', '<up>',   'v:count ? "<up>"   : "gk"', { expr = true, remap = true })
 
+-- Disable shift + up/down keys movement in all modes
+map({ 'i', 'n', 'v' }, '<S-Up>',   '<nop>', desc('Disable shift + up key movement'))
+map({ 'i', 'n', 'v' }, '<S-Down>', '<nop>', desc('Disable shift + down key movement'))
+
 -- Allow moving selected line(s) of text
 map('v', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
 map('v', 'K', ':m \'<-2\ngv=gv', desc('Move selected line(s) up'))
