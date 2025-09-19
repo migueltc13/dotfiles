@@ -42,6 +42,7 @@ fonttools
 fs
 gpg
 graphviz
+greenlet
 gyp
 h11
 hashID
@@ -79,6 +80,7 @@ meson
 monotonic
 more-itertools
 mpmath
+msgpack
 mysql-connector-python
 netaddr
 networkx
@@ -108,6 +110,7 @@ pyinotify
 PyJWT
 PyNaCl
 pynput
+pynvim
 pyOpenSSL
 pyparsing
 pypng

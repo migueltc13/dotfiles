@@ -1,4 +1,5 @@
 @githubnext/github-copilot-cli
 corepack
 json-server
+neovim
 npm

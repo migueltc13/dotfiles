@@ -48,6 +48,7 @@ curl
 dash
 dbus-x11
 dbus
+dconf-cli
 dconf-editor
 debconf-i18n
 debconf
@@ -138,6 +139,8 @@ gimp
 gir1.2-ayatanaappindicator3-0.1
 gir1.2-gmenu-3.0
 gir1.2-gtk-3.0
+gir1.2-keybinder-3.0
+gir1.2-vte-2.91
 git-lfs
 git
 gjs
@@ -212,6 +215,7 @@ indicator-application
 init
 inotify-tools
 inputattach
+intltool
 ipcalc
 iperf3
 iperf
@@ -321,6 +325,7 @@ libzmq3-dev
 libzstd-dev
 lighttpd
 linux-generic
+lldb
 lm-sensors
 locales
 login
@@ -408,6 +413,7 @@ putty-tools
 python3-babel
 python3-bson
 python3-cairo
+python3-configobj
 python3-cryptography
 python3-dbus
 python3-dev
@@ -423,7 +429,9 @@ python3-networkx
 python3-ping3
 python3-pip
 python3-ply
+python3-psutil
 python3-pynput
+python3-pynvim
 python3-qrcode
 python3-selenium
 python3-setuptools
