@@ -97,6 +97,7 @@ export PATH+=":$HOME/.bash/bin"
 export PATH+=":$HOME/.cargo/bin"
 export PATH+=":$HOME/.ghcup/bin"
 export PATH+=":$HOME/go/bin"
+export PATH+=":/usr/games"
 
 # Prepend nvm Node.js directory to PATH
 export NVM_DIR="$HOME/.nvm"
