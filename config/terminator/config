@@ -1,14 +1,10 @@
 [global_config]
   borderless = True
   extra_styling = False
+  custom_url_handler = 'xdg-open "%s"'
+  enabled_plugins = LaunchpadBugURLHandler, LaunchpadCodeURLHandler
   ask_before_closing = always
   invert_search = True
-  title_transmit_fg_color = "#7aff00"
-  title_transmit_bg_color = "#131313"
-  title_receive_fg_color = "#000000"
-  title_receive_bg_color = "#56e845"
-  title_inactive_fg_color = "#9a9996"
-  title_inactive_bg_color = "#131313"
 [keybindings]
   cycle_next = ""
   cycle_prev = ""
@@ -41,6 +37,12 @@
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
     title_hide_sizetext = True
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[green]]
     background_color = "#002000"
     background_darkness = 0.9
@@ -52,6 +54,12 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[red]]
     background_color = "#200000"
     background_darkness = 0.9
@@ -63,6 +71,12 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[black]]
     font = Hack Nerd Font Mono 11
     foreground_color = "#eeeeee"
@@ -71,6 +85,12 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[white]]
     background_color = "#ffffff"
     font = Hack Nerd Font Mono 11
@@ -80,6 +100,12 @@
     scrollback_infinite = True
     palette = "#5c5f77:#d20f39:#40a02b:#df8e1d:#1e66f5:#ea76cb:#179299:#acb0be:#6c6f85:#d20f39:#40a02b:#df8e1d:#1e66f5:#ea76cb:#179299:#bcc0cc"
     use_system_font = False
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
   [[_OBS]]
     background_darkness = 0.8
     background_type = transparent
@@ -91,6 +117,12 @@
     scrollback_infinite = True
     palette = "#292c37:#ea5b60:#57e845:#d9cb48:#6197e9:#e15cd9:#41cbc6:#cdd2e4:#717480:#e44f54:#68e850:#f2e448:#5385d1:#fa5cf2:#41e4df:#d2d6e7"
     use_system_font = False
+    title_transmit_fg_color = "#7aff00"
+    title_transmit_bg_color = "#131313"
+    title_receive_fg_color = "#000000"
+    title_receive_bg_color = "#56e845"
+    title_inactive_fg_color = "#9a9996"
+    title_inactive_bg_color = "#131313"
 [layouts]
   [[default]]
     [[[child0]]]
