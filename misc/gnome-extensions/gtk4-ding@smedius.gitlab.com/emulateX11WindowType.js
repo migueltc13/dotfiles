@@ -29,25 +29,30 @@ import * as Utils from 'resource:///org/gnome/shell/misc/util.js';
 export {EmulateX11WindowType};
 
 const appID = 'com.desktop.ding';
-const appPath = '/com/desktop/ding';
+const appPath = GLib.build_filenamev(['/', ...appID.split('.')]);
+
 class ManageWindow {
-    /* This class is added to each managed window, and it's used to
-       make it behave like an X11 Desktop window.
+    /* This class is added to each managed window, and it's used to make it
+       behave like an X11 Desktop window.
 
-       Trusted windows will set in the title the characters @!, followed
-       by the coordinates where to put the window separated by a colon, and
-       ended in semicolon. After that, it can have one or more of these letters-
+       Trusted windows will set in the title the characters @!, followed by
+       the coordinates where to put the window separated by a colon, and
+       ended in a semicolon. After that, it can have one or more of these
+       letters:
 
-       * B : put and always keep this window at the bottom of the stack of windows on screen
-       * T : put and always keep this window at the top of the stack of windows the screen
+       * B : put and always keep this window at the bottom of the stack of
+             windows on screen
+       * T : put and always keep this window at the top of the stack of
+             windows on the screen
        * D : show this window in all desktops
-       * H : hide this window from window list
+       * H : hide this window from the window list
 
        Using the title is generally not a problem because the desktop windows
        do not have a title. But some other windows may have and still need to
-       set a title and use this class, so adding a single blank space at the end of the
-       title is equivalent to @!H, and having two blank spaces at the end of the
-       title is equivalent to @!HTD. This allows use of these flags for decorated or titled windows.
+       set a title and use this class, so adding a single blank space at the
+       end of the title is equivalent to @!H, and having two blank spaces at
+       the end of the title is equivalent to @!HTD. This allows use of these
+       flags for decorated or titled windows.
     */
 
     constructor(window, waylandClient, changedStatusCB) {
@@ -135,10 +140,13 @@ class ManageWindow {
                 else
                     title = '@!H';
             }
+
             let pos = title.search('@!');
+
             if (pos !== -1) {
                 let pos2 = title.search(';', pos);
                 let coords;
+
                 if (pos2 !== -1)
                     coords = title.substring(pos + 2, pos2).trim().split(',');
                 else
@@ -150,8 +158,11 @@ class ManageWindow {
                 } catch (e) {
                     global.log(`Exception ${e.message}.\n${e.stack}`);
                 }
+
                 try {
-                    let extraChars = title.substring(pos + 2).trim().toUpperCase();
+                    let extraChars =
+                        title.substring(pos + 2).trim().toUpperCase();
+
                     for (let char of extraChars) {
                         switch (char) {
                         case 'B':
@@ -173,7 +184,12 @@ class ManageWindow {
                             break;
                         }
                     }
-                    this._desktopWindow = this._keepAtBottom && !this._keepAtTop && this._showInAllDesktops && this._hideFromWindowList;
+
+                    this._desktopWindow =
+                        this._keepAtBottom &&
+                        !this._keepAtTop &&
+                        this._showInAllDesktops &&
+                        this._hideFromWindowList;
                 } catch (e) {
                     global.log(`Exception ${e.message}.\n${e.stack}`);
                 }
@@ -203,34 +219,68 @@ class ManageWindow {
         else if (this._window.on_all_workspaces)
             this._window.unstick();
 
-        if (this._desktopWindow)
-            this._makeWindowTypeDesktop();
+        if (this._desktopWindow) {
+            if (typeof this._window.set_type === 'function') {
+                this._window.set_type(Meta.WindowType.DESKTOP);
+                console.log('Setting window type to desktop with Gnome 49 API');
+                // In future, Meta.WaylandClient.make_desktop(window) will not
+                // be necessary.
+            } else {
+                this._makeWindowTypeDesktop();
+            }
+        }
     }
 
     _keepFixedWindowPosition() {
-        this._signalIDs.push(this._window.connect('position-changed', () => {
-            if (this._fixed && (this._x !== null) && (this._y !== null)) {
-                this._window.move_frame(true, this._x, this._y);
-                if (this._window.fullscreen)
-                    this._window.unmake_fullscreen();
-            }
-        }));
+        this._signalIDs.push(
+            this._window.connect(
+                'position-changed',
+                () => {
+                    if (this._fixed &&
+                        (this._x !== null) &&
+                        (this._y !== null)
+                    ) {
+                        this._window.move_frame(true, this._x, this._y);
+                        if (this._window.fullscreen)
+                            this._window.unmake_fullscreen();
+                    }
+                }
+            )
+        );
 
-        this._signalIDs.push(this._window.connect('notify::minimized', () => {
-            this._window.unminimize();
-        }));
+        this._signalIDs.push(
+            this._window.connect('notify::minimized', () => {
+                this._window.unminimize();
+            })
+        );
 
-        this._signalIDs.push(this._window.connect('notify::maximized-vertically', () => {
-            if (!this._window.maximized_vertically)
-                this._window.maximize(Meta.MaximizeFlags.VERTICAL);
-            this._moveIntoPlace();
-        }));
+        this._signalIDs.push(
+            this._window.connect('notify::maximized-vertically',
+                () => {
+                    if (typeof this._window.is_maximized === 'function' &&
+                        !this._window.is_maximized()
+                    )
+                        this._window.maximize();
+                    else if (!this._window.maximized_vertically)
+                        this._window.maximize(Meta.MaximizeFlags.VERTICAL);
+                    this._moveIntoPlace();
+                }
+            )
+        );
 
-        this._signalIDs.push(this._window.connect('notify::maximized-horizontally', () => {
-            if (!this._window.maximized_horizontally)
-                this._window.maximize(Meta.MaximizeFlags.HORIZONTAL);
-            this._moveIntoPlace();
-        }));
+        this._signalIDs.push(
+            this._window.connect('notify::maximized-horizontally',
+                () => {
+                    if (typeof this._window.is_maximized === 'function' &&
+                        !this._window.is_maximized()
+                    )
+                        this._window.maximize();
+                    else if (!this._window.maximized_horizontally)
+                        this._window.maximize(Meta.MaximizeFlags.HORIZONTAL);
+                    this._moveIntoPlace();
+                }
+            )
+        );
 
         if ((this._x !== null) && (this._y !== null))
             this._window.move_frame(true, this._x, this._y);
@@ -240,12 +290,14 @@ class ManageWindow {
         if (this._moveIntoPlaceID)
             GLib.source_remove(this._moveIntoPlaceID);
 
-        this._moveIntoPlaceID = GLib.timeout_add(GLib.PRIORITY_LOW, 250, () => {
-            if (this._fixed && (this._x !== null) && (this._y !== null))
-                this._window.move_frame(true, this._x, this._y);
-            this._moveIntoPlaceID = 0;
-            return GLib.SOURCE_REMOVE;
-        });
+        this._moveIntoPlaceID =
+            GLib.timeout_add(GLib.PRIORITY_LOW, 250, () => {
+                if (this._fixed && (this._x !== null) && (this._y !== null))
+                    this._window.move_frame(true, this._x, this._y);
+
+                this._moveIntoPlaceID = 0;
+                return GLib.SOURCE_REMOVE;
+            });
     }
 
     _keepWindowHidden() {
@@ -267,40 +319,61 @@ class ManageWindow {
     }
 
     _keepWindowAtBottom() {
-        this._signalIDs.push(this._window.connect('notify::above', () => {
-            if (this._keepAtBottom && this._window.above)
-                this._window.unmake_above();
-        }));
+        this._signalIDs.push(
+            this._window.connect(
+                'notify::above',
+                () => {
+                    if (this._keepAtBottom && this._window.above)
+                        this._window.unmake_above();
+                }
+            )
+        );
 
-        this._signalIDs.push(this._window.connect_after('raised', () => {
-            if (this._keepAtBottom)
-                this._window.lower();
-        }));
+        this._signalIDs.push(
+            this._window.connect_after(
+                'raised',
+                () => {
+                    if (this._keepAtBottom)
+                        this._window.lower();
+                }
+            )
+        );
 
-        /* If a window is lowered below us with shortcuts, detect and fix DING window */
+        /* If a window is lowered below us with shortcuts,
+        detect and fix DING window */
         this._restackedBottomID = global.display.connect('restacked',
             this._syncToBottomOfStack.bind(this)
         );
 
         /* If the desktop is shown with keyboard gnome shortcuts, detect and put
-           DING window back, seems to be needed for X11, works without on Wayland
+           DING window back.
+           Seems to be needed for X11, works without on Wayland.
         */
         if (this._isX11) {
-            this._showDesktopID = global.workspace_manager.connect('showing-desktop-changed',
-                this._activateDesktopWindow.bind(this)
-            );
+            this._showDesktopID =
+                global.workspace_manager.connect(
+                    'showing-desktop-changed',
+                    this._activateDesktopWindow.bind(this)
+                );
         }
 
         if (this._window.above)
             this._window.unmake_above();
+
         this._window.lower();
     }
 
     _keepWindowUnFullScreen() {
-        this._signalIDs.push(this._window.connect('notify::fullscreen', () => {
-            if (this._window.fullscreen)
-                this._window.unmake_fullscreen();
-        }));
+        this._signalIDs.push(
+            this._window.connect(
+                'notify::fullscreen',
+                () => {
+                    if (this._window.fullscreen)
+                        this._window.unmake_fullscreen();
+                }
+            )
+        );
+
         if (this._window.fullscreen)
             this._window.unmake_fullscreen();
     }
@@ -311,8 +384,15 @@ class ManageWindow {
     }
 
     _syncToBottomOfStack() {
-        let windows = global.display.get_tab_list(Meta.TabList.NORMAL_ALL, global.workspace_manager.get_active_workspace());
+        let windows =
+            global.display
+            .get_tab_list(
+                Meta.TabList.NORMAL_ALL,
+                global.workspace_manager.get_active_workspace()
+            );
+
         windows = global.display.sort_windows_by_stacking(windows);
+
         if (windows.length > 1 && !windows[0].customJS_ding)
             this._moveDesktopWindowToBottom();
     }
@@ -330,6 +410,7 @@ class ManageWindow {
             if (!this._window.above)
                 this._window.make_above();
         });
+
         if (!this._window.above)
             this._window.make_above();
     }
@@ -350,25 +431,35 @@ class ManageWindow {
         if (this._checkOnAllWorkspacesID)
             GLib.source_remove(this._checkOnAllWorkspacesID);
 
-        this._checkOnAllWorkspacesID = GLib.idle_add(GLib.PRIORITY_LOW, () => {
-            if (this._showInAllDesktops && !this._window.on_all_workspaces) {
-                this._window.stick();
-                this._onIdleActivateTopWindowOnActiveWorkspace();
-            }
-            this._checkOnAllWorkspacesID = null;
-            return GLib.SOURCE_REMOVE;
-        });
+        this._checkOnAllWorkspacesID =
+            GLib.idle_add(
+                GLib.PRIORITY_LOW,
+                () => {
+                    if (this._showInAllDesktops &&
+                        !this._window.on_all_workspaces
+                    ) {
+                        this._window.stick();
+                        this._onIdleActivateTopWindowOnActiveWorkspace();
+                    }
+
+                    this._checkOnAllWorkspacesID = null;
+                    return GLib.SOURCE_REMOVE;
+                }
+            );
     }
 
     _makeWindowTypeDesktop() {
         if (!this._isX11 && this._waylandClient) {
-            const desktopWindowTypeSetOnWindow = this._waylandClient.make_desktop_window(this._window);
+            const desktopWindowTypeSetOnWindow =
+                this._waylandClient.make_desktop_window(this._window);
+
             if (!desktopWindowTypeSetOnWindow) {
                 this._emulateDesktopWindow();
                 return;
             }
         } else {
             const xid = this._window.xwindow;
+
             try {
                 this._setX11windowTypeDesktop(xid);
             } catch (e) {
@@ -398,7 +489,10 @@ class ManageWindow {
         this._showWindowOnAllDesktops();
         const moveDesktopWindowToBottom = true;
         const activateTopWindowOnWorkspace = true;
-        this._onIdleChangedStatusCallback({moveDesktopWindowToBottom, activateTopWindowOnWorkspace});
+
+        this._onIdleChangedStatusCallback(
+            {moveDesktopWindowToBottom, activateTopWindowOnWorkspace}
+        );
     }
 
     _onIdleActivateTopWindowOnActiveWorkspace() {
@@ -407,13 +501,15 @@ class ManageWindow {
     }
 
     _setX11windowSkipTaskbar(xid) {
-        // Unfortunately xprop can set only one of the properties in the state, not multiple
-        // Stick to setting only skip-taskbar, we can otherwirse also set the property for pager,
-        // _NET_WM_STATE_SKIP_PAGER
+        // Unfortunately xprop can set only one of the properties in the state,
+        // not multiple.
+        // Stick to setting only skip-taskbar, we can otherwirse also set
+        // the property for pager, _NET_WM_STATE_SKIP_PAGER
         const commandline = `xprop -id ${xid}` +
         ' -f _NET_WM_STATE 32a' +
         ' -set _NET_WM_STATE' +
         ' _NET_WM_STATE_SKIP_TASKBAR';
+
         console.log('Making X11 windowtype type skip-taskbar');
         Utils.spawnCommandLine(commandline);
     }
@@ -423,6 +519,7 @@ class ManageWindow {
         ' -f _NET_WM_STATE 32a' +
         ' -remove _NET_WM_STATE' +
         ' _NET_WM_STATE_SKIP_TASKBAR';
+
         console.log('Making X11 windowtype type NOT skip-taskbar');
         Utils.spawnCommandLine(commandline);
     }
@@ -432,6 +529,7 @@ class ManageWindow {
             ' -f _NET_WM_WINDOW_TYPE 32a' +
             ' -set _NET_WM_WINDOW_TYPE' +
             ' _NET_WM_WINDOW_TYPE_DESKTOP';
+
         console.log('Making X11 windowtype type Desktop');
         Utils.trySpawnCommandLine(commandline);
     }
@@ -471,6 +569,7 @@ var EmulateX11WindowType = class {
 
     set_wayland_client(client) {
         this._waylandClient = client;
+
         for (let window of this._windowList) {
             if (window.customJS_ding)
                 window.customJS_ding.set_wayland_client(this._waylandClient);
@@ -478,35 +577,45 @@ var EmulateX11WindowType = class {
     }
 
     enable() {
-        this._idMap = global.window_manager.connect_after('map', (obj, windowActor) => {
-            let window = windowActor.get_meta_window();
+        this._idMap =
+            global.window_manager.connect_after(
+                'map',
+                (obj, windowActor) => {
+                    const window = windowActor.get_meta_window();
 
-            if (window.get_window_type() > Meta.WindowType.DIALOG)
-                return;
+                    if (window.get_window_type() > Meta.WindowType.MODAL_DIALOG)
+                        return;
 
-            if (this._waylandClient && this._waylandClient.query_window_belongs_to(window))
-                this._addWindowManagedCustomJS_ding(window, windowActor);
+                    const appid = window.get_gtk_application_id();
 
-            if (this._isX11) {
-                let appid = window.get_gtk_application_id();
-                let windowpid = window.get_pid();
-                let mypid = parseInt(this._waylandClient.query_pid_of_program());
-                if ((appid === appID) && (windowpid === mypid))
-                    this._addWindowManagedCustomJS_ding(window, windowActor);
-            }
-        });
+                    if (appid !== appID)
+                        return;
 
-        this._idDestroy = global.window_manager.connect_after('destroy', (wm, windowActor) => {
-            // if a window is closed, ensure that the desktop doesn't receive the focus
-            let window = windowActor.get_meta_window();
-            if (window && (window.get_window_type() >= Meta.WindowType.DROPDOWN_MENU))
-                return;
+                    if (this._waylandClient &&
+                        this._waylandClient.query_window_belongs_to(window)
+                    ) {
+                        this._addWindowManagedCustomJS_ding(
+                            window,
+                            windowActor
+                        );
+                    }
 
-            this.onIdleReStackActivteWindows({activateTopWindowOnWorkspace: true});
-        });
+                    const windowpid = window.get_pid();
 
-        /* But in Overview mode it is paramount to not change the workspace to emulate
-           "stick", or the windows will appear
+                    const mypid =
+                        parseInt(this._waylandClient.query_pid_of_program());
+
+                    if (this._isX11 && windowpid === mypid) {
+                        this._addWindowManagedCustomJS_ding(
+                            window,
+                            windowActor
+                        );
+                    }
+                }
+            );
+
+        /* But in Overview mode it is paramount to not change the workspace to
+             emulate "stick", or the windows will appear
          */
         this._showingId = Main.overview.connect('showing', () => {
             this._overviewHiding = false;
@@ -514,7 +623,6 @@ var EmulateX11WindowType = class {
 
         this._hidingId = Main.overview.connect('hiding', () => {
             this._overviewHiding = true;
-            this.onIdleReStackActivteWindows({activateTopWindowOnWorkspace: true});
         });
     }
 
@@ -523,6 +631,7 @@ var EmulateX11WindowType = class {
             GLib.source_remove(this._activate_window_ID);
             this._activate_window_ID = null;
         }
+
         for (let window of this._windowList)
             this._clearWindow(window);
 
@@ -533,14 +642,17 @@ var EmulateX11WindowType = class {
             global.window_manager.disconnect(this._idMap);
             this._idMap = null;
         }
+
         if (this._idDestroy) {
             global.window_manager.disconnect(this._idDestroy);
             this._idDestroy = null;
         }
+
         if (this._showingId) {
             Main.overview.disconnect(this._showingId);
             this._showingId = null;
         }
+
         if (this._hidingId) {
             Main.overview.disconnect(this._hidingId);
             this._hidingId = null;
@@ -555,14 +667,25 @@ var EmulateX11WindowType = class {
         if (this._windowList.has(window))
             return;
 
-        window.customJS_ding = new ManageWindow(window, this._waylandClient, this.onIdleReStackActivteWindows.bind(this));
+        window.customJS_ding =
+            new ManageWindow(
+                window,
+                this._waylandClient,
+                this.onIdleReStackActivteWindows.bind(this)
+            );
+
         window.actor = windowActor;
         windowActor._delegate = new HandleDragActors(windowActor);
         this._windowList.add(window);
-        window.customJS_ding.unmanagedID = window.connect('unmanaged', win => {
-            this._clearWindow(win);
-            this._windowList.delete(window);
-        });
+
+        window.customJS_ding.unmanagedID =
+            window.connect(
+                'unmanaging',
+                win => {
+                    this._clearWindow(win);
+                    this._windowList.delete(window);
+                }
+            );
     }
 
     _clearWindow(window) {
@@ -574,10 +697,17 @@ var EmulateX11WindowType = class {
     }
 
     _activateTopWindowOnActiveWorkspace() {
-        let windows = global.display.get_tab_list(Meta.TabList.NORMAL, global.workspace_manager.get_active_workspace());
+        let windows =
+            global.display
+            .get_tab_list(
+                Meta.TabList.NORMAL,
+                global.workspace_manager.get_active_workspace()
+            );
+
         windows = global.display.sort_windows_by_stacking(windows);
+
         if (windows.length) {
-            let topWindow = windows[windows.length - 1];
+            const topWindow = windows[windows.length - 1];
             topWindow.focus(Clutter.CURRENT_TIME);
         }
     }
@@ -589,30 +719,51 @@ var EmulateX11WindowType = class {
 
     onIdleReStackActivteWindows(action = {activateTopWindowOnWorkspace: true}) {
         if (!this._activate_window_ID) {
-            this._activate_window_ID = GLib.idle_add(GLib.PRIORITY_LOW, () => {
-                if (this._overviewHiding) {
-                    if (action.moveDesktopWindowToBottom)
-                        this._moveDesktopWindowToBottom();
+            this._activate_window_ID =
+                GLib.idle_add(
+                    GLib.PRIORITY_LOW,
+                    () => {
+                        if (this._overviewHiding) {
+                            if (action.moveDesktopWindowToBottom)
+                                this._moveDesktopWindowToBottom();
 
-                    if (action.activateTopWindowOnWorkspace)
-                        this._activateTopWindowOnActiveWorkspace();
-                }
-                this._activate_window_ID = null;
-                return GLib.SOURCE_REMOVE;
-            });
+                            if (action.activateTopWindowOnWorkspace)
+                                this._activateTopWindowOnActiveWorkspace();
+                        }
+
+                        this._activate_window_ID = null;
+                        return GLib.SOURCE_REMOVE;
+                    }
+                );
         }
     }
 
-    // After shell unlock, window seems to lose stick property, refresh window properties
+    // After shell unlock, window seems to lose stick property,
+    // refresh window properties
     refreshWindows() {
         for (let window of this._windowList)
             window.customJS_ding.refreshProperties();
     }
 };
 
+
+// Since Gnome Shell 48 the enumeration of the cursor is different
+// the name has changed, althugh the value is the same;
+// We use our own enumeration names to avoid problems with the version
+// of the Gnome Shell, the enumeration integer points to the correct
+// value in the Gnome Shell 48 and Meta 48 Enum and earlier.
+// Using the wrong Enum Name seems to crash mutter
+const ShellDropCursor = {
+    DEFAULT: 2, // META_CURSOR_DEFAULT Meta.Cursor.DEFAULT
+    NODROP: 15, // META_CURSOR_NO_DROP Meta.Cursor.DND_UNSUPPORTED_TARGET
+    COPY: 13, // META_CURSOR_COPY Meta.Cursor.DND_COPY
+    MOVE: 14, // META_CURSOR_MOVE Meta.Cursor.DND_MOVE
+};
+
 class HandleDragActors {
     /* This class is added to each managed windowActor, and it's used to
-       make it behave like a shell Actor that can accept drops from Gnome Shell dnd.
+       make it behave like a shell Actor that can accept drops from
+       Gnome Shell dnd.
     */
 
     constructor(windowActor) {
@@ -620,7 +771,7 @@ class HandleDragActors {
         this.remoteDingActions = Gio.DBusActionGroup.get(
             Gio.DBus.session,
             appID,
-            `${appPath}/actions`
+            appPath
         );
     }
 
@@ -634,15 +785,19 @@ class HandleDragActors {
     handleDragOver(source) {
         if ((source.app ?? null) === null)
             return DND.DragMotionResult.NO_DROP;
+
         this._getModifierKeys();
+
         if (this.isShift) {
-            global.display.set_cursor(Meta.Cursor.DND_COPY);
+            global.display.set_cursor(ShellDropCursor.COPY);
             return DND.DragMotionResult.COPY_DROP;
         }
+
         if (this.isControl) {
-            global.display.set_cursor(Meta.Cursor.DND_MOVE);
+            global.display.set_cursor(ShellDropCursor.MOVE);
             return DND.DragMotionResult.MOVE_DROP;
         }
+
         return DND.DragMotionResult.CONTINUE;
     }
 
@@ -654,9 +809,12 @@ class HandleDragActors {
         let sourceAppId = source.app.get_id();
         let sourceAppPath = source.app.appInfo.get_filename();
         let appIsFavorite = appFavorites.isFavorite(sourceAppId);
+
         this._getModifierKeys();
+
         if (appIsFavorite && !this.isShift)
             appFavorites.removeFavorite(sourceAppId);
+
         if (sourceAppPath && (this.isControl || this.isShift)) {
             this.remoteDingActions.activate_action('createDesktopShortcut',
                 new GLib.Variant('a{sv}', {
@@ -666,6 +824,7 @@ class HandleDragActors {
                 })
             );
         }
+
         appFavorites.emit('changed');
         return true;
     }

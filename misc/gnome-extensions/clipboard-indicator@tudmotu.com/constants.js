@@ -5,6 +5,7 @@ export const PrefsFields = {
     CACHE_ONLY_FAVORITE    : 'cache-only-favorites',
     DELETE                 : 'enable-deletion',
     NOTIFY_ON_COPY         : 'notify-on-copy',
+    NOTIFY_ON_CYCLE        : 'notify-on-cycle',
     CONFIRM_ON_CLEAR       : 'confirm-clear',
     MOVE_ITEM_FIRST        : 'move-item-first',
     ENABLE_KEYBINDING      : 'enable-keybindings',
@@ -23,4 +24,5 @@ export const PrefsFields = {
     CLEAR_ON_BOOT          : 'clear-on-boot',
     PASTE_ON_SELECT        : 'paste-on-select',
     CACHE_IMAGES           : 'cache-images',
+    EXCLUDED_APPS          : 'excluded-apps',
 };

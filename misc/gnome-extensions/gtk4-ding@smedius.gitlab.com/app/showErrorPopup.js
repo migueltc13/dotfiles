@@ -29,24 +29,40 @@ const ShowErrorPopup = class {
         this._dialog = new Adw.AlertDialog();
         this._dialog.set_body_use_markup(true);
         this._dialog.set_heading_use_markup(true);
+
         if (text)
             this._dialog.set_heading(text);
+
         if (secondaryText)
             this._dialog.set_body(secondaryText);
+
         if (helpURL) {
             this._helpURL = helpURL;
             this._dialog.add_response('0', _('Cancel'));
             this._dialog.add_response('1', _('More Information'));
             this._dialog.set_close_response('0');
             this._dialog.set_default_response('1');
-            this._dialog.set_response_appearance('1', Adw.ResponseAppearance.SUGGESTED);
-            this._dialog.set_response_appearance('0', Adw.ResponseAppearance.DEFAULT);
+
+            this._dialog.set_response_appearance(
+                '1',
+                Adw.ResponseAppearance.SUGGESTED
+            );
+
+            this._dialog.set_response_appearance(
+                '0',
+                Adw.ResponseAppearance.DEFAULT
+            );
+
             this._dialog.set_prefer_wide_layout(true);
         } else {
             this._dialog.add_response('0', _('Cancel'));
             this._dialog.set_close_response('0');
             this._dialog.set_default_response('0');
-            this._dialog.set_response_appearance('0', Adw.ResponseAppearance.DEFAULT);
+
+            this._dialog.set_response_appearance(
+                '0',
+                Adw.ResponseAppearance.DEFAULT
+            );
         }
         this._dialog.connect('response', this._callback.bind(this));
     }

@@ -101,11 +101,20 @@ export const DndTargetInfo = {
     MIME_TYPES: ['x-special/ding-icon-list', 'x-special/gnome-icon-list', 'text/uri-list', 'text/plain', 'text/plain;charset=utf-8'],
 };
 
+// Since Gnome Shell 48 the enumeration of the cursor is different,
+// the name has changed, althugh the value is the same;
+// We use our own enumeration names to avoid problems with the version
+// of the Gnome Shell, the enumeration integer points to the correct
+// value in the Gnome Shell 48 and Meta 48 Enum and earlier.
+// We use strings to avoid problems with the version of the Gnome Shell
+// with corresponging Enum in DingManager.js. The strings are transmitted
+// over DBus to the exetension.
+
 export const ShellDropCursor = {
-    DEFAULT: 'default',
-    NODROP: 'dndNoDropCursor',
-    COPY: 'dndCopyCursor',
-    MOVE: 'dndMoveCursor',
+    DEFAULT: 'default', // 2 META_CURSOR_DEFAULT Meta.Cursor.DEFAULT
+    NODROP: 'dndNoDropCursor', // 15 META_CURSOR_NO_DROP Meta.Cursor.DND_UNSUPPORTED_TARGET
+    COPY: 'dndCopyCursor', // 13 META_CURSOR_COPY Meta.Cursor.DND_COPY
+    MOVE: 'dndMoveCursor', // 14 META_CURSOR_MOVE Meta.Cursor.DND_MOVE
 };
 
 export const DEFAULT_ATTRIBUTES = 'metadata::*,standard::*,access::*,time::modified,unix::mode';
@@ -136,6 +145,8 @@ export const XDG_TERMINAL_EXEC = 'xdg-terminal-exec';
 export const GRID_ELEMENT_SPACING = 2;
 export const GRID_PADDING = 0;
 export const XDG_USER_DIRS = 'user-dirs.dirs';
+export const XDG_SYSTEM_DIRS = 'user-dirs.defaults';
+export const DEFAULT_DESKTOP_NAME = 'Desktop';
 export const UnixPermissions = {
     S_ISUID: 0o04000, // set-user-ID bit
     S_ISGID: 0o02000, // set-group-ID bit (see below)

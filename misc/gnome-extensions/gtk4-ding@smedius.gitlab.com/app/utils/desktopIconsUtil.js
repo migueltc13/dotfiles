@@ -23,7 +23,7 @@ export {DesktopIconsUtil};
 
 const DesktopIconsUtil = class {
     constructor(Data, Utils) {
-        this.applicationid = Data.dingApp;
+        this.mainApp = Data.mainApp;
         this.Enums = Data.Enums;
         this.FileUtils = Utils.FileUtils;
         this.Prefs = Utils.Preferences;
@@ -33,70 +33,15 @@ const DesktopIconsUtil = class {
     /**
      * Returs the Gtk Application ID
      */
-    getApplicationID() {
-        return this.applicationid;
+    getMainApp() {
+        return this.mainApp;
     }
 
 
     usingX11() {
-        return Gdk.Display.get_default().constructor.$gtype.name === 'GdkX11Display';
-    }
-
-    /**
-     *
-     * Returns the user desktop directory as a Gio.File
-     *
-     * Deliberately using sync methods as this call is used in many places, including
-     * constructors
-     */
-    getDesktopDir() {
-        const glibDesktopPath = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP);
-        let xdgDesktopPath = null;
-        try {
-            const userDirsGioFile = this.getXdgUserDirs();
-            if (!userDirsGioFile.query_exists(null))
-                throw new Error('User configuration file user-dirs.users does not exist');
-            const decoder = new TextDecoder();
-            const contents = decoder.decode(GLib.file_get_contents(userDirsGioFile.get_path())[1]).trim();
-            if (contents)
-                xdgDesktopPath = this.parseUserDirsFile(contents);
-        } catch (e) {
-            console.error(e, `XDG Desktop not set, ${e}`);
-        }
-
-        const desktopPath = xdgDesktopPath ? xdgDesktopPath : glibDesktopPath;
-        return Gio.File.new_for_commandline_arg(desktopPath);
-    }
-
-    writeXdgUserDirsDesktopFile(path) {
-        const userDirsGioFile = this.getXdgUserDirs();
-        if (path.startsWith(GLib.get_home_dir()))
-            path = path.replace(GLib.get_home_dir(), '$HOME');
-        const newline = `XDG_DESKTOP_DIR="${path}"`;
-        try {
-            const decoder = new TextDecoder();
-            const contents = decoder.decode(GLib.file_get_contents(userDirsGioFile.get_path())[1]).trim();
-            const lineArray = contents.split('\n');
-            const newArray = lineArray.map(l => {
-                if (l.startsWith('XDG_DESKTOP_DIR='))
-                    return newline;
-                return l;
-            });
-            const newContents = newArray.join('\n');
-            this.replaceFileContentsAsync(userDirsGioFile, newContents, null);
-        } catch (e) {
-            console.error(e, `Failed to write XDG Desktop file with ${e}`);
-        }
-    }
-
-    /**
-     *
-     * Returns the user config user-dirs.dirs as a Gio.File
-     */
-    getXdgUserDirs() {
-        const xdgUserDirspath = GLib.build_filenamev([GLib.get_user_config_dir(),
-            this.Enums.XDG_USER_DIRS]);
-        return Gio.File.new_for_commandline_arg(xdgUserDirspath);
+        return Gdk.Display.get_default()
+            .constructor
+            .$gtype.name === 'GdkX11Display';
     }
 
     /**
@@ -104,43 +49,68 @@ const DesktopIconsUtil = class {
      * Returns the Nautilus scripts directory as a Gio.File
      */
     getScriptsDir() {
-        let scriptsDir =  GLib.build_filenamev([GLib.get_home_dir(), this.Enums.NAUTILUS_SCRIPTS_DIR]);
+        const scriptsDir =
+            GLib.build_filenamev(
+                [GLib.get_home_dir(), this.Enums.NAUTILUS_SCRIPTS_DIR]
+            );
+
         return Gio.File.new_for_commandline_arg(scriptsDir);
     }
 
     getUserTerminalConfFile() {
         const xdgUserConfigFolder = GLib.get_user_config_dir();
-        const xdgUserTerminalListFile = GLib.build_filenamev([xdgUserConfigFolder,
-            this.Enums.XDG_TERMINAL_LIST_FILE]);
+
+        const xdgUserTerminalListFile =
+            GLib.build_filenamev(
+                [
+                    xdgUserConfigFolder,
+                    this.Enums.XDG_TERMINAL_LIST_FILE,
+                ]
+            );
+
         return Gio.File.new_for_commandline_arg(xdgUserTerminalListFile);
     }
 
     getSystemTerminalConfFile() {
         const xdgEtcConfigFolder = GLib.get_system_config_dirs();
         const systemTerminalConfFiles = [];
+
         xdgEtcConfigFolder.forEach(f => {
-            const xdgSystemTerminalListFile = GLib.build_filenamev([f,
-                this.Enums.XDG_TERMINAL_LIST_FILE]);
-            const gioFile = Gio.File.new_for_commandline_arg(xdgSystemTerminalListFile);
+            const xdgSystemTerminalListFile = GLib.build_filenamev(
+                [
+                    f,
+                    this.Enums.XDG_TERMINAL_LIST_FILE,
+                ]
+            );
+
+            const gioFile =
+                Gio.File.new_for_commandline_arg(xdgSystemTerminalListFile);
+
             systemTerminalConfFiles.push(gioFile);
         });
+
         return systemTerminalConfFiles;
     }
 
     getUserDataTerminalDir() {
         const userDataDir = GLib.get_user_data_dir();
-        const terminalDir = GLib.build_filenamev([userDataDir, this.Enums.XDG_TERMINAL_DIR]);
+
+        const terminalDir =
+            GLib.build_filenamev([userDataDir, this.Enums.XDG_TERMINAL_DIR]);
+
         return Gio.File.new_for_commandline_arg(terminalDir);
     }
 
     getSystemDataTerminalDirs() {
         const systemDataDirs = this.Enums.SYSTEM_DATA_DIRS;
         const systemDataTerminalFiles = [];
+
         systemDataDirs.forEach(f => {
             const file = GLib.build_filenamev([f, this.Enums.XDG_TERMINAL_DIR]);
             const gioFile = Gio.File.new_for_commandline_arg(file);
             systemDataTerminalFiles.push(gioFile);
         });
+
         return systemDataTerminalFiles;
     }
 
@@ -149,7 +119,9 @@ const DesktopIconsUtil = class {
      * Returns the users Templates directory as a Gio.File
      */
     getTemplatesDir() {
-        let templatesDir = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_TEMPLATES);
+        let templatesDir =
+            GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_TEMPLATES);
+
         if ((templatesDir === GLib.get_home_dir()) || (templatesDir === null))
             return null;
 
@@ -175,9 +147,9 @@ const DesktopIconsUtil = class {
         let environ = [];
         for (let env of GLib.get_environ()) {
             /* It's a must to remove the WAYLAND_SOCKET environment variable
-                because, under Wayland, DING uses an specific socket to allow the
-                extension to detect its windows. But the scripts must run under
-                the normal socket */
+            because, under Wayland, DING uses an specific socket to allow the
+            extension to detect its windows. But the scripts must run under
+            the normal socket */
             if (env.startsWith('WAYLAND_SOCKET='))
                 continue;
 
@@ -190,7 +162,8 @@ const DesktopIconsUtil = class {
     /**
      *
      * @param {string} commandLine command to execute
-     * @param {Array} environ child's environment, or <code>null</code> to inherit parent's
+     * @param {Array} environ child's environment, or <code>null</code>
+     * to inherit parent's
      */
     spawnCommandLine(commandLine, environ = null) {
         try {
@@ -205,20 +178,25 @@ const DesktopIconsUtil = class {
      *
      * @param {string} workdir working directory path
      * @param  {Array(String)} argv child's argument vector
-     * @param {Array} environ child's environment, or <code>null</code> to inherit parent's
+     * @param {Array} environ child's environment, or <code>null</code> to
+     * inherit parent's
      * @param {bool}  async or async execution
      */
     trySpawn(workdir, argv, environ = null, async = true) {
         /* The following code has been extracted from GNOME Shell's
-         * source code in Misc.Util.trySpawn function and modified to
-         * set the working directory.
-         *
-         * https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-30/js/misc/util.js
-         */
+        * source code in Misc.Util.trySpawn function and modified to
+        * set the working directory.
+        *
+        * https://gitlab.gnome.org/GNOME/gnome-shell/blob/gnome-3-30/js/misc/util.js
+        */
         const exec = async ? GLib.spawn_async : GLib.spawn_sync;
-        const flags = async ? GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD
-            : GLib.SpawnFlags.SEARCH_PATH;
+        const flags =
+            async
+                ? GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD
+                : GLib.SpawnFlags.SEARCH_PATH;
+
         var pid;
+
         try {
             [, pid] = exec(workdir, argv, environ, flags,
                 () => {});
@@ -231,8 +209,8 @@ const DesktopIconsUtil = class {
                 });
             } else if (err instanceof GLib.Error) {
                 // The exception from gjs contains an error string like:
-                //   Error invoking GLib.spawn_command_line_async: Failed to
-                //   execute child process "foo" (No such file or directory)
+                // Error invoking GLib.spawn_command_line_async: Failed to
+                // execute child process "foo" (No such file or directory)
                 // We are only interested in the part in the parentheses. (And
                 // we can't pattern match the text, since it gets localized.)
                 let message = err.message.replace(/.*\((.+)\)/, '$1');
@@ -250,7 +228,8 @@ const DesktopIconsUtil = class {
 
         // Dummy child watch; we don't want to double-fork internally
         // because then we lose the parent-child relationship, which
-        // can break polkit.  See https://bugzilla.redhat.com//show_bug.cgi?id=819275
+        // can break polkit.
+        // See https://bugzilla.redhat.com//show_bug.cgi?id=819275
         GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, () => {});
     }
 
@@ -273,11 +252,24 @@ const DesktopIconsUtil = class {
      */
     getExtraFolders() {
         const extraFolders = [];
-        if (this.Prefs.desktopSettings.get_boolean('show-home'))
-            extraFolders.push([Gio.File.new_for_commandline_arg(GLib.get_home_dir()), this.Enums.FileType.USER_DIRECTORY_HOME]);
 
-        if (this.Prefs.desktopSettings.get_boolean('show-trash'))
-            extraFolders.push([Gio.File.new_for_uri('trash:///'), this.Enums.FileType.USER_DIRECTORY_TRASH]);
+        if (this.Prefs.desktopSettings.get_boolean('show-home')) {
+            extraFolders.push(
+                [
+                    Gio.File.new_for_commandline_arg(GLib.get_home_dir()),
+                    this.Enums.FileType.USER_DIRECTORY_HOME,
+                ]
+            );
+        }
+
+        if (this.Prefs.desktopSettings.get_boolean('show-trash')) {
+            extraFolders.push(
+                [
+                    Gio.File.new_for_uri('trash:///'),
+                    this.Enums.FileType.USER_DIRECTORY_TRASH,
+                ]
+            );
+        }
 
         return extraFolders;
     }
@@ -288,8 +280,12 @@ const DesktopIconsUtil = class {
      * @param {Gio.VolumeMonitor} volumeMonitor A Gio.VolumeMonitor
      */
     getMounts(volumeMonitor) {
-        const showVolumes = this.Prefs.desktopSettings.get_boolean('show-volumes');
-        const showNetwork = this.Prefs.desktopSettings.get_boolean('show-network-volumes');
+        const showVolumes =
+            this.Prefs.desktopSettings.get_boolean('show-volumes');
+
+        const showNetwork =
+            this.Prefs.desktopSettings.get_boolean('show-network-volumes');
+
         var mountedFileSystems;
 
         try {
@@ -301,12 +297,25 @@ const DesktopIconsUtil = class {
 
         let result = [];
         let uris = [];
-        for (let mount of mountedFileSystems) {
+
+        for (let gioMount of mountedFileSystems) {
             try {
-                let isDrive = (mount.get_drive() !== null) || (mount.get_volume() !== null);
-                let uri = mount.get_default_location().get_uri();
-                if (((isDrive && showVolumes) || (!isDrive && showNetwork)) && !uris.includes(uri)) {
-                    result.push([mount.get_default_location(), this.Enums.FileType.EXTERNAL_DRIVE, mount]);
+                let isDrive =
+                    (gioMount.get_drive() !== null) ||
+                    (gioMount.get_volume() !== null);
+
+                let uri = gioMount.get_default_location().get_uri();
+
+                if (((isDrive && showVolumes) ||
+                    (!isDrive && showNetwork)) &&
+                    !uris.includes(uri)
+                ) {
+                    result.push([
+                        gioMount.get_default_location(),
+                        this.Enums.FileType.EXTERNAL_DRIVE,
+                        gioMount,
+                    ]);
+
                     uris.push(uri);
                 }
             } catch (e) {
@@ -325,8 +334,11 @@ const DesktopIconsUtil = class {
     getFileExtensionOffset(filename, opts = {'isDirectory': false}) {
         let offset = filename.length;
         let extension = '';
+
         if (!opts.isDirectory) {
-            const doubleExtensions = ['.gz', '.bz2', '.sit', '.Z', '.bz', '.xz'];
+            const doubleExtensions =
+                ['.gz', '.bz2', '.sit', '.Z', '.bz', '.xz'];
+
             for (const item of doubleExtensions) {
                 if (filename.endsWith(item)) {
                     offset -= item.length;
@@ -335,13 +347,16 @@ const DesktopIconsUtil = class {
                     break;
                 }
             }
+
             let lastDot = filename.lastIndexOf('.');
+
             if (lastDot > 0) {
                 offset = lastDot;
                 extension = filename.substring(offset) + extension;
                 filename = filename.substring(0, offset);
             }
         }
+
         return {offset, 'basename': filename, extension};
     }
 
@@ -358,14 +373,20 @@ const DesktopIconsUtil = class {
         const byteArray = new GLib.Bytes(textCoder.encode(contents));
 
         return new Promise((resolve, reject) => {
-            file.replace_contents_bytes_async(byteArray, null,
-                true, Gio.FileCreateFlags.REPLACE_DESTINATION, cancellable, (sourceObject, res) => {
+            file.replace_contents_bytes_async(
+                byteArray,
+                null,
+                true,
+                Gio.FileCreateFlags.REPLACE_DESTINATION,
+                cancellable,
+                (sourceObject, res) => {
                     try {
                         resolve(file.replace_contents_finish(res));
                     } catch (e) {
                         reject(e);
                     }
-                });
+                }
+            );
         });
     }
 
@@ -377,19 +398,27 @@ const DesktopIconsUtil = class {
     readFileContentsAsync(file, cancellable = null) {
         return new Promise((resolve, reject) => {
             try {
-                file.read_async(GLib.PRIORITY_DEFAULT, cancellable, (actor, result) => {
-                    try {
-                        let inputstream = actor.read_finish(result);
-                        let dataInputstream = Gio.DataInputStream.new(inputstream);
-                        let [string, number] = dataInputstream.read_upto('', 0, cancellable);
-                        if (number)
-                            resolve(string);
-                        else
-                            reject(Error.new('Empty String'));
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
+                file.read_async(
+                    GLib.PRIORITY_DEFAULT,
+                    cancellable,
+                    (actor, result) => {
+                        try {
+                            let inputstream = actor.read_finish(result);
+
+                            let dataInputstream =
+                                Gio.DataInputStream.new(inputstream);
+
+                            let [string, number] =
+                                dataInputstream.read_upto('', 0, cancellable);
+
+                            if (number)
+                                resolve(string);
+                            else
+                                reject(Error.new('Empty String'));
+                        } catch (e) {
+                            reject(e);
+                        }
+                    });
             } catch (e) {
                 reject(new Error('Error reading file'));
             }
@@ -405,25 +434,33 @@ const DesktopIconsUtil = class {
     readFileBytesAsync(file, bytes, cancellable = null) {
         return new Promise((resolve, reject) => {
             try {
-                file.read_async(GLib.PRIORITY_DEFAULT, cancellable, (actor, result) => {
-                    try {
-                        const inputstream = actor.read_finish(result);
-                        inputstream.read_bytes_async(bytes,
-                            GLib.PRIORITY_DEFAULT,
-                            cancellable,
-                            (sourceObject, res) => {
-                                const data = sourceObject.read_bytes_finish(res);
-                                if (data) {
-                                    inputstream.close(cancellable);
-                                    resolve(data);
+                file.read_async(
+                    GLib.PRIORITY_DEFAULT,
+                    cancellable,
+                    (actor, result) => {
+                        try {
+                            const inputstream = actor.read_finish(result);
+
+                            inputstream.read_bytes_async(
+                                bytes,
+                                GLib.PRIORITY_DEFAULT,
+                                cancellable,
+                                (sourceObject, res) => {
+                                    const data =
+                                        sourceObject.read_bytes_finish(res);
+
+                                    if (data) {
+                                        inputstream.close(cancellable);
+                                        resolve(data);
+                                    }
+
+                                    reject(new Error('Empty Bytes'));
                                 }
-                                reject(new Error('Empty Bytes'));
-                            }
-                        );
-                    } catch (e) {
-                        reject(new Error('Error reading file inputstream'));
-                    }
-                });
+                            );
+                        } catch (e) {
+                            reject(new Error('Error reading file inputstream'));
+                        }
+                    });
             } catch (e) {
                 reject(new Error('Error reading file'));
             }
@@ -471,12 +508,14 @@ const DesktopIconsUtil = class {
         // Check if the 6th bit in the 7th byte (flag field) is set
         const generalPurposeFlag = new Uint8Array([data.get_data()[6]]);
         const zipEncrypted = (generalPurposeFlag & 0x01) === 0x01;
+
         if (zipEncrypted)
             return true;
 
         // Multiple zip file archive- needs external checking
         const command = `zipinfo -v '${file.get_path()}'`;
         const decoder = new TextDecoder();
+
         try {
             const [, out,, status] = GLib.spawn_command_line_sync(command);
 
@@ -504,6 +543,7 @@ const DesktopIconsUtil = class {
     checkIf7zEncrypted(file) {
         const command = `7z l -pBadPassword -slt '${file.get_path()}'`;
         const decoder = new TextDecoder();
+
         try {
             const [, out, error] = GLib.spawn_command_line_sync(command);
             const contents = decoder.decode(error) + decoder.decode(out);
@@ -522,14 +562,19 @@ const DesktopIconsUtil = class {
     /**
      *
      * @param {string} fileList text with list of Terminals, new line terminated
-     * @returns {Array} an array of Gio.DesktopAppInfo for each desktop entry in file
+     * @returns {Array} an array of Gio.DesktopAppInfo for each desktop
+     * entry in file
      */
     parseTerminalList(fileList) {
         const regexpattern = /^[/\\*#]/;
         const terminalGioDesktopAppInfoArray = [];
+
         if (fileList.endsWith('\n'))
             fileList = fileList.slice(0, -1);
-        const fileListArray = fileList.split('\n').filter(f => !f.match(regexpattern));
+
+        const fileListArray =
+            fileList.split('\n').filter(f => !f.match(regexpattern));
+
         if (fileListArray.length) {
             fileListArray.forEach(f => {
                 const appinfo = Gio.DesktopAppInfo.new(f);
@@ -537,6 +582,7 @@ const DesktopIconsUtil = class {
                     terminalGioDesktopAppInfoArray.push(appinfo);
             });
         }
+
         return terminalGioDesktopAppInfoArray;
     }
 
@@ -549,11 +595,16 @@ const DesktopIconsUtil = class {
     parseUserDirsFile(content) {
         if (!content)
             return null;
+
         const lineArray = content.trim().split('\n');
-        const desktopline = lineArray.filter(l => l.startsWith('XDG_DESKTOP_DIR='))[0];
+
+        const desktopline =
+            lineArray.filter(l => l.startsWith('XDG_DESKTOP_DIR='))[0];
+
         let xdgDesktopPath = desktopline.split('=')[1].trim();
         xdgDesktopPath = xdgDesktopPath.replace(/^"|"$/g, '');
         xdgDesktopPath = xdgDesktopPath.replace('$HOME', GLib.get_home_dir());
+
         return xdgDesktopPath;
     }
 
@@ -570,14 +621,18 @@ const DesktopIconsUtil = class {
         const file = destinationDir.get_child(filename);
 
         try {
-            await this.FileUtils.recursivelyMakeDir(destinationDir, cancellable);
+            await this.FileUtils
+                .recursivelyMakeDir(destinationDir, cancellable);
 
             const info = new Gio.FileInfo();
             info.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_MODE, 0o700);
-            await destinationDir.set_attributes_async(info,
+
+            await destinationDir.set_attributes_async(
+                info,
                 Gio.FileQueryInfoFlags.NONE,
                 GLib.PRIORITY_NORMAL,
-                cancellable);
+                cancellable
+            );
         } catch (e) {
             if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.EXISTS))
                 throw e;
@@ -590,16 +645,20 @@ const DesktopIconsUtil = class {
             info.set_attribute_string('metadata::nautilus-drop-position',
                 `${dropCoordinates.join(',')}`);
 
-            await file.set_attributes_async(info,
+            await file.set_attributes_async(
+                info,
                 Gio.FileQueryInfoFlags.NONE,
                 GLib.PRIORITY_LOW,
-                cancellable);
+                cancellable
+            );
         }
     }
 
     /**
      *
-     * @param {string} fileUri The system file URI of the .desktop file of the installed application
+     * @param {string} fileUri The system file URI of the .desktop
+     * file of the installed application
+     *
      * @param {Array} dropCoordinates the drop cooordinates of the .desktop file
      *
      * Makes an executable .desktop file on the desktop with metadata set trusted.
@@ -607,12 +666,22 @@ const DesktopIconsUtil = class {
     copyDesktopFileToDesktop(fileUri, dropCoordinates) {
         return new Promise((resolve, reject) => {
             let gioFile = Gio.File.new_for_uri(fileUri);
+
             let destinationGioFile = Gio.File.new_for_path(
                 GLib.build_filenamev(
-                    [GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP), gioFile.get_basename()]
+                    [
+                        GLib.get_user_special_dir(
+                            GLib.UserDirectory.DIRECTORY_DESKTOP
+                        ),
+                        gioFile.get_basename(),
+                    ]
                 )
             );
-            let gioFileCopyFlags = Gio.FileCopyFlags.OVERWRITE | Gio.FileCopyFlags.TARGET_DEFAULT_PERMS;
+
+            let gioFileCopyFlags =
+                Gio.FileCopyFlags.OVERWRITE |
+                Gio.FileCopyFlags.TARGET_DEFAULT_PERMS;
+
             gioFile.copy_async(
                 destinationGioFile,
                 gioFileCopyFlags,
@@ -622,15 +691,33 @@ const DesktopIconsUtil = class {
                 (source, result) => {
                     try {
                         let res = source.copy_finish(result);
+
                         if (res) {
                             let info = new Gio.FileInfo();
-                            if (dropCoordinates !== null)
-                                info.set_attribute_string('metadata::nautilus-drop-position', `${dropCoordinates[0]},${dropCoordinates[1]}`);
-                            let newUnixMode = this.Enums.UnixPermissions.S_IRUSR | this.Enums.UnixPermissions.S_IWUSR |
-                                this.Enums.UnixPermissions.S_IXUSR | this.Enums.UnixPermissions.S_IRGRP |
-                                this.Enums.UnixPermissions.S_IWGRP | this.Enums.UnixPermissions.S_IROTH;
-                            info.set_attribute_uint32(Gio.FILE_ATTRIBUTE_UNIX_MODE, newUnixMode);
-                            info.set_attribute_string('metadata::trusted', 'true');
+
+                            if (dropCoordinates !== null) {
+                                info.set_attribute_string(
+                                    'metadata::nautilus-drop-position',
+                                    `${dropCoordinates[0]},${dropCoordinates[1]}`
+                                );
+                            }
+
+                            let newUnixMode =
+                                this.Enums.UnixPermissions.S_IRUSR |
+                                this.Enums.UnixPermissions.S_IWUSR |
+                                this.Enums.UnixPermissions.S_IXUSR |
+                                this.Enums.UnixPermissions.S_IRGRP |
+                                this.Enums.UnixPermissions.S_IWGRP |
+                                this.Enums.UnixPermissions.S_IROTH;
+
+                            info.set_attribute_uint32(
+                                Gio.FILE_ATTRIBUTE_UNIX_MODE, newUnixMode
+                            );
+
+                            info.set_attribute_string(
+                                'metadata::trusted', 'true'
+                            );
+
                             destinationGioFile.set_attributes_async(
                                 info,
                                 Gio.FileQueryInfoFlags.NONE,
@@ -638,9 +725,15 @@ const DesktopIconsUtil = class {
                                 null,
                                 (sour, resul) => {
                                     try {
-                                        resolve(sour.set_attributes_finish(resul));
+                                        resolve(
+                                            sour.set_attributes_finish(resul)
+                                        );
                                     } catch (error) {
-                                        console.log(`Failed to make executable .desktop File: ${error.message}`);
+                                        console.log(
+                                            'Failed to make executable ' +
+                                            `.desktop File: ${error.message}`
+                                        );
+
                                         reject(error);
                                     }
                                 }
@@ -648,6 +741,7 @@ const DesktopIconsUtil = class {
                         }
                     } catch (e) {
                         console.error(e);
+
                         reject(e);
                     }
                 }
@@ -661,7 +755,7 @@ const DesktopIconsUtil = class {
      * @param {boolean} modal If the window should be modal
      */
     windowHidePagerTaskbarModal(window, modal) {
-        window.set_application(this.applicationid);
+        window.set_application(this.mainApp);
         let title = window.get_title();
         if (title === null)
             title = '';
@@ -710,26 +804,42 @@ const DesktopIconsUtil = class {
         return false;
     }
 
-    checkAppOpensFileType(gioDesktopAppInfo, fileUri = null, attributeContentType = null) {
+    checkAppOpensFileType(
+        gioDesktopAppInfo,
+        fileUri = null,
+        attributeContentType = null
+    ) {
         let Appname = gioDesktopAppInfo.get_name();
         let gioFileInfo;
         let AppsSupportingOpen = [];
+
         if (fileUri) {
-            gioFileInfo = Gio.File.new_for_uri(fileUri).query_info(this.Enums.DEFAULT_ATTRIBUTES,
-                Gio.FileQueryInfoFlags.NONE,
-                null);
-            AppsSupportingOpen = Gio.AppInfo.get_all_for_type(gioFileInfo.get_content_type());
+            gioFileInfo =
+                Gio.File.new_for_uri(fileUri)
+                .query_info(
+                    this.Enums.DEFAULT_ATTRIBUTES,
+                    Gio.FileQueryInfoFlags.NONE,
+                    null
+                );
+
+            AppsSupportingOpen =
+                Gio.AppInfo.get_all_for_type(gioFileInfo.get_content_type());
         } else if (attributeContentType) {
-            AppsSupportingOpen = Gio.AppInfo.get_all_for_type(attributeContentType);
+            AppsSupportingOpen =
+                Gio.AppInfo.get_all_for_type(attributeContentType);
         } else {
             return {canopenFile: false, Appname: 'None'};
         }
+
         AppsSupportingOpen = AppsSupportingOpen.map(f => f.get_name());
+
         let canopenFile;
+
         if (AppsSupportingOpen.includes(Appname))
             canopenFile = true;
         else
             canopenFile = false;
+
         return {canopenFile, Appname};
     }
 };

@@ -21,9 +21,16 @@ import Gio from 'gi://Gio';
 
 import * as Enums from './app/enums.js';
 import * as  adwPreferencesWindow from './app/adwPreferencesWindow.js';
-import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+import {ExtensionPreferences, gettext as _} from
+    'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+
+const fileProto = imports.system.version >= 17200
+    ? Gio.File.prototype : Gio._LocalFilePrototype;
+Gio._promisify(fileProto, 'replace_contents_async');
 
 const appID = 'com.desktop.ding';
+
 export default class dingPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const desktopSettings = this.getSettings();
@@ -33,17 +40,37 @@ export default class dingPreferences extends ExtensionPreferences {
         const gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
         const schemaNautilus = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
         const version = this.metadata['version-name'];
+
         let nautilusSettings;
-        if (!schemaNautilus)
+
+        if (!schemaNautilus) {
             nautilusSettings = null;
-        else
-            nautilusSettings = new Gio.Settings({settings_schema: schemaNautilus});
+        } else {
+            nautilusSettings =
+                new Gio.Settings({settings_schema: schemaNautilus});
+        }
 
-        const resource = Gio.Resource.load(`${this.path}/app/${appID}.data.gresource`);
+        const resource =
+            Gio.Resource.load(`${this.path}/app/${appID}.data.gresource`);
+
         resource._register();
-        window.connect('close-request', resource._unregister.bind(this));
 
-        const preferencesWindow = new adwPreferencesWindow.AdwPreferencesWindow(desktopSettings, nautilusSettings, gtkSettings, version);
+        const preferencesWindow =
+            new adwPreferencesWindow.AdwPreferencesWindow(
+                desktopSettings,
+                nautilusSettings,
+                gtkSettings,
+                version
+            );
+
+        window.connect(
+            'close-request',
+            () => {
+                resource._unregister();
+                preferencesWindow.destroy();
+            }
+        );
+
         preferencesWindow.getAdwPreferencesWindow(window);
     }
 }

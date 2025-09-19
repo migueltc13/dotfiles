@@ -101,6 +101,14 @@
         </description>
     </key>
 
+    <key name="notify-on-cycle" type="b">
+        <default>true</default>
+        <summary>Show notification when cycling through the entries with hotkeys</summary>
+        <description>
+            If true, a notification is shown when cycling through the clipboard entries using hotkeys.
+        </description>
+    </key>
+
     <key name="confirm-clear" type="b">
         <default>true</default>
         <summary>Show confirmation dialog on Clear History</summary>
@@ -176,6 +184,13 @@
             <summary>Cache images</summary>
             <description>
                 Allow caching images to disk
+            </description>
+        </key>
+        <key name="excluded-apps" type="as">
+            <default>[]</default>
+            <summary>List of excluded applications</summary>
+            <description>
+                A list of applications that are excluded from clipboard history.
             </description>
         </key>
     </schema>

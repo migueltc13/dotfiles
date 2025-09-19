@@ -105,5 +105,15 @@
         <summary>Icons can be positioned anywhere on Desktop</summary>
         <description>Icons are not on a rectangular grid but can be postioned anywhere independent of grid</description>
     </key>
+        <key type="as" name="togglevisibility">
+        <default>[]</default>
+        <summary>Hide/Show all desktop windows</summary>
+        <description>Show the icons on the desktop, or hide them all</description>
+    </key>
+        <key type="a{ss}" name="shortcutoverrides">
+        <default>{}</default>
+        <summary>User Application Shortcuts</summary>
+        <description>Override for default application shortcuts set by the User</description>
+    </key>
     </schema>
 </schemalist>

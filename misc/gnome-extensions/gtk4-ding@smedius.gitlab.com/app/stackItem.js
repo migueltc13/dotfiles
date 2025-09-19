@@ -1,7 +1,7 @@
 
 /* DING: Desktop Icons New Generation for GNOME Shell
  *
- * Copyright (C) 2021, Gtk4 port 2022 Sundeep Mediratta (smedius@gmail.com)
+ * Copyright (C) Gtk4 port 2022, 2025 Sundeep Mediratta (smedius@gmail.com)
  * Copyright (C) 2019 Sergio Costas (rastersoft@gmail.com)
  * Based on code original (C) Carlos Soriano
  * SwitcherooControl code based on code original from Marsch84
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import {_} from '../dependencies/gettext.js';
-import {Gdk, Gio, Graphene, Gtk, Gsk} from '../dependencies/gi.js';
+import {Gdk, Gio, Graphene, Gtk, Gsk, GLib} from '../dependencies/gi.js';
 import * as DesktopIconItem from './desktopIconItem.js';
 
 export {StackItem};
@@ -27,8 +27,8 @@ export {StackItem};
 const Signals = imports.signals;
 
 const StackItem = class extends DesktopIconItem.DesktopIconItem {
-    constructor(desktopManager, file, attributeContentType, fileExtra) {
-        super(desktopManager, fileExtra);
+    constructor(desktopManager, file, attributeContentType, fileTypeEnum) {
+        super(desktopManager, fileTypeEnum);
         this._isSpecial = false;
         this._file = file;
         this.isStackTop = true;
@@ -126,8 +126,11 @@ const StackItem = class extends DesktopIconItem.DesktopIconItem {
 
     // eslint-disable-next-line no-unused-vars
     _doButtonOnePressed(button, X, Y, x, y, shiftPressed, controlPressed) {
-        this._desktopManager.onToggleStackUnstackThisTypeClicked(
-            this.attributeContentType);
+        const variant = GLib.Variant.new('s', this.attributeContentType);
+        this._desktopManager.mainApp.activate_action(
+            'stackunstack',
+            variant
+        );
     }
 
     setSelected() {
@@ -233,16 +236,15 @@ const StackItem = class extends DesktopIconItem.DesktopIconItem {
         return this._savedCoordinates[1];
     }
 
-    set savedCoordinates(pos) {
-        this._savedCoordinates = pos;
-    }
-
     set size(size) {
         this._size = size;
     }
 
     set time(time) {
         this._modifiedTime = time;
+    }
+
+    set savedCoordinates(pos) {
     }
 };
 Signals.addSignalMethods(StackItem.prototype);

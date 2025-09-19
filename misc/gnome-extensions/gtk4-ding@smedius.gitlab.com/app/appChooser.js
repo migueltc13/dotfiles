@@ -20,9 +20,10 @@ import {_} from '../dependencies/gettext.js';
 export {AppChooserDialog};
 
 const AppChooserDialog = class {
-    constructor(codepath, fileItems, activeFileItem = null, dbusUtils, desktopIconsUtil) {
+    constructor(fileItems, activeFileItem = null, dbusUtils, desktopIconsUtil) {
         if (!activeFileItem)
             activeFileItem = fileItems[0];
+
         if (fileItems.length === 1) {
             this.fileName = activeFileItem.displayName;
             this.singleContentType = true;
@@ -30,60 +31,112 @@ const AppChooserDialog = class {
             this.fileName = null;
             this.singleContentType = this._detectSingleContentType(fileItems);
         }
+
         this._dbusUtils = dbusUtils;
         this._desktopIconsUtil = desktopIconsUtil;
         this.mimeType = activeFileItem.attributeContentType;
-        const appwindow = this._desktopIconsUtil.getApplicationID().get_active_window();
-        this.builderObject = Gtk.Builder.new_from_resource('/com/desktop/ding/ui/ding-app-chooser.ui');
+        this.mimeTypeIsDirectory = this.mimeType === 'inode/directory';
+
+        const appwindow =
+            this._desktopIconsUtil.getMainApp().get_active_window();
+
+        this.builderObject =
+            Gtk.Builder
+            .new_from_resource('/com/desktop/ding/ui/ding-app-chooser.ui');
+
         this.builderObject.set_translation_domain('gtk4-ding');
-        this.appChooserDialog = this.builderObject.get_object('DingAppChooser');
+
+        this.appChooserDialog =
+            this.builderObject.get_object('DingAppChooser');
+
         this.appChooserDialog.set_transient_for(appwindow);
         this.appChooserDialog.set_title('DingAppChooser');
         this.appChooserDialog.set_name('DingAppChooser');
+
         const modal = true;
-        this._desktopIconsUtil.windowHidePagerTaskbarModal(this.appChooserDialog, modal);
-        this.appChooserBox = this.builderObject.get_object('app_chooser_widget_box');
+
+        this._desktopIconsUtil
+        .windowHidePagerTaskbarModal(this.appChooserDialog, modal);
+
+        this.appChooserBox =
+            this.builderObject.get_object('app_chooser_widget_box');
+        this.appChooserBox.set_hexpand(true);
+        this.appChooserBox.set_halign(Gtk.Align.FILL);
+
+
         this.appChooserWidget = Gtk.AppChooserWidget.new(this.mimeType);
         this.appChooserWidget.set_show_default(true);
         this.appChooserWidget.set_show_fallback(true);
         this.appChooserWidget.set_show_other(true);
         this.appChooserBox.append(this.appChooserWidget);
         this.appChooserWidget.set_vexpand(true);
+        this.appChooserWidget.set_halign(Gtk.Align.FILL);
+        this.appChooserWidget.set_hexpand(true);
+
         if (this.fileName !== null) {
-            const description = _('Choose an application to open <b>{foo}</b>').replace(
-                '{foo}', this.fileName.replaceAll('&', '&amp;'));
-            this.appChooserLabel = this.builderObject.get_object('label_description');
+            const description =
+             _('Choose an application to open <b>{foo}</b>')
+             .replace('{foo}', this.fileName.replaceAll('&', '&amp;'));
+
+            this.appChooserLabel =
+                this.builderObject.get_object('label_description');
+
             this.appChooserLabel.set_markup(description);
         }
+
         let headerTitle;
-        this.appChooserDialogHeaderBar = this.appChooserDialog.get_header_bar();
-        this.mimeTypeIsDirectory = this.mimetype === 'inode/directory';
+
         if (!this.singleContentType)
             headerTitle = _('Open Items');
         else if (this.mimeTypeIsDirectory)
             headerTitle = _('Open Folder');
         else
             headerTitle = _('Open File');
-        this.appChooserDialogHeaderBar.set_title_widget(Adw.WindowTitle.new(headerTitle, ''));
 
-        this.appChooserRowBox = this.builderObject.get_object('set_default_box');
-        this.appChooserRow = this.builderObject.get_object('set_default_row');
-        this.appChooserRowSwitch = this.builderObject.get_object('set_as_default_switch');
+        this.appChooserDialogHeaderBar = this.appChooserDialog.get_header_bar();
+
+        this.appChooserDialogHeaderBar
+        .set_title_widget(Adw.WindowTitle.new(headerTitle, ''));
+
+        this.appChooserRowBox =
+            this.builderObject.get_object('set_default_box');
+
+        this.appChooserRow =
+            this.builderObject.get_object('set_default_row');
+
+        this.appChooserRowSwitch =
+            this.builderObject.get_object('set_as_default_switch');
 
         this.selectedAppInfo = this.appChooserWidget.get_app_info();
-        if (this.selectedAppInfo !== null)
-            this._onApplicationSelected(this.appChooserWidget, this.selectedAppInfo);
-        this.appChooserWidget.connect('application-activated', this._onApplicationActivated.bind(this));
-        this.appChooserWidget.connect('application-selected', this._onApplicationSelected.bind(this));
+
+        if (this.selectedAppInfo !== null) {
+            this._onApplicationSelected(
+                this.appChooserWidget,
+                this.selectedAppInfo
+            );
+        }
+
+        this.appChooserWidget.connect(
+            'application-activated',
+            this._onApplicationActivated.bind(this)
+        );
+
+        this.appChooserWidget.connect(
+            'application-selected',
+            this._onApplicationSelected.bind(this)
+        );
+
         if (this.singleContentType && !this.mimeTypeIsDirectory) {
             let description = Gio.content_type_get_description(this.mimeType);
             this.appChooserRow.set_subtitle(description);
         } else {
             this.appChooserRowBox.set_visible(false);
         }
+
         this.appChooserDialog.connect('close', () => {
             this.appChooserDialog.response(Gtk.ResponseType.CANCEL);
         });
+
         this.appChooserDialog.connect('response', (actor, retval) => {
             if (retval === Gtk.ResponseType.OK) {
                 this._checkUpdateDefaultAppForMimeType();
@@ -97,16 +150,36 @@ const AppChooserDialog = class {
     _checkUpdateDefaultAppForMimeType() {
         if (!this.singleContentType)
             return;
+
         let newAppSelected = false;
+
         if (this.appChooserRowSwitch.get_sensitive())
             newAppSelected = this.appChooserRowSwitch.get_active();
+
         if (newAppSelected) {
-            let success = this.selectedAppInfo.set_as_default_for_type(this.mimeType);
+            let success =
+                this.selectedAppInfo.set_as_default_for_type(this.mimeType);
+
             if (!success) {
-                let header = _('Error changing default application');
-                let message = _('Error while setting {foo} as default application for {mimetype}');
-                message = message.replace('{foo}', this.selectedAppInfo.get_display_name());
-                message = message.replace('{mimetype}', Gio.content_type_get_description(this.mimeType));
+                let header =
+                    _('Error changing default application');
+
+                let message =
+        _('Error while setting {foo} as default application for {mimetype}');
+
+                message =
+                    message.replace(
+                        '{foo}',
+                        this.selectedAppInfo.get_display_name()
+                    );
+
+                message =
+                    message
+                    .replace(
+                        '{mimetype}',
+                        Gio.content_type_get_description(this.mimeType)
+                    );
+
                 this._dbusUtils.doNotify(header, message);
             }
         }
@@ -120,22 +193,35 @@ const AppChooserDialog = class {
     _onApplicationSelected(actor, appInfo) {
         if (!this.appChooserDialog)
             return;
+
         this.selectedAppInfo = appInfo;
-        this.appChooserDialog.set_response_sensitive(Gtk.ResponseType.OK, this.selectedAppInfo !== null);
-        let defaultAppInfo = Gio.AppInfo.get_default_for_type(this.mimeType, false);
+
+        this.appChooserDialog
+        .set_response_sensitive(
+            Gtk.ResponseType.OK,
+            this.selectedAppInfo !== null
+        );
+
+        let defaultAppInfo =
+            Gio.AppInfo.get_default_for_type(this.mimeType, false);
+
         let defaultSelected = false;
+
         if (defaultAppInfo)
             defaultSelected = defaultAppInfo.equal(this.selectedAppInfo);
+
         this.appChooserRowSwitch.set_state(defaultSelected);
         this.appChooserRowSwitch.set_sensitive(!defaultSelected);
     }
 
     _detectSingleContentType(fileItems) {
         let mimetype = fileItems[0].attributeContentType;
+
         for (let fileItem of fileItems) {
             if (fileItem.attributeContentType !== mimetype)
                 return false;
         }
+
         return true;
     }
 

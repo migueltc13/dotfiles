@@ -47,6 +47,8 @@ Gio._promisify(fileProto, 'load_bytes_async');
 Gio._promisify(fileProto, 'make_directory_async');
 Gio._promisify(fileProto, 'query_info_async');
 Gio._promisify(fileProto, 'set_attributes_async');
+Gio._promisify(fileProto, 'replace_contents_async');
+Gio._promisify(fileProto, 'load_contents_async');
 
 const getTextDomain = 'gtk4-ding';
 const appID = 'com.desktop.ding';
@@ -68,22 +70,47 @@ const adWDingApp = GObject.registerClass(
             this.connect('startup', this._onStartup.bind(this));
             this.connect('command-line', this._onCommandLine.bind(this));
             this.connect('activate', this._onActivate.bind(this));
+            this.connect('shutdown', this._onShutdown.bind(this));
         }
 
         _onStartup() {
             this.codePath =
                 GLib.path_get_dirname(System.programPath);
+
+            this.systemInstall = this.codePath.startsWith('/usr');
+
             this.extensionDir = GLib.path_get_dirname(this.codePath);
-            const localePath = GLib.build_filenamev([this.extensionDir, 'locale']);
+
+            const localePath = GLib.build_filenamev(
+                [this.extensionDir, 'locale']
+            );
+
             if (Gio.File.new_for_path(localePath).query_exists(null))
                 Gettext.bindtextdomain(getTextDomain, localePath);
 
             const resourcePath = GLib.build_filenamev(
                 [this.codePath, `${appID}.data.gresource`]);
+
             const resource = Gio.Resource.load(resourcePath);
             resource._register();
 
             this._initializeOptions();
+
+            if (!this.systemInstall) {
+                console.log('Local install detected, updating icon cache...');
+                this._updateIconCache().catch(e => logError(e));
+                this._updateAppInfoCache().catch(e => logError(e));
+            }
+        }
+
+        _onShutdown() {
+            if (this.systemInstall)
+                return;
+
+            if (this.appIcon)
+                this._removeFile(this.appIcon);
+            if (this.appDesktopFile)
+                this._removeFile(this.appDesktopFile);
         }
 
         // eslint-disable-next-line consistent-return
@@ -102,18 +129,19 @@ const adWDingApp = GObject.registerClass(
             if (!this.errorFound && !this.showHelp) {
                 if (commandLine.get_is_remote()) {
                     this.desktops = this.newdesktops;
-                    this.desktopManager.updateGridWindows(this.desktops);
-                    // If testing Dbus activations, comment the above
-                    // and uncomment the following -
-                    // or get remote actions from the app and activate
-                    // this.desktopVariants = this.newDesktopsVariants;
-                    // this.remoteDingActions.activate_action('updateGridWindows',
-                    //    new GLib.Variant('av', this.desktopVariants));
-                    // OR smiply activate the app action directly
-                    // app.activate_action(
-                    //     'updateGridWindows',
-                    //     new GLib.Variant('av', this.desktopVariants)
-                    // );
+                    const windowManager = this.desktopManager.windowManager;
+                    windowManager.updateGridWindows(this.desktops);
+                // If testing Dbus activations, comment the above
+                // and uncomment the following -
+                // or get remote actions from the app and activate
+                // this.desktopVariants = this.newDesktopsVariants;
+                // this.remoteDingActions.activate_action('updateGridWindows',
+                //    new GLib.Variant('av', this.desktopVariants));
+                // OR smiply activate the app action directly
+                // app.activate_action(
+                //     'updateGridWindows',
+                //     new GLib.Variant('av', this.desktopVariants)
+                // );
                 } else {
                     this._finishStartUp(app);
                     app.activate();
@@ -143,15 +171,19 @@ const adWDingApp = GObject.registerClass(
                 'gnomeversion': this.gnomeversion,
                 'programversion': this.programversion,
                 'uuid': this.uuid,
-                'dingApp': app,
+                'mainApp': app,
             };
             this.Utils = {FileUtils};
+
             this.Utils.DBusUtils =
                 new DBusUtils.DBusUtils(app);
+
             this.Utils.ThumbnailLoader =
                 new Thumbnails.ThumbnailLoader(this.Utils.FileUtils);
+
             this.Utils.Preferences =
                 new Preferences.Preferences(this.Data, AdwPreferencesWindow);
+
             this.Utils.DesktopIconsUtil =
                 new DesktopIconsUtil.DesktopIconsUtil(this.Data, this.Utils);
         }
@@ -173,25 +205,30 @@ const adWDingApp = GObject.registerClass(
         _parseOptions(args) {
             this.newdesktops = [];
             this.newDesktopsVariants = [];
+
             // modified for GJS to work like passing optioncontext
             args.forEach((arg, index, array) => {
                 this.options.some(entry => {
                     const longname = arg === `--${entry.long_name}`;
                     const shortname = arg === `-${entry.short_name}`;
+
                     if (longname || shortname) {
-                        let assignFunction = entry.arg_data;
+                        const assignFunction = entry.arg_data;
+
                         if (entry.arg === GLib.OptionArg.NONE) {
                             assignFunction();
                             return true;
                         }
 
                         let value;
+
                         if (longname && entry.long_name.includes('='))
                             value = entry.split('=')[1];
                         else
                             value = array[index += 1] ?? null;
 
                         assignFunction(value);
+
                         return true;
                     }
                     return false;
@@ -204,11 +241,14 @@ const adWDingApp = GObject.registerClass(
             // const helptext = this.optionsContext.get_help(false, null);
             let helpMessage =
                 'Usage: gjs -m adw-ding.js [OPTIONS]\n\nOptions:\n';
+
             this.options.forEach(entry => {
                 const shortOption = entry.short_name
                     ? `-${entry.short_name}` : '';
+
                 const argDescription = entry.arg_description
                     ? ` ${entry.arg_description}` : '';
+
                 helpMessage += `  ${shortOption},  --${entry.long_name}` +
                     `   ${argDescription}\n\n`;
 
@@ -251,7 +291,8 @@ const adWDingApp = GObject.registerClass(
                     flags: 0,
                     arg: GLib.OptionArg.NONE,
                     arg_data: () => (this.asDesktop = true),
-                    description: 'run as desktop (with transparent window, reacting to data from the extension...',
+                    description: 'run as desktop (with transparent window, ' +
+                        'reacting to data from the extension...',
                     arg_description: 'as desktop flag',
                 },
                 {
@@ -269,7 +310,8 @@ const adWDingApp = GObject.registerClass(
                     flags: 0,
                     arg: GLib.OptionArg.STRING,
                     arg_data: value => (this.gnomeversion = value),
-                    description: 'pass the gnome version to the DING application',
+                    description:
+                        'pass the gnome version to the DING application',
                     arg_description: 'gnome shell version',
                 },
                 {
@@ -278,7 +320,8 @@ const adWDingApp = GObject.registerClass(
                     flags: 0,
                     arg: GLib.OptionArg.STRING,
                     arg_data: value => (this.programversion = value),
-                    description: 'pass the version-name of the program to display in extension/DING preferences',
+                    description: 'pass the version-name of the program to ' +
+                        'display in extension/DING preferences',
                     arg_description: 'application/extension version',
                 },
                 {
@@ -296,7 +339,8 @@ const adWDingApp = GObject.registerClass(
                     flags: 0,
                     arg: GLib.OptionArg.STRING,
                     arg_data: value => (this.uuid = value),
-                    description: 'pass the uuid of the extension to use in the DING application',
+                    description: 'pass the uuid of the extension to use in ' +
+                        'the DING application',
                     arg_description: 'extension uuid',
                 },
                 {
@@ -320,16 +364,23 @@ const adWDingApp = GObject.registerClass(
         i: monitor index (0, 1...)
 
     multiple "-D" options can be set for multi monitor setup`,
-                    arg_description: 'x:y:w:h:z:t:b:l:r:i -string with monitor dimensions',
+                    arg_description:
+                        'x:y:w:h:z:t:b:l:r:i -string with monitor dimensions',
                 },
             ];
-            // This does not work in GJS - constructor cannot be called - alternative implemented
-            // this.optionsContext = new GLib.OptionContext('Adw Desktop Icons Application');
+
+            // This does not work in GJS - constructor cannot be called -
+            // therefore alternative implementation for the following
+            //
+            // this.optionsContext =
+            //      new GLib.OptionContext('Adw Desktop Icons Application');
+            //
             // this.optionsContext.add_main_entries(options, getTextDomain);
         }
 
         _parseDesktopData(data) {
             data = data.split(':');
+
             if (data.length !== 10)
                 throw new Error('Incorrect number of parameters for -D\n');
 
@@ -351,6 +402,7 @@ const adWDingApp = GObject.registerClass(
 
             if (Object.values(dataObject).some(x => isNaN(x)))
                 throw new Error('Incorrect non numeric value in -D data \n');
+
             this.newdesktops.push(dataObject);
         }
 
@@ -382,6 +434,159 @@ const adWDingApp = GObject.registerClass(
                     primaryMonitor: d.primaryMonitor,
                 });
             });
+        }
+
+        async _installFile(resourcePath, destinationPath) {
+            const resourceFile = Gio.File.new_for_uri(resourcePath);
+            const destinationFile = Gio.File.new_for_path(destinationPath);
+
+            const [contents] =
+                await resourceFile.load_contents_async(null);
+
+            if (!contents)
+                return false;
+
+            if (destinationFile.query_exists(null)) {
+                const [existingContents] =
+                    await destinationFile.load_contents_async(null);
+
+                const fileName = GLib.path_get_basename(destinationPath);
+
+                if (this._memcmp(contents, existingContents))
+                    console.log(`Already up-to-date: ${fileName}`);
+                else
+                    console.log(`User installed file ${fileName} exists`);
+
+                return false;
+            }
+
+            try {
+                await destinationFile.replace_contents_async(
+                    contents,
+                    null,
+                    false,
+                    Gio.FileCreateFlags.REPLACE_DESTINATION,
+                    null
+                );
+
+                console.log(
+                    `Updated: ${GLib.path_get_basename(destinationPath)}`
+                );
+            } catch (e) {
+                if (e.matches(
+                    Gio.IOErrorEnum,
+                    Gio.IOErrorEnum.NOT_FOUND
+                )) {
+                    GLib.mkdir_with_parents(
+                        GLib.path_get_dirname(destinationPath),
+                        0o700
+                    );
+                    console.log(
+                        'Created missing parent directories: ' +
+                        `${GLib.path_get_dirname(destinationPath)}`
+                    );
+
+                    const retval = await this._installFile(
+                        resourcePath,
+                        destinationPath
+                    );
+
+                    return retval;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        _removeFile(destinationPath) {
+            const destinationFile = Gio.File.new_for_path(destinationPath);
+
+            try {
+                if (destinationFile.query_exists(null))
+                    destinationFile.delete(null);
+
+                console.log(
+                    'Cleaning up, removed: ' +
+                    `${GLib.path_get_basename(destinationPath)}`
+                );
+            } catch (e) {
+                logError(e);
+            }
+        }
+
+        async _updateIconCache() {
+            const appPath = `/${appID.split('.').join('/')}`;
+            const iconPath = '/icons/hicolor/scalable/apps';
+            const iconResrc = `resource://${appPath}${iconPath}/${appID}.svg`;
+
+            const appIcon = GLib.build_filenamev([
+                GLib.get_user_data_dir(),
+                `${iconPath}`,
+                `${appID}.svg`,
+            ]);
+
+            const written = await this._installFile(iconResrc, appIcon);
+
+            if (written) {
+                this.appIcon = appIcon;
+
+                const iconCachePath = GLib.build_filenamev([
+                    GLib.get_user_data_dir(),
+                    'icons',
+                    'hicolor',
+                ]);
+
+                const updated = await GLib.spawn_command_line_async(
+                    'gtk-update-icon-cache ' +
+                    '-q -t -f ' +
+                    `${iconCachePath}`
+                );
+
+                if (updated)
+                    console.log('Updated icon cache');
+            }
+        }
+
+        async _updateAppInfoCache() {
+            const appPath = `/${appID.split('.').join('/')}`;
+            const appResource = `resource://${appPath}/${appID}.desktop`;
+
+            const appDesktopFile = GLib.build_filenamev([
+                GLib.get_user_data_dir(),
+                'applications',
+                `${appID}.desktop`,
+            ]);
+
+            const written =
+                await this._installFile(appResource, appDesktopFile);
+
+            if (written) {
+                this.appDesktopFile = appDesktopFile;
+
+                // Gnome will update the app info cache automatically
+                // However it takes a long time to update the cache
+                // and we need to do it manually for the app to be
+                // available sooner
+                const updated = await GLib.spawn_command_line_async(
+                    'update-desktop-database -q ' +
+                    `${GLib.path_get_dirname(appDesktopFile)}`
+                );
+
+                if (updated)
+                    console.log('Updated desktop database');
+            }
+        }
+
+        _memcmp(a, b) {
+            if (a.length !== b.length)
+                return false;
+
+            if (a.some((x, i) => x !== b[i]))
+                return false;
+
+            return true;
         }
     }
 );

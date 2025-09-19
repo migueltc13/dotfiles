@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Cairo, Gdk, GdkPixbuf, GLib, Gio, GnomeDesktop, Poppler} from '../dependencies/gi.js';
+import {Cairo, Gdk, GdkPixbuf, GLib, Gio, GnomeDesktop, Poppler} from
+    '../dependencies/gi.js';
 
 export {ThumbnailLoader};
 
@@ -34,7 +35,9 @@ Gio._promisify(GnomeDesktop.DesktopThumbnailFactory.prototype,
     'save_thumbnail_finish');
 
 const PIXBUF_CONTENT_TYPES = new Set();
-GdkPixbuf.Pixbuf.get_formats().forEach(f => PIXBUF_CONTENT_TYPES.add(...f.get_mime_types()));
+
+GdkPixbuf.Pixbuf
+.get_formats().forEach(f => PIXBUF_CONTENT_TYPES.add(...f.get_mime_types()));
 
 // Max file size for which to attempt thumbnail generation with local code
 const MAX_FILE_SIZE = 5242880;
@@ -47,11 +50,34 @@ const ThumbnailLoader = class {
     constructor(FileUtils) {
         this.FileUtils = FileUtils;
         this._timeoutValue = 5000;
-        this._thumbnailFactory = GnomeDesktop.DesktopThumbnailFactory.new(GnomeDesktop.DesktopThumbnailSize.LARGE);
-        this.standardThumbnailsFolder = GLib.build_filenamev([GLib.get_home_dir(), '.cache/thumbnails']);
+
+        this._thumbnailFactory =
+            GnomeDesktop.DesktopThumbnailFactory
+            .new(GnomeDesktop.DesktopThumbnailSize.LARGE);
+
+        this.standardThumbnailsFolder =
+            GLib.build_filenamev([GLib.get_home_dir(), '.cache/thumbnails']);
+
         this.standardThumbnailSubFolders = ['large', 'normal'];
-        this.gimpSnapThumbnailsFolder = GLib.build_filenamev([GLib.get_home_dir(), 'snap/common/gimp', '.cache/thumbnails']);
-        this.gimpFlatPackThumbnailsFolder = GLib.build_filenamev([GLib.get_home_dir(), '.var/app/org.gimp.GIMP', 'cache/thumbnails']);
+
+        this.gimpSnapThumbnailsFolder =
+            GLib.build_filenamev(
+                [
+                    GLib.get_home_dir(),
+                    'snap/common/gimp',
+                    '.cache/thumbnails',
+                ]
+            );
+
+        this.gimpFlatPackThumbnailsFolder =
+            GLib.build_filenamev(
+                [
+                    GLib.get_home_dir(),
+                    '.var/app/org.gimp.GIMP',
+                    'cache/thumbnails',
+                ]
+            );
+
         this.md5Hasher = GLib.Checksum.new(GLib.ChecksumType.MD5);
         this.textCoder = new TextEncoder();
     }
@@ -60,7 +86,9 @@ const ThumbnailLoader = class {
         if (!await this.FileUtils.queryExists(file.file))
             return null;
 
-        if (this._thumbnailFactory.has_valid_failed_thumbnail(file.uri, file.modifiedTime))
+        if (this._thumbnailFactory
+            .has_valid_failed_thumbnail(file.uri, file.modifiedTime)
+        )
             return null;
 
         if (!await this._createThumbnailAsync(file, cancellable)) {
@@ -76,28 +104,54 @@ const ThumbnailLoader = class {
 
     async _createThumbnailAsync(file, cancellable) {
         let gotTimeout = false;
-        let timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, this._timeoutValue, () => {
-            console.log(`Timeout while generating thumbnail for ${file.displayName}`);
-            timeoutId = 0;
-            gotTimeout = true;
-            cancellable.cancel();
-            return GLib.SOURCE_REMOVE;
-        });
+
+        let timeoutId =
+            GLib.timeout_add(GLib.PRIORITY_DEFAULT, this._timeoutValue, () => {
+                console.log(
+                    `Timeout while generating thumbnail for ${file.displayName}`
+                );
+
+                timeoutId = 0;
+                gotTimeout = true;
+                cancellable.cancel();
+
+                return GLib.SOURCE_REMOVE;
+            });
 
         try {
-            const thumbnailPixbuf = await this._thumbnailFactory.generate_thumbnail_async(
-                file.uri, file.attributeContentType, cancellable);
-            await this._thumbnailFactory.save_thumbnail_async(thumbnailPixbuf,
-                file.uri, file.modifiedTime, cancellable).catch(e => {
-                if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                    console.error(`Error saving thumbnail ${e}`);
-            });
+            const thumbnailPixbuf =
+                await this._thumbnailFactory
+                .generate_thumbnail_async(
+                    file.uri,
+                    file.attributeContentType,
+                    cancellable
+                );
+
+            await this._thumbnailFactory
+                .save_thumbnail_async(
+                    thumbnailPixbuf,
+                    file.uri,
+                    file.modifiedTime,
+                    cancellable
+                )
+                .catch(e => {
+                    if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                        console.error(`Error saving thumbnail ${e}`);
+                });
+
             return true;
         } catch (e) {
-            if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                console.error(e, `Error creating thumbnail with thumbnailFactory: ${e.message}`);
-            return await this._createFallBackThumbnailAsync(file,
-                gotTimeout && cancellable.is_cancelled() ? null : cancellable);
+            if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                console.error(e,
+                    'Error creating thumbnail with thumbnailFactory: ' +
+                    `${e.message}`
+                );
+            }
+
+            return await this._createFallBackThumbnailAsync(
+                file,
+                gotTimeout && cancellable.is_cancelled() ? null : cancellable
+            );
         } finally {
             if (timeoutId)
                 GLib.source_remove(timeoutId);
@@ -108,11 +162,18 @@ const ThumbnailLoader = class {
         const thumbnailPixbuf = this._createThumbnailLocally(file, cancellable);
 
         if (thumbnailPixbuf !== null) {
-            await this._thumbnailFactory.save_thumbnail_async(thumbnailPixbuf,
-                file.uri, file.modifiedTime, cancellable).catch(e => {
-                if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                    console.error(`Error saving thumbnail ${e}`);
-            });
+            await this._thumbnailFactory
+                .save_thumbnail_async(
+                    thumbnailPixbuf,
+                    file.uri,
+                    file.modifiedTime,
+                    cancellable
+                )
+                .catch(e => {
+                    if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                        console.error(`Error saving thumbnail ${e}`);
+                });
+
             return true;
         }
 
@@ -121,30 +182,44 @@ const ThumbnailLoader = class {
 
     async _createFailedThumbnailAsync(file, cancellable) {
         try {
-            await this._thumbnailFactory.create_failed_thumbnail_async(file.uri,
-                file.modifiedTime, cancellable);
+            await this._thumbnailFactory.create_failed_thumbnail_async(
+                file.uri,
+                file.modifiedTime,
+                cancellable
+            );
         } catch (e) {
-            if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                console.error(e, `Error while creating failed thumbnail: ${e.message}`);
+            if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                console.error(e,
+                    `Error while creating failed thumbnail: ${e.message}`
+                );
+            }
         }
     }
 
     _createThumbnailLocally(file, cancellable) {
         let thumbnailPixbuf = null;
+
         if (file.fileSize < MAX_FILE_SIZE) {
             const contentType = file.attributeContentType;
+
             try {
                 if (PIXBUF_CONTENT_TYPES.has(contentType))
                     thumbnailPixbuf = this._loadImageAsIcon(file, cancellable);
-                else if (contentType === 'application/pdf' || contentType === 'x-pdf')
+                else if (
+                    contentType === 'application/pdf' ||
+                    contentType === 'x-pdf'
+                )
                     thumbnailPixbuf = this._loadPdfAsIcon(file, cancellable);
             } catch (e) {
                 if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                     throw e;
 
-                console.error(e, `Error while generating icon image: ${e.message}`);
+                console.error(e,
+                    `Error while generating icon image: ${e.message}`
+                );
             }
         }
+
         return thumbnailPixbuf;
     }
 
@@ -154,44 +229,70 @@ const ThumbnailLoader = class {
         try {
             // Assume no password
             const password = null;
-            const popplerDocument = Poppler.Document.new_from_gfile(file.file,
-                password, cancellable);
+
+            const popplerDocument =
+                Poppler.Document.new_from_gfile(
+                    file.file,
+                    password,
+                    cancellable
+                );
+
             if (!popplerDocument)
                 return thumbnailPixbuf;
+
             const firstPage = popplerDocument.get_page(0);
+
             if (!firstPage)
                 return thumbnailPixbuf;
+
             const [pagewidth, pageheight] = firstPage.get_size();
 
             let width = WIDTH;
             let height = HEIGHT;
             const aspectRatio = pagewidth / pageheight;
+
             if ((width / height) > aspectRatio)
                 width = height * aspectRatio;
             else
                 height = width / aspectRatio;
+
             const hScale = width / pagewidth;
             const vScale = height / pageheight;
 
-            const imageSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32, pagewidth, pageheight);
+            const imageSurface =
+                new Cairo.ImageSurface(
+                    Cairo.Format.ARGB32,
+                    pagewidth,
+                    pageheight
+                );
+
             const ctx = new Cairo.Context(imageSurface);
+
             this._drawPdfOn(ctx, firstPage);
 
-            const scaledSurface = new Cairo.ImageSurface(Cairo.Format.ARGB32, width, height);
+            const scaledSurface =
+                new Cairo.ImageSurface(Cairo.Format.ARGB32, width, height);
+
             const scaledCtx = new Cairo.Context(scaledSurface);
             scaledCtx.scale(hScale, vScale);
 
             scaledCtx.setSourceSurface(imageSurface, 0, 0);
             scaledCtx.paint();
 
-            thumbnailPixbuf = Gdk.pixbuf_get_from_surface(scaledSurface, 0, 0, width, height);
+            thumbnailPixbuf =
+                Gdk.pixbuf_get_from_surface(scaledSurface, 0, 0, width, height);
+
             ctx.$dispose();
             scaledCtx.$dispose();
         } catch (e) {
             if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 throw e;
-            if (!e.matches(Poppler.Error, Poppler.Error.ENCRYPTED))
-                console.error(e, `Error creating pdf thumbnail pixbuf ${file.uri}`);
+
+            if (!e.matches(Poppler.Error, Poppler.Error.ENCRYPTED)) {
+                console.error(e,
+                    `Error creating pdf thumbnail pixbuf ${file.uri}`
+                );
+            }
         }
 
         return thumbnailPixbuf;
@@ -214,18 +315,27 @@ const ThumbnailLoader = class {
             let width = WIDTH;
             let height = HEIGHT;
             const aspectRatio = pixbuf.width / pixbuf.height;
+
             if ((width / height) > aspectRatio)
                 width = height * aspectRatio;
             else
                 height = width / aspectRatio;
-            thumbnailPixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR);
+
+            thumbnailPixbuf =
+                pixbuf.scale_simple(
+                    width,
+                    height,
+                    GdkPixbuf.InterpType.BILINEAR
+                );
 
             return thumbnailPixbuf;
         } catch (e) {
             if (e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 throw e;
 
-            console.error(e, `Error creating image thumbnail pixbuf ${file.uri}`);
+            console.error(e,
+                `Error creating image thumbnail pixbuf ${file.uri}`
+            );
         }
 
         return thumbnailPixbuf;
@@ -233,9 +343,12 @@ const ThumbnailLoader = class {
 
     /*
      * ExtraCode to find thumbnail in the thumbnail Folder
-     * Was Used to find GIMP thumbnails, however ThumbnailFactoryNormal can now find it.
-     * However to do that you have to start two ThumbnailFactories, this is simpler and lighter
-     * Can be used to search arbitrary folders for thumbnails in Futre if necessary, not just Subfolders
+     * Was Used to find GIMP thumbnails, however ThumbnailFactoryNormal
+     * can now find it.
+     *
+     * However to do that you have to start two ThumbnailFactories,
+     * this is simpler and lighter, can be used to search arbitrary folders
+     * for thumbnails in Futre if necessary, not just Subfolders
     */
 
     _findThumbnail(file, basePath, subFolders = null, cancellable) {
@@ -243,6 +356,7 @@ const ThumbnailLoader = class {
             return null;
 
         let md5FileUriHash = this._getMD5Hash(file.uri);
+
         if (!md5FileUriHash)
             return null;
 
@@ -252,18 +366,31 @@ const ThumbnailLoader = class {
 
         if (subFolders) {
             for (const subfolder of subFolders) {
-                thumbnailFileSearchPath = GLib.build_filenamev([basePath, subfolder, thumbnailMD5Name]);
-                if (Gio.File.new_for_path(thumbnailFileSearchPath).query_exists(cancellable)) {
+                thumbnailFileSearchPath =
+                    GLib
+                    .build_filenamev([basePath, subfolder, thumbnailMD5Name]);
+
+                if (
+                    Gio.File.new_for_path(thumbnailFileSearchPath)
+                    .query_exists(cancellable)
+                ) {
                     thumbnailFilePath = thumbnailFileSearchPath;
+
                     break;
                 }
             }
             return thumbnailFilePath;
         }
 
-        thumbnailFileSearchPath = GLib.build_filenamev([basePath, thumbnailMD5Name]);
-        if (Gio.File.new_for_path(thumbnailFileSearchPath).query_exists(cancellable))
+        thumbnailFileSearchPath =
+            GLib.build_filenamev([basePath, thumbnailMD5Name]);
+
+        if (
+            Gio.File.new_for_path(thumbnailFileSearchPath)
+            .query_exists(cancellable)
+        )
             thumbnailFilePath = thumbnailFileSearchPath;
+
         return thumbnailFilePath;
     }
 
@@ -276,49 +403,92 @@ const ThumbnailLoader = class {
     }
 
     canThumbnail(file) {
-        return this._thumbnailFactory.can_thumbnail(file.uri,
-            file.attributeContentType,
-            file.modifiedTime);
+        return this._thumbnailFactory
+            .can_thumbnail(
+                file.uri,
+                file.attributeContentType,
+                file.modifiedTime
+            );
     }
 
     _lookupThumbnail(file, cancellable) {
         let thumbnail = null;
+
         // do searches for only special cases to conserve resources //
         if (file.attributeContentType === 'image/x-xcf') {
-            // lets do a local search in thumbnails dir, look only in normal subfolder as we already searched large
-            thumbnail = this._findThumbnail(file, this.standardThumbnailsFolder, ['normal'], cancellable);
+            // lets do a local search in thumbnails dir, look only in normal
+            // subfolder as we already searched large
+            thumbnail =
+                this._findThumbnail(
+                    file,
+                    this.standardThumbnailsFolder,
+                    ['normal'],
+                    cancellable
+                );
+
             if (thumbnail)
                 return thumbnail;
 
             // we can now search far and wide in snaps and flatpacks if we want.
-            thumbnail = this._findThumbnail(file, this.gimpSnapThumbnailsFolder, this.standardThumbnailSubFolders, cancellable);
-            if (!thumbnail)
-                thumbnail = this._findThumbnail(file, this.gimpFlatPackThumbnailsFolder, this.standardThumbnailSubFolders, cancellable);
+            thumbnail =
+                this._findThumbnail(
+                    file,
+                    this.gimpSnapThumbnailsFolder,
+                    this.standardThumbnailSubFolders,
+                    cancellable
+                );
+
+            if (!thumbnail) {
+                thumbnail =
+                    this._findThumbnail(
+                        file,
+                        this.gimpFlatPackThumbnailsFolder,
+                        this.standardThumbnailSubFolders,
+                        cancellable
+                    );
+            }
+
             return thumbnail;
         }
+
         return thumbnail;
     }
 
     hasThumbnail(file, cancellable) {
         let thumbnail = null;
+
         thumbnail = this._thumbnailFactory.lookup(file.uri, file.modifiedTime);
+
         if (thumbnail)
             return thumbnail;
+
         thumbnail = this._lookupThumbnail(file, cancellable);
+
         return thumbnail;
     }
 
     async getThumbnail(file, cancellable) {
         try {
             let thumbnail = this.hasThumbnail(file, cancellable);
+
             if (!thumbnail && this.canThumbnail(file))
                 thumbnail = await this._generateThumbnail(file, cancellable);
-            if (!thumbnail && await this._createFallBackThumbnailAsync(file, cancellable))
-                thumbnail =  this._thumbnailFactory.lookup(file.uri, file.modifiedTime);
+
+            if (
+                !thumbnail &&
+                await this._createFallBackThumbnailAsync(file, cancellable)
+            ) {
+                thumbnail =
+                    this._thumbnailFactory.lookup(file.uri, file.modifiedTime);
+            }
+
             return thumbnail;
         } catch (error) {
-            console.log(`Error when asking for a thumbnail for ${file.displayName}: ${error.message}\n${error.stack}`);
+            console.log(
+                `Error when asking for a thumbnail for ${file.displayName}:` +
+                ` ${error.message}\n${error.stack}`);
         }
+
         return null;
     }
 };
