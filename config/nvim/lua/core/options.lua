@@ -67,6 +67,9 @@ g.loaded_netrwPlugin = 1
 -- Disable ruby provider
 g.loaded_ruby_provider = 0
 
+-- Disable perl provider
+g.loaded_perl_provider = 0
+
 -- Python 3 executable
 g.python3_host_prog = vim.split(vim.fn.system('which python3'), '\n')[1]
 

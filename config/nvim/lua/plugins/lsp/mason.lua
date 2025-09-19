@@ -1,6 +1,6 @@
 return {
     "williamboman/mason.nvim",
-    version = "v1.x",
+    -- version = "v1.x",
     event = "LazyFile",
     cmd = {
         "Mason",

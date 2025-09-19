@@ -6,6 +6,10 @@ return {
     config = function()
         require("catppuccin").setup({
             transparent_background = true,
+            float = {
+                transparent = true, -- enable transparent floating windows
+                solid = "rounded", -- use solid styling for floating windows, see |winborder|
+            },
             integrations = {
                 aerial = true,
                 alpha = true,

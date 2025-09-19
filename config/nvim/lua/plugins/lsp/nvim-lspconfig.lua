@@ -7,7 +7,6 @@ return {
 		-- { "antosha417/nvim-lsp-file-operations", config = true },
 	},
 	config = function()
-		local lspconfig = require("lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		-- set rounded borders for floating windows
@@ -47,7 +46,7 @@ return {
         }
 
         for _, server in ipairs(servers) do
-            lspconfig[server].setup({
+            vim.lsp.config(server, {
                 capabilities = capabilities,
                 on_attach = lsp_on_attach,
                 handlers = handlers,
@@ -55,7 +54,7 @@ return {
         end
 
 		-- configure python server
-        lspconfig["pylsp"].setup({
+        vim.lsp.config("pylsp", {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,
@@ -80,7 +79,7 @@ return {
         })
 
 		-- configure lua server
-		lspconfig["lua_ls"].setup({
+		vim.lsp.config("lua_ls", {
 			capabilities = capabilities,
 			on_attach = lsp_on_attach,
 			handlers = handlers,
@@ -104,7 +103,7 @@ return {
 		})
 
 		-- configure clangd server
-		lspconfig["clangd"].setup({
+		vim.lsp.config("clangd", {
 			capabilities = capabilities,
 			on_attach = lsp_on_attach,
 			handlers = handlers,
@@ -115,7 +114,7 @@ return {
 		})
 
         -- configure typescript server with vue support
-        lspconfig["ts_ls"].setup({
+        vim.lsp.config("ts_ls", {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
             handlers = handlers,

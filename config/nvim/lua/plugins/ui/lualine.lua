@@ -57,7 +57,7 @@ return {
         { 'nvim-tree/nvim-web-devicons', opt = true },
     },
     config = function()
-        local lazy_status = require("lazy.status") -- to configure lazy pending updates count
+        -- local lazy_status = require("lazy.status") -- to configure lazy pending updates count
         local toggle = require("util.toggle") -- to configure status notify
 
         require("lualine").setup({
@@ -77,11 +77,11 @@ return {
                     },
                 },
                 lualine_x = {
-                    {
-                        lazy_status.updates,
-                        cond = lazy_status.has_updates,
-                        color = { fg = '#ff9e64' },
-                    },
+                    -- {
+                    --     lazy_status.updates,
+                    --     cond = lazy_status.has_updates,
+                    --     color = { fg = '#ff9e64' },
+                    -- },
                     {
                         toggle.curr_notify_icon,
                         cond = toggle.cond_status_notify,
