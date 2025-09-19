@@ -9,7 +9,7 @@ HISTSIZE=8192  # lines
 HISTFILESIZE=1048576  # bytes
 HISTTIMEFORMAT="%F %T "  # Display timestamps as "YYYY-MM-DD HH:MM:SS"
 HISTCONTROL="ignoredups:ignorespace"  # ignore dups and space-prefixed commands
-HISTIGNORE="clear:cd:cd -:pwd:exit:logout"
+HISTIGNORE="clear:cd:cd -:pwd:exit:logout"  # remove these commands from history
 
 # append to the history file instead of overwriting it
 shopt -s histappend
@@ -81,6 +81,10 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# Set DBUS session address. Solves issues with some GUI apps when started
+# from terminal (e.g., gnome-calculator, nautilus, etc.)
+# export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus"
+
 # default editor
 export EDITOR=nvim
 
@@ -98,6 +102,7 @@ export PATH+=":$HOME/.cargo/bin"
 export PATH+=":$HOME/.ghcup/bin"
 export PATH+=":$HOME/go/bin"
 export PATH+=":/usr/games"
+export PATH+=":/snap/bin"
 
 # Prepend nvm Node.js directory to PATH
 export NVM_DIR="$HOME/.nvm"
