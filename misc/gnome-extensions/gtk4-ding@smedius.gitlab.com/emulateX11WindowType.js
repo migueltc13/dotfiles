@@ -219,16 +219,8 @@ class ManageWindow {
         else if (this._window.on_all_workspaces)
             this._window.unstick();
 
-        if (this._desktopWindow) {
-            if (typeof this._window.set_type === 'function') {
-                this._window.set_type(Meta.WindowType.DESKTOP);
-                console.log('Setting window type to desktop with Gnome 49 API');
-                // In future, Meta.WaylandClient.make_desktop(window) will not
-                // be necessary.
-            } else {
-                this._makeWindowTypeDesktop();
-            }
-        }
+        if (this._desktopWindow)
+            this._makeWindowTypeDesktop();
     }
 
     _keepFixedWindowPosition() {
@@ -257,11 +249,7 @@ class ManageWindow {
         this._signalIDs.push(
             this._window.connect('notify::maximized-vertically',
                 () => {
-                    if (typeof this._window.is_maximized === 'function' &&
-                        !this._window.is_maximized()
-                    )
-                        this._window.maximize();
-                    else if (!this._window.maximized_vertically)
+                    if (!this._window.maximized_vertically)
                         this._window.maximize(Meta.MaximizeFlags.VERTICAL);
                     this._moveIntoPlace();
                 }
@@ -271,11 +259,7 @@ class ManageWindow {
         this._signalIDs.push(
             this._window.connect('notify::maximized-horizontally',
                 () => {
-                    if (typeof this._window.is_maximized === 'function' &&
-                        !this._window.is_maximized()
-                    )
-                        this._window.maximize();
-                    else if (!this._window.maximized_horizontally)
+                    if (!this._window.maximized_horizontally)
                         this._window.maximize(Meta.MaximizeFlags.HORIZONTAL);
                     this._moveIntoPlace();
                 }

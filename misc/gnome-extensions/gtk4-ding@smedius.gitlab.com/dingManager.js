@@ -656,52 +656,31 @@ var LaunchSubprocess = class {
                     Gio.SubprocessFlags.STDERR_MERGE,
             });
 
-        this.subprocess = null;
-        this.process_running = false;
-    }
-
-    makeWaylandClientSubprocess(argv) {
-        if (!Meta.is_wayland_compositor())
-            throw new Error('X11, Cannot make Wayland client subprocess');
-
-        let subprocess;
-
-        // New API introduced in
-        // https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/4491
-        if (typeof Meta.WaylandClient.prototype.new_subprocess === 'function') {
-            this._waylandClient =
-                Meta.WaylandClient.new_subprocess(
-                    global.context, this._launcher, argv
-                );
-            subprocess = this._waylandClient.get_subprocess();
-        } else {
-            // Old APIs
+        if (Meta.is_wayland_compositor()) {
             try {
-                // Previous API
+                this._waylandClient = Meta.WaylandClient.new(this._launcher);
+            } catch (e) {
                 this._waylandClient =
                     Meta.WaylandClient.new(global.context, this._launcher);
-            } catch (e) {
-                // Oldest API
-                this._waylandClient = Meta.WaylandClient.new(this._launcher);
             }
 
             if (Config.PACKAGE_VERSION === '3.38.0') {
                 // workaround for bug in 3.38.0
                 this._launcher.ref();
             }
-
-            subprocess = this._waylandClient.spawnv(global.display, argv);
         }
-
-        return subprocess;
+        this.subprocess = null;
+        this.process_running = false;
     }
 
     async spawnv(argv) {
         try {
-            if (Meta.is_wayland_compositor())
-                this.subprocess = this.makeWaylandClientSubprocess(argv);
-            else
+            if (Meta.is_wayland_compositor()) {
+                this.subprocess =
+                    this._waylandClient.spawnv(global.display, argv);
+            } else {
                 this.subprocess = this._launcher.spawnv(argv);
+            }
         } catch (e) {
             this.subprocess = null;
             throw e;
@@ -799,45 +778,30 @@ var LaunchSubprocess = class {
     }
 
     show_in_window_list(window) {
-        if (!Meta.is_wayland_compositor() || !this.process_running)
-            return;
-
-        if (typeof window.show_in_window_list === 'function')
-            // New Gnome 49 API
-            window.show_in_window_list();
-        else
-            this._waylandClient?.show_in_window_list(window);
+        if (Meta.is_wayland_compositor() && this.process_running)
+            this._waylandClient.show_in_window_list(window);
     }
 
     hide_from_window_list(window) {
-        if (!Meta.is_wayland_compositor() || !this.process_running)
-            return;
-
-        if (typeof window.hide_from_window_list === 'function')
-            // New Gnome 49 API
-            window.hide_from_window_list();
-        else
-            this._waylandClient?.hide_from_window_list(window);
+        if (Meta.is_wayland_compositor() && this.process_running)
+            this._waylandClient.hide_from_window_list(window);
     }
 
     make_desktop_window(window) {
         if (window.window_type === Meta.WindowType.DESKTOP)
             return true;
 
-        if (!Meta.is_wayland_compositor() || !this.process_running)
-            return false;
+        if (Meta.is_wayland_compositor() && this.process_running) {
+            try {
+                this._waylandClient.make_desktop(window);
+                console.log('Making Wayland window type Desktop');
 
-        try {
-            this._waylandClient.make_desktop(window);
-            console.log(
-                'Making Wayland window type Desktop with Meta.WaylandClient API'
-            );
-
-            return true;
-        } catch (e) {
-            console.log(
-                'No API to make window type Desktop available!'
-            );
+                return true;
+            } catch (e) {
+                console.log(
+                    'Meta.WaylandClient make_desktop() method not available!'
+                );
+            }
         }
 
         return false;
