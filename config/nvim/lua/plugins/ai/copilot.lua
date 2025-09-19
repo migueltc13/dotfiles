@@ -43,7 +43,7 @@ return {
                 cvs = true, -- default: false
                 ["."] = false,
             },
-            copilot_node_command = 'node', -- Node.js version must be > 16.x
+            copilot_node_command = 'node',  -- Node.js version must be > 20.x
             server_opts_overrides = {},
         })
         -- Remove legacy commands
