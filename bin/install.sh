@@ -438,12 +438,12 @@ if ask "Do you want to install neovim appimage?"; then
     case $choice in
         1)
             echo -e "${G}Installing latest stable neovim appimage...${N}"
-            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage &&
+            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage &&
                 chmod u+x nvim && sudo mv nvim /usr/local/bin
             ;;
         2)
             echo -e "${G}Installing latest nightly neovim appimage...${N}"
-            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage &&
+            eval wget "$debug_wget" -O nvim https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.appimage &&
                 chmod u+x nvim && sudo mv nvim /usr/local/bin
             ;;
         3)
