@@ -93,7 +93,7 @@ _G.lsp_on_attach = function()
     map('n', '<leader>rn', ':lua vim.lsp.buf.rename()\n',          desc('LSP: smart rename'))
     map('n', '<leader>ca', ':lua vim.lsp.buf.code_action()\n',     desc('LSP: code action'))
     map('n', '<leader>rs', ':LspRestart\n',                        desc('LSP: restart language server'))
-    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()<cr>', desc('LSP: show diagnostics for line'))
+    map('n', '<leader>dl', ':lua vim.diagnostic.open_float()\n',   desc('LSP: show diagnostics for line'))
     map('n', '<leader>db', ':Telescope diagnostics bufnr=0\n',     desc('LSP: show diagnostics for buffer'))
     map('n', '<leader>dw', ':Telescope diagnostics\n',             desc('LSP: show diagnostics for workspace'))
     map('n', '[d',         ':lua vim.diagnostic.goto_prev()\n',    desc('LSP: go to previous diagnostic'))
@@ -190,9 +190,13 @@ map({ 'i', 'c' }, '<A-l>', '<right>', desc('Move right', { remap = true }))
 -- map('n', '<down>', 'v:count ? "<down>" : "gj"', { expr = true, remap = true })
 -- map('n', '<up>',   'v:count ? "<up>"   : "gk"', { expr = true, remap = true })
 
--- Disable shift + up/down keys movement in all modes
-map({ 'i', 'n', 'v' }, '<S-Up>',   '<nop>', desc('Disable shift + up key movement'))
-map({ 'i', 'n', 'v' }, '<S-Down>', '<nop>', desc('Disable shift + down key movement'))
+-- Disable shift + up/down keys movement in insert mode
+map('i', '<S-Up>',   '<nop>', desc('Disable shift + up key movement'))
+map('i', '<S-Down>', '<nop>', desc('Disable shift + down key movement'))
+
+-- Disable shift + up/down keys default movement in normal and visual mode
+map({ 'n', 'v' }, '<S-Up>',   'k', desc('Go up',   { remap = true }))
+map({ 'n', 'v' }, '<S-Down>', 'j', desc('Go down', { remap = true }))
 
 -- Allow moving selected line(s) of text
 map('v', 'J', ':m \'>+1\ngv=gv', desc('Move selected line(s) down'))
@@ -223,8 +227,11 @@ map('n', '<leader>x',   Misc.make_executable,               desc('Make file exec
 -- Ctrl + click to open links
 map({'i', 'v', 'c', 't', 'n'}, '<C-LeftMouse>', '', desc('Open link', { remap = true }))
 
+-- Go to alternate buffer with Ctrl + ^
+map('n', '<C-\\>', '<cmd>b#<cr>', desc('Go to alternate buffer', { remap = true }))
+
 -- Allow Ctrl + ^ in insert mode
-map('i', '<C-^>', '<esc><C-^>', desc('[<C-^>]', { remap = true }))
+map('i', '<C-\\>', '<esc><C-\\>', desc('[<C-^>]', { remap = true }))
 
 -- Copy to the system clipboard (Ctrl + C)
 map('v', '<C-C>', '"+y',                          desc('Copy to system clipboard'))
