@@ -4,38 +4,58 @@ return {
     dependencies = {
         "mason.nvim",
         "hrsh7th/cmp-nvim-lsp", -- lsp source for nvim-cmp
-        -- { "antosha417/nvim-lsp-file-operations", config = true },
+        { "antosha417/nvim-lsp-file-operations", config = true },
+        { "folke/lazydev.nvim", opts = {} },
     },
     config = function()
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-        -- set rounded borders for floating windows
-        vim.diagnostic.config({
-            float = { border = "rounded" },
-        })
-        local handlers = {
-            ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
-            ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
-        }
-        require("lspconfig.ui.windows").default_options.border = "rounded"
-
-        -- Default LSP capabilities (completions capabilities are overridden by cmp-nvim-lsp)
+        -- Default LSP capabilities
         local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+        -- Override the completions capabilities with cmp-nvim-lsp
+        local cmp_nvim_lsp = require("cmp_nvim_lsp")
         capabilities.textDocument.completion = cmp_nvim_lsp.default_capabilities().textDocument.completion
 
         -- Change the Diagnostic symbols in the sign column (gutter)
-        local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-        for type, icon in pairs(signs) do
-            local hl = "DiagnosticSign" .. type
-            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-        end
+        vim.diagnostic.config({
+            signs = {
+                -- icons / symbols
+                text = {
+                    [vim.diagnostic.severity.ERROR] = " ",
+                    [vim.diagnostic.severity.WARN]  = " ",
+                    [vim.diagnostic.severity.INFO]  = " ",
+                    [vim.diagnostic.severity.HINT]  = "󰠠 ",
+                },
+                -- Add underline to the section of the line with the diagnostic
+                linehl = {
+                    [vim.diagnostic.severity.ERROR] = "Error",
+                    [vim.diagnostic.severity.WARN]  = "Warn",
+                    [vim.diagnostic.severity.INFO]  = "Info",
+                    [vim.diagnostic.severity.HINT]  = "Hint",
+                },
+                -- Add highlight color to the number column
+                numhl = {
+                    [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+                    [vim.diagnostic.severity.WARN]  = "WarningMsg",
+                    [vim.diagnostic.severity.INFO]  = "DiagnosticInfo",
+                    [vim.diagnostic.severity.HINT]  = "DiagnosticHint",
+                },
+            },
+            -- set rounded borders for floating windows
+            float = { border = "rounded" },
+            -- show virtual text (for each diagnostic)
+            virtual_text = true,
+        })
+
+        -- Default capabilities, on_attach function and handlers for all LSP servers
+        vim.lsp.config("*", {
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+        })
 
         -- LSPs with default configurations
         local servers = {
             "bashls",
             "hls",
-            "pylsp",
-            "lua_ls",
             "jdtls",
             "marksman",
             "html",
@@ -46,19 +66,12 @@ return {
         }
 
         for _, server in ipairs(servers) do
-            vim.lsp.config(server, {
-                capabilities = capabilities,
-                on_attach = lsp_on_attach,
-                handlers = handlers,
-            })
+            vim.lsp.config(server, {})
             vim.lsp.enable(server)
         end
 
         -- configure and enable python server
         vim.lsp.config("pylsp", {
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
             settings = {
                 pylsp = {
                     plugins = {
@@ -83,9 +96,6 @@ return {
 
         -- configure and enable lua server
         vim.lsp.config("lua_ls", {
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
             settings = {
                 Lua = {
                     runtime = {
@@ -109,9 +119,6 @@ return {
 
         -- configure and enable clangd server
         vim.lsp.config("clangd", {
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
             cmd = {
                 "clangd",
                 "--offset-encoding=utf-16",
@@ -122,9 +129,6 @@ return {
 
         -- configure and enable typescript server with vue support
         vim.lsp.config("ts_ls", {
-            capabilities = capabilities,
-            on_attach = lsp_on_attach,
-            handlers = handlers,
             init_options = {
                 plugins = {
                     {
@@ -134,7 +138,7 @@ return {
                     },
                 }
             },
-            filetypes = { "javascript", "vue" },
+            filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
         })
 
         vim.lsp.enable("ts_ls")
