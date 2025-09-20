@@ -164,7 +164,7 @@ map('n', '<A-u>', ':UndotreeToggle\n', desc('undotree: toggle'))
 map('n', '<leader>m', ':MaximizerToggle!\n', desc('vim-maximizer: toggle'))
 
 -- Lazy
-map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
+-- map('n', '<leader>l', ':Lazy\n', desc('lazy: open'))
 
 -- Which-key
 map('n', '<leader>k', ':WhichKey\n', desc('which-key: open'))
