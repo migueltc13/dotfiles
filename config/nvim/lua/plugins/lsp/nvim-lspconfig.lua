@@ -111,6 +111,9 @@ return {
                             [vim.fn.stdpath("config") .. "/lua"] = true,
                         },
                     },
+                    completion = {
+                        callSnippet = "Replace",  -- ensures function completions come with placeholders
+                    },
                 },
             },
         })
