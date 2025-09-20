@@ -1,34 +1,34 @@
 return {
-	"neovim/nvim-lspconfig",
-	event = "LazyFile",
-	dependencies = {
-		"mason.nvim",
-		"hrsh7th/cmp-nvim-lsp", -- lsp source for nvim-cmp
-		-- { "antosha417/nvim-lsp-file-operations", config = true },
-	},
-	config = function()
+    "neovim/nvim-lspconfig",
+    event = "LazyFile",
+    dependencies = {
+        "mason.nvim",
+        "hrsh7th/cmp-nvim-lsp", -- lsp source for nvim-cmp
+        -- { "antosha417/nvim-lsp-file-operations", config = true },
+    },
+    config = function()
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-		-- set rounded borders for floating windows
-		vim.diagnostic.config({
-			float = { border = "rounded" },
-		})
-		local handlers = {
-			["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
-			["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
-		}
-		require("lspconfig.ui.windows").default_options.border = "rounded"
+        -- set rounded borders for floating windows
+        vim.diagnostic.config({
+            float = { border = "rounded" },
+        })
+        local handlers = {
+            ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+            ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
+        }
+        require("lspconfig.ui.windows").default_options.border = "rounded"
 
-		-- Default LSP capabilities (completions capabilities are overridden by cmp-nvim-lsp)
-		local capabilities = vim.lsp.protocol.make_client_capabilities()
+        -- Default LSP capabilities (completions capabilities are overridden by cmp-nvim-lsp)
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities.textDocument.completion = cmp_nvim_lsp.default_capabilities().textDocument.completion
 
-		-- Change the Diagnostic symbols in the sign column (gutter)
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-		for type, icon in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-		end
+        -- Change the Diagnostic symbols in the sign column (gutter)
+        local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+        for type, icon in pairs(signs) do
+            local hl = "DiagnosticSign" .. type
+            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+        end
 
         -- LSPs with default configurations
         local servers = {
@@ -51,9 +51,10 @@ return {
                 on_attach = lsp_on_attach,
                 handlers = handlers,
             })
+            vim.lsp.enable(server)
         end
 
-		-- configure python server
+        -- configure and enable python server
         vim.lsp.config("pylsp", {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
@@ -78,42 +79,48 @@ return {
             }
         })
 
-		-- configure lua server
-		vim.lsp.config("lua_ls", {
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-			settings = {
-				Lua = {
+        vim.lsp.enable("pylsp")
+
+        -- configure and enable lua server
+        vim.lsp.config("lua_ls", {
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
+            settings = {
+                Lua = {
                     runtime = {
                         version = 'LuaJIT',
                     },
-					diagnostics = {
-						globals = { "vim", "require" },
-					},
-					workspace = {
-						-- make LS aware of runtime files
-						library = {
-							[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-							[vim.fn.stdpath("config") .. "/lua"] = true,
-						},
-					},
-				},
-			},
-		})
+                    diagnostics = {
+                        globals = { "vim", "require" },
+                    },
+                    workspace = {
+                        -- make LS aware of runtime files
+                        library = {
+                            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                            [vim.fn.stdpath("config") .. "/lua"] = true,
+                        },
+                    },
+                },
+            },
+        })
 
-		-- configure clangd server
-		vim.lsp.config("clangd", {
-			capabilities = capabilities,
-			on_attach = lsp_on_attach,
-			handlers = handlers,
-			cmd = {
-				"clangd",
-				"--offset-encoding=utf-16",
-			},
-		})
+        vim.lsp.enable("lua_ls")
 
-        -- configure typescript server with vue support
+        -- configure and enable clangd server
+        vim.lsp.config("clangd", {
+            capabilities = capabilities,
+            on_attach = lsp_on_attach,
+            handlers = handlers,
+            cmd = {
+                "clangd",
+                "--offset-encoding=utf-16",
+            },
+        })
+
+        vim.lsp.enable("clangd")
+
+        -- configure and enable typescript server with vue support
         vim.lsp.config("ts_ls", {
             capabilities = capabilities,
             on_attach = lsp_on_attach,
@@ -129,5 +136,7 @@ return {
             },
             filetypes = { "javascript", "vue" },
         })
-	end,
+
+        vim.lsp.enable("ts_ls")
+    end,
 }
