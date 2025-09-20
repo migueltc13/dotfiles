@@ -1,7 +1,7 @@
 return {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",
-    branch = "0.1.x",
+    branch = "master", -- or "0.1.x" (deprecated)
     dependencies = {
         "nvim-lua/plenary.nvim",
         "nvim-tree/nvim-web-devicons",
