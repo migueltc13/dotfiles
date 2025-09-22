@@ -238,6 +238,7 @@ ldap-utils
 less
 lhs2tex
 libarchive-dev
+libarchive-tools
 libasound2-plugins
 libatk-adaptor
 libblas-dev
@@ -456,6 +457,7 @@ rofi
 ronn
 rsync
 rsyslog
+ruby-dev
 samba
 sassc
 screenkey
@@ -532,7 +534,6 @@ valgrind
 vim-runtime
 vim-tiny
 vim
-virtualbox-qt
 vlc
 vulkan-tools
 w3m
