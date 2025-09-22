@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {Gdk, Gio, GLib, Gtk} from '../dependencies/gi.js';
+import {Gdk, Gio, GLib, Gtk, DesktopAppInfo} from '../dependencies/gi.js';
 import {_} from '../dependencies/gettext.js';
 
 export {DesktopActions};
@@ -110,7 +110,7 @@ const DesktopActions = class {
             'activate',
             () => {
                 const desktopFile =
-                    Gio.DesktopAppInfo.new('gnome-background-panel.desktop');
+                    DesktopAppInfo.new('gnome-background-panel.desktop');
                 const context =
                     Gdk.Display.get_default().get_app_launch_context();
                 context.set_timestamp(Gdk.CURRENT_TIME);
@@ -125,7 +125,7 @@ const DesktopActions = class {
             'activate',
             () => {
                 const desktopFile =
-                    Gio.DesktopAppInfo.new('gnome-display-panel.desktop');
+                    DesktopAppInfo.new('gnome-display-panel.desktop');
                 const context =
                     Gdk.Display.get_default().get_app_launch_context();
                 context.set_timestamp(Gdk.CURRENT_TIME);

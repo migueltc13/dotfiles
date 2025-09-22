@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Adw, GLib, Gtk, Gio, Gdk} from '../dependencies/gi.js';
+import {Adw, GLib, Gtk, Gio, Gdk, DesktopAppInfo} from '../dependencies/gi.js';
 import {_} from '../dependencies/gettext.js';
 
 export {Preferences};
@@ -64,7 +64,7 @@ const Preferences = class {
         }
 
         this._gnomeFilesAppInfo =
-            Gio.DesktopAppInfo.new('org.gnome.Nautilus.desktop');
+            DesktopAppInfo.new('org.gnome.Nautilus.desktop');
 
 
         // Compression
@@ -680,17 +680,17 @@ const Preferences = class {
         switch (defaultTerminal) {
         case 'gnome-terminal':
             terminal = 'org.gnome.Terminal.desktop';
-            terminalappinfo = Gio.DesktopAppInfo.new(terminal);
+            terminalappinfo = DesktopAppInfo.new(terminal);
             if (!terminalappinfo) {
                 terminal = 'org.gnome.Ptyxis.desktop';
-                terminalappinfo = Gio.DesktopAppInfo.new(terminal);
+                terminalappinfo = DesktopAppInfo.new(terminal);
             }
 
             break;
         case 'gnome-console':
         default:
             terminal = 'org.gnome.Console.desktop';
-            terminalappinfo = Gio.DesktopAppInfo.new(terminal);
+            terminalappinfo = DesktopAppInfo.new(terminal);
         }
 
         return  terminalappinfo ? [terminalappinfo] : [];
@@ -739,37 +739,18 @@ const Preferences = class {
 
     async _updateTerminalXdgData() {
         let xdgDataFiles = [];
-        let scanFolders = [];
+        const scanFiles = [this._xdgUserData, ...this._xdgSystemData];
 
-        scanFolders = [this._xdgUserData, ...this._xdgSystemData];
-
-        for (let f of scanFolders) {
+        for (let f of scanFiles) {
             if (f.query_exists(null)) {
-                const iter =
+                const systemFileContent =
                     // eslint-disable-next-line no-await-in-loop
-                    await f.enumerate_children_async(
-                        'standard::*',
-                        Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-                        GLib.PRIORITY_DEFAULT,
-                        null
-                    );
+                    await this._desktopIconsUtil.readFileContentsAsync(f);
 
-                // eslint-disable-next-line no-await-in-loop
-                for await (const fileInfo of iter) {
-                    const fileName = fileInfo.get_name();
+                const x =
+                    this._desktopIconsUtil.parseTerminalList(systemFileContent);
 
-                    if (!fileName.endsWith('.desktop'))
-                        continue;
-
-                    const fpath =
-                        GLib.build_filenamev([f.get_path(), fileName]);
-
-                    const appinfo =
-                        Gio.DesktopAppInfo.new_from_filename(fpath);
-
-                    if (appinfo)
-                        xdgDataFiles.push(appinfo);
-                }
+                xdgDataFiles = xdgDataFiles.concat(x);
             }
         }
 

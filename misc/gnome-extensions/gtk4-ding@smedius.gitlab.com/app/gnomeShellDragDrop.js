@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Gdk, Gio, GLib} from '../dependencies/gi.js';
+import {Gdk, Gio, GLib, DesktopAppInfo} from '../dependencies/gi.js';
 import {_} from '../dependencies/gettext.js';
 
 export {GnomeShellDrag};
@@ -201,7 +201,7 @@ const GnomeShellDrag = class {
         try {
             if (this._currentDesktopFileAppPath.endsWith('.desktop')) {
                 const desktopFile =
-                    Gio.DesktopAppInfo.new_from_filename(
+                    DesktopAppInfo.new_from_filename(
                         GLib.build_filenamev(
                             [this._currentDesktopFileAppPath]
                         )
@@ -277,7 +277,7 @@ const GnomeShellDrag = class {
         if (this._currentDesktopFileAppPath.endsWith('.desktop')) {
             try {
                 const desktopFile =
-                    Gio.DesktopAppInfo
+                    DesktopAppInfo
                     .new_from_filename(
                         GLib.build_filenamev([this._currentDesktopFileAppPath])
                     );

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {Gdk, Gio, GLib} from '../dependencies/gi.js';
+import {Gdk, Gio, GLib, DesktopAppInfo} from '../dependencies/gi.js';
 import {FileItemIcon} from '../dependencies/localFiles.js';
 
 import {_} from '../dependencies/gettext.js';
@@ -39,7 +39,7 @@ const DesktopFileIcon = class extends FileItemIcon {
 
         if (this._isDesktopFile) {
             try {
-                this._desktopFile = Gio.DesktopAppInfo.new_from_filename(
+                this._desktopFile = DesktopAppInfo.new_from_filename(
                     this._file.get_path()
                 );
 
@@ -74,7 +74,7 @@ const DesktopFileIcon = class extends FileItemIcon {
             return;
 
         this.desktopAppInfo =
-            Gio.DesktopAppInfo.new_from_filename(this.path);
+            DesktopAppInfo.new_from_filename(this.path);
 
         this.actionMap = new Map();
 

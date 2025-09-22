@@ -475,11 +475,15 @@ const adWDingApp = GObject.registerClass(
             } catch (e) {
                 if (e.matches(
                     Gio.IOErrorEnum,
-                    Gio.IOErrorEnum.NOT_EMPTY
+                    Gio.IOErrorEnum.NOT_FOUND
                 )) {
                     GLib.mkdir_with_parents(
                         GLib.path_get_dirname(destinationPath),
                         0o700
+                    );
+                    console.log(
+                        'Created missing parent directories: ' +
+                        `${GLib.path_get_dirname(destinationPath)}`
                     );
 
                     const retval = await this._installFile(

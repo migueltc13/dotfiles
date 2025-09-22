@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Gio, GLib, Gdk} from '../../dependencies/gi.js';
+import {Gio, GLib, Gdk, DesktopAppInfo} from '../../dependencies/gi.js';
 import {_} from '../../dependencies/gettext.js';
 
 export {DesktopIconsUtil};
@@ -96,7 +96,11 @@ const DesktopIconsUtil = class {
         const userDataDir = GLib.get_user_data_dir();
 
         const terminalDir =
-            GLib.build_filenamev([userDataDir, this.Enums.XDG_TERMINAL_DIR]);
+            GLib.build_filenamev([
+                userDataDir,
+                this.Enums.XDG_TERMINAL_DIR,
+                this.Enums.XDG_TERMINAL_LIST_FILE,
+            ]);
 
         return Gio.File.new_for_commandline_arg(terminalDir);
     }
@@ -106,7 +110,11 @@ const DesktopIconsUtil = class {
         const systemDataTerminalFiles = [];
 
         systemDataDirs.forEach(f => {
-            const file = GLib.build_filenamev([f, this.Enums.XDG_TERMINAL_DIR]);
+            const file = GLib.build_filenamev([
+                f,
+                this.Enums.XDG_TERMINAL_DIR,
+                this.Enums.XDG_TERMINAL_LIST_FILE,
+            ]);
             const gioFile = Gio.File.new_for_commandline_arg(file);
             systemDataTerminalFiles.push(gioFile);
         });
@@ -566,7 +574,7 @@ const DesktopIconsUtil = class {
      * entry in file
      */
     parseTerminalList(fileList) {
-        const regexpattern = /^[/\\*#]/;
+        const regexpattern = /^[/\\*#-]/;
         const terminalGioDesktopAppInfoArray = [];
 
         if (fileList.endsWith('\n'))
@@ -577,7 +585,7 @@ const DesktopIconsUtil = class {
 
         if (fileListArray.length) {
             fileListArray.forEach(f => {
-                const appinfo = Gio.DesktopAppInfo.new(f);
+                const appinfo = DesktopAppInfo.new(f.replace('+', ''));
                 if (appinfo)
                     terminalGioDesktopAppInfoArray.push(appinfo);
             });

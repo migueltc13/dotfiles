@@ -289,7 +289,13 @@ const aboutApp = class AboutDialog {
         );
 
         aboutDialog.set_release_notes(
-            `<p>* Adw version 100.5 for Gnome 45, 46, 47, 48</p>
+            `<p>* Adw version 100.7 for Gnome 45, 46, 47, 48 49</p>
+<ul><li>Fix Gnome 49 compatibility issues</li></ul>
+<ul><li>Fix xdg-terminal-exec directory detection in system data dirs</li></ul>
+            <p>* Adw version 100.6 for Gnome 45, 46, 47, 48 49</p>
+<ul><li>Adapt to new Gnome 49 Meta.Window and Meta.WaylandClient API</li></ul>
+<ul><li>Fix missing app icon if no parent icon folder</li></ul>
+            <p>* Adw version 100.5 for Gnome 45, 46, 47, 48</p>
 <ul><li>Set localized default desktop name</li></ul>
 <ul><li>Resizable open with dialog</li></ul>
 <ul><li>Fix custom icons size</li></ul>
