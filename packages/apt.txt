@@ -510,7 +510,6 @@ ttf-mscorefonts-installer
 tzdata
 ubuntu-advantage-tools
 ubuntu-docs
-ubuntu-drivers-common
 ubuntu-keyring
 ubuntu-minimal
 ubuntu-release-upgrader-core
