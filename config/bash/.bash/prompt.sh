@@ -61,6 +61,12 @@ _build_prompt() {
         git_part="${_l}├─┤\[\e[0m\]\[\e[3;36m\] ${branch}"
     fi
 
+    # Python virtual environment. Symbols: 󰌠      
+    local venv_part=""
+    if [ -n "$VIRTUAL_ENV" ]; then
+        venv_part="${_l}├─┤\[\e[0m\]\[\e[3;34m\]󰌠 $(basename "$VIRTUAL_ENV")"
+    fi
+
     # Stopped jobs stack. Symbols:   ⚙    
     local job_part=""
     local jobs=$(jobs -s)
@@ -72,7 +78,7 @@ _build_prompt() {
         job_part="${_l}├─┤${job_part}"
     fi
 
-    PS1="\[\e]0;\u@\h: \w\a\]${_l}╭──┤${_user}\u${_host}${_l}├─┤${_time}${_prompt_time}${_l}├─┤${_path}\w${git_part}${job_part}${_l}│\n${_l}╰─${_prompt_color}▶${_reset} "
+    PS1="\[\e]0;\u@\h: \w\a\]${_l}╭──┤${_user}\u${_host}${_l}├─┤${_time}${_prompt_time}${_l}├─┤${_path}\w${git_part}${venv_part}${job_part}${_l}│\n${_l}╰─${_prompt_color}▶${_reset} "
 
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '  # default prompt
 }
