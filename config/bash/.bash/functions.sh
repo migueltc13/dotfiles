@@ -92,9 +92,9 @@ function n() {
     nvim $result
 }
 
-# git: Add file(s) and commit them: "Create <file(s)>"
+# git: Add file(s) and commit them: "Add <file(s)>"
 function gac() {
-    git add "$@" && git commit -m "Create $*"
+    git add "$@" && git commit -m "Add $*"
 }
 
 # git: Add file(s) and commit them: "Update <file(s)>"
