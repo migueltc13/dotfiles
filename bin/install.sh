@@ -199,13 +199,6 @@ if ask "Do you want to copy bash config files?"; then
     mkdir -p "$HOME"/.bash
     echo -e "${G}Copying bash config files...${N}"
 
-    if ask "Do you want to copy .profile?"; then
-        echo -e "${G}Copying .profile...${N}"
-        cp config/bash/.profile "$HOME"
-    else
-        echo -e "${R}.profile was not copied.${N}"
-    fi
-
     cp config/bash/.bashrc "$HOME"
 
     if ask "Do you want to copy .bash/prompt.sh?"; then
@@ -215,6 +208,7 @@ if ask "Do you want to copy bash config files?"; then
         echo -e "${R}.bash/prompt.sh was not copied.${N}"
     fi
 
+    cp config/bash/.bash/LS_COLORS.sh "$HOME/.bash/"
     cp config/bash/.bash/colors.sh "$HOME/.bash/"
     cp config/bash/.bash/aliases.sh "$HOME/.bash/"
     cp config/bash/.bash/functions.sh "$HOME/.bash/"
