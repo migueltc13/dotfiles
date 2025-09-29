@@ -7,15 +7,28 @@ function which() {
             echo "${w#*$'\n'}"
             ;;
         *'is aliased to'*)
-            w="${w#*\`}"
-            echo "${w%\'*}"
+            # More verbose output:
+            # $ which python || command -v python
+            # alias python='python3'
+            alias "$1"
+
+            # Cleaner output:
+            # $ which python
+            # python3
+            # w="${w#*\`}"
+            # echo "${w%\'*}"
             ;;
         *'is hashed'*)
             w=${w::-1}
             echo "${w##* (}"
             ;;
         *)
-            echo "${w##* }"
+            local path="${w##* }"
+            if [ -L "$path" ]; then
+                echo "$path ⇒ $(readlink -f "$path")"
+            else
+                echo "$path"
+            fi
             ;;
     esac
 }
