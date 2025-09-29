@@ -127,6 +127,18 @@ nvm() {
     fi
 }
 
+# Lazy load miniconda3
+export IS_CONDA_LOADED=false
+conda() {
+    if [ "$IS_CONDA_LOADED" = false ]; then
+        . /opt/miniconda3/etc/profile.d/conda.sh
+        export IS_CONDA_LOADED=true
+        conda "$@"
+    else
+        command conda "$@"
+    fi
+}
+
 # Skip perl5 setup
 # if command -v perl &> /dev/null && [ -d "$HOME/perl5" ]; then
 #     export PATH="$HOME/perl5/bin${PATH:+:${PATH}}"
