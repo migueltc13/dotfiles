@@ -1,3 +1,5 @@
+## Version 14
+ * add Gnome 49 support
 ## Version 13
  * add Gnome 48 support
 ## Version 12
