@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Gtk, Gdk, Gio, Graphene, GLib, Pango, GdkPixbuf}
+import {Gtk, Gdk, Gio, Graphene, Gsk, GLib, Pango, GdkPixbuf}
     from '../dependencies/gi.js';
 
 import {_} from '../dependencies/gettext.js';
@@ -361,35 +361,8 @@ const DesktopIconItem = class {
             return false;
     }
 
-    _updateClickState(button, eventtime) {
-        const settings = Gtk.Settings.get_default();
-        let doubleClickTime = settings.gtk_double_click_time;
-
-        // Workaround for X11
-        if (this.DesktopIconsUtil.usingX11) {
-            eventtime = GLib.get_monotonic_time();
-            doubleClickTime *= 1000;
-        }
-
-        if ((button === this._lastClickButton) &&
-            ((eventtime - this._lastClickTime) < doubleClickTime))
-            this._clickCount++;
-        else
-            this._clickCount = 1;
-
-        this._lastClickTime = eventtime;
-        this._lastClickButton = button;
-    }
-
-    getClickCount() {
-        return this._clickCount;
-    }
-
-    _onPressButton(actor, X, Y, x, y, shiftPressed, controlPressed) {
+    _onPressButton(actor, nPress, X, Y, x, y, shiftPressed, controlPressed) {
         const button = actor.get_current_button();
-        const eventtime = actor.get_current_event_time();
-
-        this._updateClickState(button, eventtime);
 
         this._buttonPressInitialX = x - this._x1;
         this._buttonPressInitialY = y - this._y1;
@@ -399,6 +372,7 @@ const DesktopIconItem = class {
         if (button === 3) {
             this._doButtonThreePressed(
                 button,
+                nPress,
                 X, Y,
                 x, y,
                 shiftPressed,
@@ -407,12 +381,18 @@ const DesktopIconItem = class {
         } else if (button === 1) {
             this._doButtonOnePressed(
                 button,
+                nPress,
                 X, Y,
                 x, y,
                 shiftPressed,
                 controlPressed
             );
         }
+    }
+
+    _onLongPressButton(
+        _actor, _X, _Y, _x, _y, _button, _shiftPressed, _controlPressed) {
+        // Handle long press events here if needed
     }
 
     _onReleaseButton(actor, X, Y, x, y, shiftPressed, controlPressed) {
@@ -430,7 +410,9 @@ const DesktopIconItem = class {
         }
     }
 
-    _doButtonThreePressed(button, X, Y, x, y, shiftPressed, controlPressed) {
+    _doButtonThreePressed(
+        button, nPress, X, Y, x, y, shiftPressed, controlPressed
+    ) {
         if (!this._isSelected)
             this._dragManager.selected(this, this.Enums.Selection.RIGHT_BUTTON);
 
@@ -446,8 +428,10 @@ const DesktopIconItem = class {
         );
     }
 
-    _doButtonOnePressed(button, X, Y, x, y, shiftPressed, controlPressed) {
-        if (this.getClickCount() === 1) {
+    _doButtonOnePressed(
+        button, nPress, X, Y, x, y, shiftPressed, controlPressed
+    ) {
+        if (nPress === 1) {
             if (shiftPressed || controlPressed) {
                 this._dragManager.selected(
                     this,
@@ -462,8 +446,9 @@ const DesktopIconItem = class {
         }
     }
 
-    // eslint-disable-next-line no-unused-vars
-    _doButtonOneReleased(button, X, Y, x, y, shiftPressed, controlPressed) {
+    _doButtonOneReleased(
+        // eslint-disable-next-line no-unused-vars
+        button, nPressX, Y, x, y, shiftPressed, controlPressed) {
     }
 
     /** *********************
@@ -820,84 +805,42 @@ const DesktopIconItem = class {
                 finalSize / scale,
                 scale,
                 Gtk.TextDirection.NONE,
-                Gtk.IconLookupFlags.FORCE_SIZE
+                Gtk.IconLookupFlags.FORCE_SIZE |
+                Gtk.IconLookupFlags.FORCE_SYMBOLIC
             );
 
         const emblemWidth = emblemIcon.get_intrinsic_width();
         const emblemHeight = emblemIcon.get_intrinsic_height();
 
-        const emblemSnapshot = Gtk.Snapshot.new();
 
-        const origin = new Graphene.Point({x: 3, y: 3});
-        const size = new Graphene.Size(
-            {width: emblemWidth - 5, height: emblemHeight - 5}
-        );
-        const rect = new Graphene.Rect({origin, size});
-        const color = new Gdk.RGBA();
-        color.parse('rgba(255, 255, 255, 1.0)');
-        emblemSnapshot.append_color(
-            color,
-            rect
-        );
+        const emblemSnapshot = Gtk.Snapshot.new();
+        const rect = new Graphene.Rect();
+        rect.init(2, 2, emblemWidth - 4, emblemHeight - 4);
+        const rr = new Gsk.RoundedRect();
+        rr.init_from_rect(rect, 5);
+        emblemSnapshot.append_color(this.Prefs.hoverColor, rect);
         emblemIcon.snapshot(emblemSnapshot, emblemWidth, emblemHeight);
+        const emblemNode = emblemSnapshot.to_node();
 
         const iconPaintableSnapshot = Gtk.Snapshot.new();
         iconPaintable.snapshot(iconPaintableSnapshot, iconWidth, iconHeight);
+        iconPaintableSnapshot.save();
 
-        if (position === 0) {
+        if (!this._emblemX) {
             const desiredWidth = this.Prefs.DesiredWidth - 8;
             const estimatedWidth = iconWidth + 2 * emblemWidth;
             const finalWidth = Math.min(desiredWidth, estimatedWidth);
-
-            const newIconPaintableSnapshot = Gtk.Snapshot.new();
-            const xorigin = new Graphene.Point({x: 0, y: 0});
-
-            const xsize = new Graphene.Size(
-                {width: finalWidth, height: iconHeight}
-            );
-
-            const xrect = new Graphene.Rect({origin: xorigin, size: xsize});
-            const xcolor = new Gdk.RGBA();
-            xcolor.parse('rgba(0, 0, 0, 0)');
-
-            newIconPaintableSnapshot.append_color(
-                xcolor,
-                xrect
-            );
-
-            newIconPaintableSnapshot.translate(
-                new Graphene.Point({
-                    x: Math.round((finalWidth - iconWidth) / 2),
-                    y: 0,
-                })
-            );
-
-            newIconPaintableSnapshot
-            .append_node(iconPaintableSnapshot.to_node());
-
-            const emblemX =
-                Math.round((iconWidth + finalWidth) / 2 - emblemWidth);
-
-            newIconPaintableSnapshot
-            .translate(
-                new Graphene.Point(
-                    {
-                        x: emblemX,
-                        y: emblemHeight * position + Number(position) * 1,
-                    }
-                )
-            );
-
-            newIconPaintableSnapshot.append_node(emblemSnapshot.to_node());
-
-            return newIconPaintableSnapshot.to_paintable(null);
+            this._emblemX =
+                    Math.round((iconWidth + finalWidth) / 2 - emblemWidth);
         }
 
-        iconPaintableSnapshot.translate(new Graphene.Point({
-            x: iconWidth - emblemWidth,
-            y: emblemHeight * position + Number(position) * 1,
-        }));
-        iconPaintableSnapshot.append_node(emblemSnapshot.to_node());
+        const x = this._emblemX;
+        const y = Math.max(0, position * (emblemHeight + 1));
+
+        iconPaintableSnapshot.translate(new Graphene.Point({x, y}));
+        iconPaintableSnapshot.append_node(emblemNode);
+        iconPaintableSnapshot.restore();
+
         return iconPaintableSnapshot.to_paintable(null);
     }
 
@@ -970,6 +913,10 @@ const DesktopIconItem = class {
             return;
 
         this._state = state;
+    }
+
+    set opacity(number) {
+        this.container.set_opacity(number);
     }
 
     get dropCapable() {

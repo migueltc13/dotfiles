@@ -32,10 +32,13 @@ const Cairo = await import('gi://cairo')
     .catch(e => console.error(`Install Cairo for proper fallback pdf thumbnailing \n ${e}`));
 import gettext from 'gettext';
 
-import GioUnix from 'gi://GioUnix?version=2.0';
+const GioUnix = await import('gi://GioUnix?version=2.0')
+    .then(module => module.default)
+    .catch(_e => {
+        console.log('GioUnix not found, falling back to Gio...');
+    });
 
 var DesktopAppInfo;
-
 // Prefer GioUnix if available (newer GLib ≥ 2.80)
 if (GioUnix?.DesktopAppInfo)
     DesktopAppInfo = GioUnix.DesktopAppInfo;
@@ -44,8 +47,6 @@ else if (Gio?.DesktopAppInfo)
 
 if (!DesktopAppInfo)
     console.error('DesktopAppInfo is not available on this system!');
-
-console.log(`Using DesktopAppInfo from: ${DesktopAppInfo.$gtype?.name || 'unknown'}`);
 
 export {
     Adw,

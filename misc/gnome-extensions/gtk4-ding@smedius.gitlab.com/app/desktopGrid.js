@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Gtk, Gdk, GLib, Gio, Graphene, Gsk, Adw} from '../dependencies/gi.js';
+import {GObject, Gtk, Gdk, GLib, Gio, Graphene, Gsk, Adw} from '../dependencies/gi.js';
 import {_} from '../dependencies/gettext.js';
 
 export {DesktopGrid};
@@ -1261,7 +1261,7 @@ const DrawGrid =  class extends DisplayGrid {
 };
 
 
-const DesktopGrid = class extends DrawGrid {
+const ControlGrid = class extends DrawGrid {
     constructor(desktopManager, desktopName, desktopDescription, asDesktop) {
         super(desktopManager, desktopName, desktopDescription, asDesktop);
         this._addDragControllers();
@@ -1298,77 +1298,114 @@ const DesktopGrid = class extends DrawGrid {
         this._buttonClick.set_button(0);
         this._buttonClick.set_propagation_phase(Gtk.PropagationPhase.BUBBLE);
         this._container.add_controller(this._buttonClick);
+        this._buttonLongClick = Gtk.GestureLongPress.new();
+        this._buttonLongClick.set_button(0);
+        this._buttonLongClick.set_propagation_phase(Gtk.PropagationPhase.BUBBLE);
+        this._container.add_controller(this._buttonLongClick);
 
-        this._buttonClick.connect(
-            'pressed',
-            (actor, nPress, x, y) => {
-                if (this._desktopManager.closePopUps())
-                    return;
+        this._buttonClick.set_exclusive(true);
+        this._buttonLongClick.set_exclusive(true);
+        this._buttonClick.group(this._buttonLongClick);
+        this._longHandled = false;
 
-                const button = actor.get_current_button();
-                const state = this._buttonClick.get_current_event_state();
-                const isCtrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
-                const isShift = (state & Gdk.ModifierType.SHIFT_MASK) !== 0;
-                const [X, Y] = this.coordinatesLocalToGlobal(x, y);
+        this._buttonLongClick.connect('pressed', (actor, x, y) => {
+            this._longHandled = true;
+            this._doGestureLongPress(actor, x, y);
+        });
 
-                const clickItem = this._fileAt(x, y);
+        this._buttonLongClick.connect('cancelled', _actor => {
+            this._longHandled = false;
+        });
 
-                if (clickItem) {
-                    const clickRectangle =
-                        new Gdk.Rectangle({x: X, y: Y, width: 1, height: 1});
+        this._buttonClick.connect('pressed', (actor, nPress, x, y) => {
+            this._doGesturePress(actor, nPress, x, y);
+        });
 
-                    if (clickRectangle.intersect(clickItem.iconRectangle)[0] ||
-                        clickRectangle.intersect(clickItem.labelRectangle)[0]) {
-                        clickItem._onPressButton(
-                            actor,
-                            X, Y,
-                            x, y,
-                            isShift,
-                            isCtrl
-                        );
-                        return;
-                    }
-                }
+        this._buttonClick.connect('released', (actor, nPress, x, y) => {
+            if (this._longHandled)
+                this._longHandled = false;
 
-                this._desktopManager
-                .onPressButton(X, Y,
-                    x, y,
-                    button,
-                    isShift,
-                    isCtrl,
-                    this)
-                .catch(e => console.error(e));
-            }
-        );
-
-        this._buttonClick.connect(
-            'released',
-            (actor, nPress, x, y) => {
-                const state = this._buttonClick.get_current_event_state();
-                const isCtrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
-                const isShift = (state & Gdk.ModifierType.SHIFT_MASK) !== 0;
-                const [X, Y] = this.coordinatesLocalToGlobal(x, y);
-
-                const clickItem = this._fileAt(x, y);
-
-                if (clickItem && !this._dragManager.rubberBand) {
-                    const clickRectangle =
-                        new Gdk.Rectangle({x: X, y: Y, width: 1, height: 1});
-
-                    if (clickRectangle.intersect(clickItem.iconRectangle)[0] ||
-                        clickRectangle.intersect(clickItem.labelRectangle)[0]) {
-                        clickItem
-                        ._onReleaseButton(actor, X, Y, x, y, isShift, isCtrl);
-                        return;
-                    }
-                }
-
-                this._dragManager.onReleaseButton(this);
-            }
-        );
+            this._doGestureRelease(actor, nPress, x, y, this);
+        });
 
         this._setDropDestination(this._container);
         this._setDragSource(this._container);
+    }
+
+    _doGesturePress(actor, nPress, x, y) {
+        if (this._desktopManager.closePopUps())
+            return;
+
+        const button = actor.get_current_button();
+        const state = this._buttonClick.get_current_event_state();
+        const isCtrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
+        const isShift = (state & Gdk.ModifierType.SHIFT_MASK) !== 0;
+        const [X, Y] = this.coordinatesLocalToGlobal(x, y);
+
+        const clickItem = this._fileAt(x, y);
+
+        if (clickItem && this._clickItemClickable(clickItem, X, Y)) {
+            clickItem
+                ._onPressButton(actor, nPress, X, Y, x, y, isShift, isCtrl);
+            return;
+        }
+
+        this._desktopManager
+            .onPressButton(X, Y, x, y, button, isShift, isCtrl, this);
+    }
+
+    async _doGestureRelease(actor, nPress, x, y, grid) {
+        const button = actor.get_current_button();
+        const state = this._buttonClick.get_current_event_state();
+        const isCtrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
+        const isShift = (state & Gdk.ModifierType.SHIFT_MASK) !== 0;
+        const [X, Y] = this.coordinatesLocalToGlobal(x, y);
+
+        const clickItem = this._fileAt(x, y);
+        const clickItemClickable = this._clickItemClickable(clickItem, X, Y);
+
+        if (clickItemClickable && !this._dragManager.rubberBand) {
+            clickItem._onReleaseButton(
+                actor, nPress, X, Y, x, y, isShift, isCtrl);
+            return;
+        }
+
+        this._dragManager.onReleaseButton(this);
+
+        await this._desktopManager
+            .onReleaseButton(X, Y, x, y, button, isShift, isCtrl, grid)
+            .catch(logError);
+    }
+
+    _doGestureLongPress(actor, x, y) {
+        const button = actor.get_current_button();
+        const state = this._buttonClick.get_current_event_state();
+        const isCtrl = (state & Gdk.ModifierType.CONTROL_MASK) !== 0;
+        const isShift = (state & Gdk.ModifierType.SHIFT_MASK) !== 0;
+        const [X, Y] = this.coordinatesLocalToGlobal(x, y);
+
+        const clickItem = this._fileAt(x, y);
+        const clickItemClickable = this._clickItemClickable(clickItem, X, Y);
+
+        if (clickItemClickable) {
+            clickItem
+            ._onLongPressButton(actor, X, Y, x, y, isShift, isCtrl);
+            return;
+        }
+
+        this._desktopManager
+            .onLongPressButton(X, Y, x, y, button, isShift, isCtrl, this);
+    }
+
+    _clickItemClickable(clickedItem, X, Y) {
+        if (!clickedItem)
+            return false;
+
+        const clickRectangle =
+            new Gdk.Rectangle({x: X, y: Y, width: 1, height: 1});
+
+        return clickRectangle.intersect(clickedItem.iconRectangle)[0] ||
+            clickRectangle.intersect(clickedItem.labelRectangle)[0];
     }
 
     _setDropDestination(widget) {
@@ -2110,5 +2147,434 @@ const DesktopGrid = class extends DrawGrid {
             GLib.Source.remove(this.directoryOpenTimer);
 
         this.directoryOpenTimer = 0;
+    }
+};
+
+/* A Picture that can translate itself at paint time (render-only) */
+const OffsetPicture = GObject.registerClass({
+    Properties: {
+        'tx': GObject.ParamSpec.double('tx', 'tx', 'translate x',
+            GObject.ParamFlags.READWRITE | GObject.ParamFlags.EXPLICIT_NOTIFY,
+            -1e6, 1e6, 0.0),
+        'ty': GObject.ParamSpec.double('ty', 'ty', 'translate y',
+            GObject.ParamFlags.READWRITE | GObject.ParamFlags.EXPLICIT_NOTIFY,
+            -1e6, 1e6, 0.0),
+        'scale':  GObject.ParamSpec.double('scale', '', '',
+            GObject.ParamFlags.READWRITE, 0.5, 2.0, 1.0),
+        'pivot-x': GObject.ParamSpec.double('pivot-x', '', '',
+            GObject.ParamFlags.READWRITE, -1e6, 1e6, 0),
+        'pivot-y': GObject.ParamSpec.double('pivot-y', '', '',
+            GObject.ParamFlags.READWRITE, -1e6, 1e6, 0),
+    },
+}, class OffsetPicture extends Gtk.Picture {
+    constructor(props = {}) {
+        super(
+            Object.assign({
+                hexpand: false,
+                vexpand: false,
+                halign: Gtk.Align.START,
+                valign: Gtk.Align.START,
+                can_target: false,
+            },
+            props)
+        );
+        this._tx = 0.0;
+        this._ty = 0.0;
+        this._scale = 1.0;
+        this._pivot_x = 0.0;
+        this._pivot_y = 0.0;
+    }
+
+    get tx() {
+        return this._tx;
+    }
+
+    set tx(v) {
+        v = Number(v);
+        if (v !== this._tx) {
+            this._tx = v;
+            this.notify('tx');
+            this.queue_draw();
+        }
+    }
+
+    get ty() {
+        return this._ty;
+    }
+
+    set ty(v) {
+        v = Number(v);
+        if (v !== this._ty) {
+            this._ty = v;
+            this.notify('ty');
+            this.queue_draw();
+        }
+    }
+
+    get scale() {
+        return this._scale;
+    }
+
+    set scale(v) {
+        v = Number(v);
+        if (v !== this._scale) {
+            this._scale = v;
+            this.notify('scale');
+            this.queue_draw();
+        }
+    }
+
+    get pivot_x() {
+        return this._pivot_x;
+    }
+
+    set pivot_x(v) {
+        v = Number(v);
+        if (v !== this._pivot_x) {
+            this._pivot_x = v;
+            this.notify('pivot-x');
+            this.queue_draw();
+        }
+    }
+
+    get pivot_y() {
+        return this._pivot_y;
+    }
+
+    set pivot_y(v) {
+        v = Number(v);
+        if (v !== this._pivot_y) {
+            this._pivot_y = v;
+            this.notify('pivot-y');
+            this.queue_draw();
+        }
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    vfunc_snapshot(snapshot) {
+        const a = this.get_allocation();
+        if (a.width <= 0 || a.height <= 0)
+            return;
+
+        snapshot.save();
+        try {
+            const rect = new Graphene.Rect();
+            rect.init(0, 0, a.width, a.height);
+            snapshot.push_clip(rect);
+            try {
+                snapshot.translate(
+                    new Graphene.Point({x: this._tx, y: this._ty}));
+                snapshot.translate(
+                    new Graphene.Point({x: this.pivot_x, y: this.pivot_y}));
+                snapshot.scale(this.scale, this.scale);
+                snapshot.translate(
+                    new Graphene.Point({x: -this.pivot_x, y: -this.pivot_y}));
+
+                super.vfunc_snapshot(snapshot);
+            } finally {
+                snapshot.pop();
+            }
+        } finally {
+            snapshot.restore();
+        }
+    }
+});
+
+const DesktopGrid = class extends ControlGrid {
+    constructor(desktopManager, desktopName, desktopDescription, asDesktop) {
+        super(desktopManager, desktopName, desktopDescription, asDesktop);
+        this._snapshotPic = new OffsetPicture();
+        this._oldMargins = null;
+        this._animationInProgress = false;
+        this._freezeDesktop = false;
+        this._pendingMargins = null;
+        this._newMargins = null;
+        this._tweenDelta = null;
+        this._reverse = 0.33; // single tuning knob for spring snappiness
+        // in ms
+        this._duration =  Math.max(350, this.Enums.TRANSITIONDURATION ?? 0);
+        this._setupAnimations();
+    }
+
+    destroy() {
+        if (this._relayoutCoalesceSource) {
+            GLib.source_remove(this._relayoutCoalesceSource);
+            this._relayoutCoalesceSource = 0;
+        }
+        super.destroy();
+    }
+
+    _setupAnimations() {
+        this._setupSpringAnimation();
+        this._setupOffsetAnimation();
+    }
+
+    _captureSnapshotPaintable(widget) {
+        return new Promise(resolve => {
+            const width = widget.get_width();
+            const height = widget.get_height();
+            const size = new Graphene.Size({width, height});
+            try {
+                const snap = Gtk.Snapshot.new();
+                widget.vfunc_snapshot(snap);
+                resolve(snap.to_paintable(size));
+            } catch (e) {
+                logError(e);
+                GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                    try {
+                        const snap = Gtk.Snapshot.new();
+                        widget.vfunc_snapshot(snap);
+                        resolve(snap.to_paintable(size));
+                    } catch (ee) {
+                        logError(ee);
+                        const gdkpic =
+                            Gtk.WidgetPaintable.new(widget).get_current_image();
+                        resolve(gdkpic);
+                    }
+                    return GLib.SOURCE_REMOVE;
+                });
+            }
+        });
+    }
+
+    async displaySnapshot() {
+        if (this._freezeDesktop)
+            return;
+
+        this._freezeDesktop = true;
+        const snapshot = await this._captureSnapshotPaintable(this._window);
+        this._resetAll();
+        this._snapshotPic.set_paintable(snapshot);
+
+        this._oldMargins = this._getCurrentMargins();
+
+        this._overlay.add_overlay(this._snapshotPic);
+
+        this._snapshotPic.opacity = 1;
+        this._overlay.queue_draw();
+        this._container.opacity = 0;
+        this._container.queue_draw();
+    }
+
+    _getCurrentMargins() {
+        const margin = {
+            left: this._marginLeft ?? 0,
+            top:  this._marginTop  ?? 0,
+            right: this._marginRight ?? 0,
+            bottom: this._marginBottom ?? 0,
+        };
+        const contentRectangle = this._computeContentRectangle(margin);
+        margin.contentRectangle = contentRectangle;
+        return margin;
+    }
+
+    _computeContentRectangle(margins) {
+        const contentRectangle = new Gdk.Rectangle({
+            x: margins.left,
+            y: margins.top,
+            width: this._windowWidth - margins.left - margins.right,
+            height: this._windowHeight - margins.top - margins.bottom,
+        });
+        return contentRectangle;
+    }
+
+    _setLiveOffset(dx, dy) {
+        this._snapshotPic.tx = Math.round(dx);
+        this._snapshotPic.ty = Math.round(dy);
+    }
+
+    _setLiveTransform(scale, pivotx, pivoty) {
+        this._snapshotPic.scale = Number(scale);
+        this._snapshotPic.pivot_x = Math.round(pivotx);
+        this._snapshotPic.pivot_y = Math.round(pivoty);
+    }
+
+    _resetLiveTransform() {
+        this._setLiveTransform(1.0, 0, 0);
+    }
+
+    _resetLiveOffset() {
+        this._setLiveOffset(0, 0);
+    }
+
+    _resetAll() {
+        this._resetLiveOffset();
+        this._resetLiveTransform();
+    }
+
+    _clearOverlay(widget) {
+        if (widget?.get_parent() === this._overlay)
+            this._overlay.remove_overlay(widget);
+    }
+
+    _displayLive() {
+        this._container.opacity = 1.0;
+        this._snapshotPic.opacity = 0;
+        this._container.queue_draw();
+        this._resetAll();
+        this._clearOverlay(this._snapshotPic);
+        this._animationInProgress = false;
+        this._freezeDesktop = false;
+    }
+
+    _computeTweenDelta(Old, New) {
+        const sameShape =
+            Old.contentRectangle.width === New.contentRectangle.width &&
+            Old.contentRectangle.height === New.contentRectangle.height;
+
+        if (sameShape) {
+            // If the content rectangles are the same shape, we can just tween
+            // the top left corner of the content rectangle as the anchor
+            // for pixel perfect alignment of the content rectangle.
+            const anchor = 'topleft';
+            const dx = Old.left - New.left;
+            const dy = Old.top - New.top;
+            const pivotx = Old.contentRectangle.x;
+            const pivoty = Old.contentRectangle.y;
+
+            return {sameShape, anchor, dx, dy, pivotx, pivoty};
+        }
+
+        // If the content rectangles are not the same shape, or if the
+        // or both axis changed size, then we cannot just tween the
+        // top left corner of the content rectangle as the anchor.
+        // Instead, we need to tween the center, to account for the
+        // difference in aspect ratio.
+        const ocx = Old.contentRectangle.x + Old.contentRectangle.width  / 2;
+        const ocy = Old.contentRectangle.y + Old.contentRectangle.height / 2;
+        const ncx = New.contentRectangle.x + New.contentRectangle.width  / 2;
+        const ncy = New.contentRectangle.y + New.contentRectangle.height / 2;
+        const anchor = 'center';
+        const dx = ocx - ncx;
+        const dy = ocy - ncy;
+        const pivotx = ncx;
+        const pivoty = ncy;
+
+        return {sameShape, anchor, dx, dy, pivotx, pivoty};
+    }
+
+    requestAnimatedRelayout() {
+        if (this._relayoutCoalesceSource) {
+            GLib.source_remove(this._relayoutCoalesceSource);
+            this._relayoutCoalesceSource = 0;
+        }
+
+        // coalesce multiple relayouts within this time
+        const relayoutBurstMs = 100;
+
+        this._pendingMargins = this._getCurrentMargins();
+
+        this._relayoutCoalesceSource = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT, relayoutBurstMs, () => {
+                this._playRelayoutTransition(this._pendingMargins);
+                this._relayoutCoalesceSource = 0;
+                this._pendingMargins = null;
+                return GLib.SOURCE_REMOVE;
+            }
+        );
+    }
+
+    _setupSpringAnimation() {
+        const dampingRatio = 0.58; // < 1 => underdamped (dip then settle)
+        const stiffness   = 250 + Math.round((1 - this._reverse) * 350);
+        const mass        = 1.0;
+
+        const springParams =
+            Adw.SpringParams.new(dampingRatio, mass, stiffness);
+
+        const springTarget = Adw.CallbackAnimationTarget.new(v => {
+            const s = Number(v); // animates around 1.0 due to initial_velocity
+            this._setLiveTransform(
+                s, this._tweenDelta.pivotx, this._tweenDelta.pivoty
+            );
+        });
+
+        this._springAnimation = new Adw.SpringAnimation({
+            widget: this._overlay,
+            value_from: 1.0,
+            value_to:   1.0,
+            spring_params: springParams,
+            initial_velocity: -3.0, // negative => dip “away”, then return
+            epsilon: 0.001,
+            clamp: false,
+            target: springTarget,
+        });
+    }
+
+    _setupOffsetAnimation() {
+        const target = Adw.CallbackAnimationTarget.new(value => {
+            const t = Number(value); // 0.0 to 1.0
+            const x = Math.round(-this._tweenDelta.dx * t);
+            const y = Math.round(-this._tweenDelta.dy * t);
+            this._setLiveOffset(x, y);
+            this._snapshotPic.opacity = 1 - t;
+
+            // Fade in the NEW container only near the end
+            if (t > 0.8)
+                this._container.opacity = t;
+        });
+
+        this._offsetAnim = new Adw.TimedAnimation({
+            widget: this._overlay,
+            value_from: 0.0,
+            value_to: 1.0,
+            duration: this._duration,
+            easing: Adw.Easing.EASE_OUT_CUBIC,
+            target,
+        });
+
+        this._offsetAnim.connect('done', () => {
+            this._setLiveOffset(-this._tweenDelta.dx, -this._tweenDelta.dy);
+            // Ensure we end exactly at identity scale
+            if (this._moveAway) {
+                this._setLiveTransform(
+                    1.0, this._tweenDelta.pivotx, this._tweenDelta.pivoty
+                );
+            }
+            this._displayLive();
+        });
+    }
+
+    _playRelayoutTransition(pendingMargins = null) {
+        if (!this.animationsEnabled || !this._freezeDesktop) {
+            this._displayLive();
+            return;
+        }
+
+        if (this._animationInProgress) {
+            this._offsetAnim.pause();
+            this._springAnimation.pause();
+        }
+
+        this._animationInProgress = true;
+        this._newMargins = pendingMargins ?? this._getCurrentMargins();
+
+        this._tweenDelta =
+            this._computeTweenDelta(this._oldMargins, this._newMargins);
+
+        const noshift = this._tweenDelta.dx === 0 && this._tweenDelta.dy === 0;
+        this._moveAway = !this._tweenDelta.sameShape;
+        if (noshift && !this._moveAway) {
+            // No visible change, so just end the animation
+            this._displayLive();
+            return;
+        }
+        // Initialize transform for the OLD snapshot we are animating
+        // - translation starts at the old position
+        // - scale is 1.0 (no depth change yet)
+        // - pivot is from tweenDelta (center for shape change, topleft otherwise)
+        this._setLiveOffset(0, 0);
+        this._setLiveTransform(1.0,
+            this._tweenDelta.pivotx,
+            this._tweenDelta.pivoty
+        );
+
+        this._offsetAnim.play();
+        if (this._moveAway)
+            this._springAnimation.play();
+    }
+
+    get animationsEnabled() {
+        return this.Prefs.globalAnimations;
     }
 };

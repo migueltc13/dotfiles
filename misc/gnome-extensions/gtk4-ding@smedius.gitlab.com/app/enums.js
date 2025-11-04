@@ -174,3 +174,4 @@ export const IgnoreKeys = [
     'KEY_Meta_R', 'KEY_Alt_L', 'KEY_Alt_R', 'KEY_Super_L',
     'KEY_Super_R', 'KEY_ISO_Level3_Shift', 'KEY_ISO_Level5_Shift',
 ];
+export const TRANSITIONDURATION = 500; // in ms

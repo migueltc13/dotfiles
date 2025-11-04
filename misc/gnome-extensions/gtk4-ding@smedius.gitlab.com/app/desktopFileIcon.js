@@ -149,26 +149,21 @@ const DesktopFileIcon = class extends FileItemIcon {
 
         if (this._writableByOthers || !this._attributeCanExecute) {
             const title = _('Invalid Permissions on Desktop File');
-            let error =
-                _(
-                    'This .desktop File has incorrect Permissions.' +
-                    ' Right Click to edit Properties, then:\n'
-                );
+            const a =  _('This Desktop File has incorrect Permissions.');
+            const aa = _('Right Click to edit Properties, then:');
+            let error = `${a} ${aa}\n`;
+            const b = _('Set Permissions, in');
+            const c = _('Others Access');
+            const d = _('Read Only');
+            const e = _('or');
+            const f = _('None');
+            const g = _('Enable option');
+            const h = _('Allow Executing File as a Program');
+            if (this._writableByOthers)
+                error += `\n${b} "${c}", "${d}" ${e} "${f}"`;
 
-            if (this._writableByOthers) {
-                error +=
-                _(
-                    '\nSet Permissions, in "Others Access",' +
-                    ' "Read Only" or "None"'
-                );
-            }
-
-            if (!this._attributeCanExecute) {
-                error +=
-                _(
-                    '\nEnable option, "Allow Executing File as a Program"'
-                );
-            }
+            if (!this._attributeCanExecute)
+                error += `\n${g}, "${h}"`;
 
             this._showerrorpopup(title, error);
             return;
@@ -176,13 +171,13 @@ const DesktopFileIcon = class extends FileItemIcon {
 
         if (!this.trustedDesktopFile) {
             const title = _('Untrusted Desktop File');
-            const error =
-                _(
-                    'This .desktop file is not trusted, it can not be' +
-                    ' launched. To enable launching, right-click, then:\n\n' +
-                    'Enable "Allow Launching"'
-                );
+            const a =
+                _('This Desktop file is not trusted, it can not be launched.');
+            const b = _('To enable launching, right-click, then:');
+            const c = _('enable');
+            const d = _('Allow Launching');
 
+            const error = `${a} ${b}\n\n${c} "${d}"`;
             this._showerrorpopup(title, error);
             return;
         }

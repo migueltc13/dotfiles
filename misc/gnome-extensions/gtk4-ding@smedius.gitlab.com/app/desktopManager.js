@@ -189,13 +189,26 @@ const DesktopManager = class {
             await runDialog;
         }
 
-        const isFolder = this._desktopDir.query_file_type(
+        const fileType = this._desktopDir.query_file_type(
             Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-            null) === Gio.FileType.DIRECTORY;
-        if (!isFolder) {
+            null);
+        if (fileType === Gio.FileType.SYMBOLIC_LINK) {
+            const header = _('Can Not Show the Desktop');
+            // TRANSLATORS: {desktop} folder path automatically inserted
+            const text = _('The Desktop folder {desktop} is a Symbolic Link\n\nPlease set the Desktop Folder to a real Folder');
             const errorDialog = this.showError(
-                _('Can Not Show the Desktop'),
-                _(`The Desktop folder ${this._desktopDir.get_path()} does not exist, or is not a Directory\n\nCheck your xdg-utils installation and set the correct Desktop Folder`)
+                header,
+                text.replace('{desktop}', this._desktopDir.get_path())
+            );
+            await errorDialog.run();
+            this._desktops.forEach(d => d.setErrorState());
+        } else if (fileType !== Gio.FileType.DIRECTORY) {
+            const header = _('Can Not Show the Desktop');
+            // TRANSLATORS: {desktop} folder path automatically inserted
+            const text = _('The Desktop folder {desktop} does not exist, or is not a Directory\n\nCheck your xdg-utils installation and set the correct Desktop Folder');
+            const errorDialog = this.showError(
+                header,
+                text.replace('{desktop}', this._desktopDir.get_path())
             );
             await errorDialog.run();
             this._desktops.forEach(d => d.setErrorState());
@@ -203,30 +216,25 @@ const DesktopManager = class {
 
         const inodeHandlers = Gio.AppInfo.get_all_for_type('inode/directory');
         if (!GLib.find_program_in_path('nautilus')) {
-            const errorDialog = this.showError(
-                _('GNOME Files not found'),
-                _('The GNOME Files application is required by Gtk4 Desktop Icons NG.')
-            );
+            const header = _('GNOME Files not found');
+            const text = _('The GNOME Files application is required by Gtk4 Desktop Icons NG.');
+            const errorDialog = this.showError(header, text);
             await errorDialog.run();
         }
 
         if (!inodeHandlers.length) {
             const helpURL = 'https://gitlab.com/smedius/desktop-icons-ng/-/issues/73';
-            const errorDialog = this.showError(
-                _('There is no default File Manager'),
-                _('There is no application that handles mimetype "inode/directory"'),
-                helpURL
-            );
+            const header = _('There is no default File Manager');
+            const text = _('There is no application that handles mimetype "inode/directory"');
+            const errorDialog = this.showError(header, text, helpURL);
             await errorDialog.run();
         }
 
         if (!inodeHandlers.map(a => a.get_id()).includes('org.gnome.Nautilus.desktop')) {
             const helpURL = 'https://gitlab.com/smedius/desktop-icons-ng/-/issues/73';
-            const errorDialog = this.showError(
-                _('Gnome Files is not registered as a File Manager'),
-                _('The Gnome Files application is not programmed to open Folders!\nCheck your xdg-utils installation\nCheck Gnome Files .desktop File installation'),
-                helpURL
-            );
+            const header = _('Gnome Files is not registered as a File Manager');
+            const text = _('The Gnome Files application is not programmed to open Folders!\nCheck your xdg-utils installation\nCheck Gnome Files .desktop File installation');
+            const errorDialog = this.showError(header, text, helpURL);
             await errorDialog.run();
         }
     }
@@ -266,13 +274,7 @@ const DesktopManager = class {
 
     // Keyboard and Mouse Events
 
-    async onPressButton(X, Y,
-        x, y,
-        button,
-        shiftPressed,
-        controlPressed,
-        grid
-    ) {
+    onPressButton(X, Y, x, y, button, shiftPressed, controlPressed) {
         this._clickX = Math.floor(X);
         this._clickY = Math.floor(Y);
 
@@ -284,13 +286,20 @@ const DesktopManager = class {
             }
             this.dragManager.startRubberband(X, Y);
         }
+    }
 
+    async onReleaseButton(X, Y, x, y, button, isShift, isCtrl, grid) {
         // Right Click
         if (button === 3) {
             await this.desktopMenuManager
                 .showDesktopMenu(x, y, grid)
                 .catch(e => logError(e));
         }
+    }
+
+    onLongPressButton(_X, _Y, _x, _y, button, _isShift, _isCtrl, _grid) {
+        if (button === 3)
+            this.mainApp.activate_action('displayShellBackgroundMenu', null);
     }
 
     onKeyPress(keyval, keycode, state, grid) {
@@ -1287,6 +1296,7 @@ const DesktopManager = class {
                 this.unselectAll();
 
             this.mainApp.activate_action('textEntryAccelsTurnOn', null);
+            this._displayList.forEach(f => (f.opacity = 1));
             this._findFileWindow.destroy();
             this._findFileWindow = null;
         });
@@ -1314,10 +1324,18 @@ const DesktopManager = class {
         if (found.length !== 0) {
             if (setselected) {
                 this.unselectAll();
-                found.map(f => f.setSelected());
+                const notfound = this._displayList.filter(
+                    f => !found.includes(f)
+                );
+                found.forEach(f => {
+                    f.setSelected();
+                    f.opacity = 1;
+                });
+                notfound.forEach(f => (f.opacity = 0.2));
             }
             return true;
         } else {
+            this.unselectAll();
             return false;
         }
     }
@@ -1450,7 +1468,10 @@ const DesktopManager = class {
     }
 
     unselectAll() {
-        this._displayList.map(f => f.unsetSelected());
+        this._displayList.forEach(f => {
+            f.unsetSelected();
+            f.opacity = 1;
+        });
         this.fileItemMenu.activeFileItem = null;
     }
 

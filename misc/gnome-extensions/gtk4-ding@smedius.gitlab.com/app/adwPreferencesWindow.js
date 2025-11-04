@@ -277,7 +277,8 @@ const aboutApp = class AboutDialog {
         );
 
         aboutDialog.set_translator_credits(
-            'Weblate Translators, See History.MD on website.'
+            `Weblate Translators, See History.MD on website. Translated using machine translation with LibreTranslate. Unverified strings, translation may contain errors. Corrections, verification and additional translation can be done on Weblate.
+            Translations available in- ar,az,be,bg,bn,ca,cs,da,de,el,eo,es,et,eu,fa,fi,fr,fur,ga,gl,he,hi,hr,hu,id,it,ja,ka,ko,ky,lv,lt,ms,nb,nb_NO,nl,oc,pl,pt_BR,pt,ro,ru,sk,sl,sq,sv,ta,tl,tr,th,uk,ur,zh-Hans,zh-Hant,zh_CN,zh_TW.`
         );
 
         aboutDialog.set_version(this.version);
@@ -289,7 +290,15 @@ const aboutApp = class AboutDialog {
         );
 
         aboutDialog.set_release_notes(
-            `<p>* Adw version 100.7 for Gnome 45, 46, 47, 48 49</p>
+            `<p>* Adw version 100.9 for Gnome 45, 46, 47, 48 49</p>
+<ul><li>Machine Translation with LibreTranslate to all supported languages</li></ul>
+            <p>* Adw version 100.8-2 for Gnome 45, 46, 47, 48 49</p>
+<ul><li>Bug fix for older gnome versions with no GioUnix namespace</li></ul>
+            <p>* Adw version 100.8 for Gnome 45, 46, 47, 48 49</p>
+<ul><li>Animate margin changes. Respects global Gtk4/Gnome animation settings</li></ul>
+<ul><li>Right long-click brings up gnome shell background menu directly</li></ul>
+<ul><li>Improve search UI, unselected items are now properly dimmed to highlight the selected</li></ul>
+            <p>* Adw version 100.7 for Gnome 45, 46, 47, 48 49</p>
 <ul><li>Fix Gnome 49 compatibility issues</li></ul>
 <ul><li>Fix xdg-terminal-exec directory detection in system data dirs</li></ul>
             <p>* Adw version 100.6 for Gnome 45, 46, 47, 48 49</p>
@@ -688,14 +697,14 @@ const AdwPreferencesWindow = class extends DingPreferencesWindow {
         aboutGroup.add(aboutButton);
 
         const tranlationGroup = new Adw.PreferencesGroup({
-            title: _('Translations'),
-            description: _('All tranlations on Weblate..'),
+            title: _('Translation'),
+            description: _('Machine translated using LibreTranslate. User verified and edited on Weblate.'),
         });
 
         aboutFrame.add(tranlationGroup);
 
-        tranlationGroup.add(this.addActionRowButton(_('Translations'),
-            _('Help translate in your web browser'),
+        tranlationGroup.add(this.addActionRowButton(_('Edit Translations'),
+            _('Verify, add or correct translation in your web browser'),
             _('Translate'),
             this.launchWebTranslation.bind(this)
         ));

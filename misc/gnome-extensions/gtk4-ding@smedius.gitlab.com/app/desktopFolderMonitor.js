@@ -91,18 +91,22 @@ const DesktopMonitor = class extends DesktopFolderUtils {
     }
 
     onDesktopFolderChanged(newDesktopDir) {
-        const isFolder =
+        const fileType =
             newDesktopDir.query_file_type(
                 Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
                 null
-            ) === Gio.FileType.DIRECTORY;
+            );
 
-        if (!isFolder) {
-            const header =
-                _('Desktop Folder Change Failed');
+        if (fileType === Gio.FileType.SYMBOLIC_LINK) {
+            const header =  _('Desktop Folder Change Failed');
+            const text = _('The new Desktop Folder is a Symbolic Link');
 
+            this.dbusManager.doNotify(header, text);
+            return;
+        } else if (fileType !== Gio.FileType.DIRECTORY) {
+            const header = _('Desktop Folder Change Failed');
             const text =
-                _('The new Desktop Folder does not exist!');
+                _('The new Desktop Folder does not exist or is not a Folder!');
 
             this.dbusManager.doNotify(header, text);
             return;

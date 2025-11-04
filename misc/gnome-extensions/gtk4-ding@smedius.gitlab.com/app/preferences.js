@@ -220,6 +220,11 @@ const Preferences = class {
 
         this.darkmode = this._adwStyleManager.get_dark();
         this._premultiplied = this._getPreMultiplied();
+
+        // Gtk Theme and animation Changes
+        this._gtkSettings =
+            Gtk.Settings.get_for_display(Gdk.Display.get_default());
+        this._refreshAnimations();
     }
 
     getAdwPreferencesWindow() {
@@ -449,12 +454,11 @@ const Preferences = class {
             this._refreshDesktopAndColors();
         });
 
-        // Gtk Theme Changes
-        this._gtkSettings =
-            Gtk.Settings.get_for_display(Gdk.Display.get_default());
-
-        this._gtkSettings.connect('notify::gtk-theme-name', () => {
-            this._refreshDesktopAndColors();
+        this._gtkSettings.connect('notify', (actor, paramSpec) => {
+            if (paramSpec.name === 'gtk-theme-name')
+                this._refreshDesktopAndColors();
+            if (paramSpec.name === 'gtk-enable-animations')
+                this._refreshAnimations();
         });
 
         // Callback to handle accent color changes
@@ -605,6 +609,13 @@ const Preferences = class {
                 ` change: ${e.message}\n${e.stack}`
             );
         });
+    }
+
+    _refreshAnimations() {
+        this.globalAnimations =
+            this._gtkSettings.gtk_enable_animations ?? false;
+        const enabled = this.globalAnimations ? 'enabled' : 'disabled';
+        console.log('System animations are', enabled);
     }
 
     _initLocalCSSprovider() {

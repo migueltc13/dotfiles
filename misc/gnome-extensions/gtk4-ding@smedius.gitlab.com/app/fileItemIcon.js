@@ -308,19 +308,21 @@ const FileItemIcon = class extends DesktopIconItem {
      * Button Clicks *
      ***********************/
 
-    _doButtonOnePressed(button, X, Y, x, y, shiftPressed, controlPressed) {
+    _doButtonOnePressed(
+        button, nPress, X, Y, x, y, shiftPressed, controlPressed
+    ) {
         super._doButtonOnePressed(
-            button, X, Y, x, y, shiftPressed, controlPressed
+            button, nPress, X, Y, x, y, shiftPressed, controlPressed
         );
 
-        if (this.getClickCount() === 2 && !this.Prefs.CLICK_POLICY_SINGLE)
+        if (nPress === 2 && !this.Prefs.CLICK_POLICY_SINGLE)
             this.doOpen();
     }
 
     _doButtonOneReleased(
-        _button, _X, _Y, _x, _y, shiftPressed, controlPressed
+        _button, nPress, _X, _Y, _x, _y, shiftPressed, controlPressed
     ) {
-        if (this.getClickCount() === 1 &&
+        if (nPress === 1 &&
              this.Prefs.CLICK_POLICY_SINGLE &&
              !shiftPressed &&
              !controlPressed)

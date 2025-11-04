@@ -57,7 +57,8 @@ const WindowManager = class {
         });
 
         updateGridWindows.connect('activate', (action, parameter) => {
-            this.updateGridWindows(parameter.recursiveUnpack());
+            this.updateGridWindows(parameter.recursiveUnpack())
+            .catch(e => logError(e));
         });
 
         this.mainApp.add_action(updateGridWindows);
@@ -102,7 +103,7 @@ const WindowManager = class {
         );
     }
 
-    updateGridWindows(newdesktoplist) {
+    async updateGridWindows(newdesktoplist) {
         this._priorDesktopList = this._desktopList;
         this._desktopList = newdesktoplist;
 
@@ -221,6 +222,7 @@ const WindowManager = class {
         const redisplay = monitorschanged || gridschanged;
 
         if (redisplay) {
+            await this._displayDesktopSnapShots();
             this._desktopManager._displayList.forEach(x => x.removeFromGrid());
 
             this._desktops.forEach((desktop, index) => {
@@ -251,9 +253,22 @@ const WindowManager = class {
             // old coordinates seperately in do stacks with nonitorschanged info
             this._desktopManager._performSanityChecks();
 
-            this._desktopManager
+            await this._desktopManager
             .reFrameDesktop({redisplay, monitorschanged, gridschanged});
+
+            this._displayAnimationToLive();
         }
+    }
+
+    async _displayDesktopSnapShots() {
+        const array = this._desktops.map(
+            d => d.displaySnapshot()
+        );
+        await Promise.all(array).catch(e => logError(e));
+    }
+
+    _displayAnimationToLive() {
+        this._desktops.forEach(d => d.requestAnimatedRelayout());
     }
 
     createGridWindows() {
