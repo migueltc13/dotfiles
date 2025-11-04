@@ -1,5 +1,5 @@
 # override which to handle aliases and functions
-function which() {
+which() {
     local w
     w="$(command -V "$1")"
     case "$w" in
@@ -33,8 +33,15 @@ function which() {
     esac
 }
 
+# xdg-open with multiple arguments support
+open() {
+    for arg in "$@"; do
+        xdg-open "$arg"
+    done
+}
+
 # Create directory and navigate into it
-function mcd() {
+mcd() {
     if [[ -z "$1" ]]; then
         echo "Usage: $0 <dir>"
         return 1
@@ -43,12 +50,12 @@ function mcd() {
 }
 
 # Perform basic calculations
-function calc() {
+calc() {
     echo "$@" | bc -l
 }
 
 # Explode directory
-function explode() {
+explode() {
     if [ -z "$1" ]; then
         echo "Usage: $0 <dir>"
         return 1
@@ -58,17 +65,17 @@ function explode() {
 }
 
 # # fzf: find files
-function f() {
+f() {
     find . -type f 2>/dev/null | fzf --preview="bat --color=always --style=rule {}"
 }
 
 # fzf: find directories
-function d() {
+d() {
     find . -type d  2>/dev/null | fzf
 }
 
 # fzf: find files and open them with bat
-function b() {
+b() {
     local result
     result=$(f)
     if [ -z "$result" ]; then
@@ -79,7 +86,7 @@ function b() {
 }
 
 # fzf: find files/directories and open them with xdg-open
-function o() {
+o() {
     local result
     result=$(find .  2>/dev/null | fzf --no-multi)
     if [ -z "$result" ]; then
@@ -89,7 +96,7 @@ function o() {
 }
 
 # fzf: find files/directories and open them with nvim
-function n() {
+n() {
     local result
     result=$(find .  2>/dev/null | \
         fzf --preview="\
@@ -106,17 +113,17 @@ function n() {
 }
 
 # git: Add file(s) and commit them: "Add <file(s)>"
-function gac() {
+gac() {
     git add "$@" && git commit -m "Add $*"
 }
 
 # git: Add file(s) and commit them: "Update <file(s)>"
-function guc() {
+guc() {
     git add "$@" && git commit -m "Update $*"
 }
 
 # git: Rename file and commit it: "Rename <file_to_rm> to <file_to_add>"
-function grc() {
+grc() {
     if [ $# -ne 2 ]; then
         echo "Usage: grc <file_to_rm> <file_to_add>"
         return 1
@@ -125,7 +132,7 @@ function grc() {
 }
 
 # Get a raw link from a github link
-function graw() {
+graw() {
     main_link=$(xclip -out -selection clipboard)
     user=$(echo "$main_link" | cut -d '/' -f 4)
     repo=$(echo "$main_link" | cut -d '/' -f 5)
@@ -136,7 +143,7 @@ function graw() {
 }
 
 # Open or more github repositories in browser
-function gho() {
+gho() {
     list_orgs=false
     case "$1" in
         -h | --help)
@@ -171,12 +178,12 @@ function gho() {
 }
 
 # Open current github repository in browser
-function ghoc() {
+ghoc() {
     gh repo view --web &>/dev/null
 }
 
 # Extract any type of archive
-function extract() {
+extract() {
     if [ -z "$1" ]; then
         echo "Usage: $0 <file>"
         return 1
@@ -207,7 +214,7 @@ function extract() {
 }
 
 # Color Picker
-function color-picker() {
+color-picker() {
     COLOR=$(zenity --color-selection --title="Color Picker" 2>/dev/null)
     case $? in
         0) echo -n "$COLOR" | xclip -i -selection clipboard;;
@@ -217,7 +224,7 @@ function color-picker() {
 }
 
 # Send 1 free sms per day with Text Belt
-function send-sms() {
+send-sms() {
     if [ $# -ne 2 ]; then
         echo "Usage: $0 <phone_number> <message>"
         return 1
@@ -230,7 +237,7 @@ function send-sms() {
 }
 
 # Fix previous command
-function fuck() {
+fuck() {
     TF_PYTHONIOENCODING=$PYTHONIOENCODING;
     export TF_SHELL=bash;
     export TF_ALIAS=fuck;
