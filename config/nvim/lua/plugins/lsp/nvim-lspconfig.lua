@@ -122,6 +122,7 @@ return {
 
         -- configure and enable clangd server
         vim.lsp.config("clangd", {
+            on_attach = lsp_on_attach,  -- ensures on_attach is set
             cmd = {
                 "clangd",
                 "--offset-encoding=utf-16",
