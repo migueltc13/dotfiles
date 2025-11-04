@@ -1,3 +1,4 @@
+@github/copilot
 @githubnext/github-copilot-cli
 corepack
 json-server
