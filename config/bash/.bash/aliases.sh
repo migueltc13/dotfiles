@@ -21,7 +21,7 @@ alias ......='cd ../../../../..'
 
 # Tools
 alias t='tmux a || tmux'                                       # Attach to tmux session or create a new one
-alias lll='ranger'                                             # Ranger visual file manager
+# alias lll='ranger'                                           # Ranger visual file manager
 alias ncdu='ncdu -q --color=dark'                              # NCurses Disk Usage
 alias xclip='xclip -i -selection clipboard'                    # Copy to clipboard with xclip
 alias r2='radare2'                                             # Radare2
