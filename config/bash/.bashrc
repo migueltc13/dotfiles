@@ -81,6 +81,15 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# Ignore case on completions
+bind "set completion-ignore-case on"
+
+# Configure core-gui instances launched from vcmd
+if [ -n "$CORE_PYTHON" ]; then
+    export TERM="xterm-256color"
+    export HOME="/root"
+fi
+
 # Set DBUS session address. Solves issues with some GUI apps when started
 # from terminal (e.g., gnome-calculator, nautilus, etc.)
 # export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$UID/bus"
