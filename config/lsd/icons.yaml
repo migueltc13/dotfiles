@@ -70,6 +70,8 @@ name:
   .tmux: 
   tmux.conf: 
   .tmux.conf: 
+  flag.txt:  # 󰈻   󰈼
+  flag:  # 󰈻   󰈼
 extension:
   go:  # 
   py: 
