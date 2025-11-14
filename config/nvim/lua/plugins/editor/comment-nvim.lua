@@ -40,7 +40,19 @@ return {
             extra = true,
         },
         ---Function to call before (un)comment
-        pre_hook = nil,
+        pre_hook = function(ctx)
+            -- Only apply for Alloy files
+            if vim.bo.filetype ~= "alloy" then return end
+
+            if ctx.ctype == 2 then  -- block comment: ctx.ctype == 2
+                vim.bo.commentstring = "/* %s */"
+            else -- single line comment: ctx.ctype == 1
+                vim.bo.commentstring = "// %s"
+            end
+
+            -- return vim.bo.commentstring
+        end,
+
         ---Function to call after (un)comment
         post_hook = nil,
     },

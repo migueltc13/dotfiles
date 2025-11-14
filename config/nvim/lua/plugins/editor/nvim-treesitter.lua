@@ -80,5 +80,18 @@ return {
             zindex = 20, -- The Z-index of the context window
             on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching)
         })
+
+        local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+        parser_config.alloy = {
+            install_info = {
+                url = "https://github.com/fore-stun/tree-sitter-alloy",
+                files = { "src/parser.c" },
+                branch = "main",
+            },
+            filetype = "alloy",  -- .als files
+        }
+
+        -- Map .als files to alloy parser
+        vim.treesitter.language.register('alloy', 'als')
     end,
 }

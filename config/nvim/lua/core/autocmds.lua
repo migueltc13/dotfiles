@@ -109,3 +109,14 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
     end,
 })
+
+-- Map .als files to the alloy filetype and set comment strings appropriately
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = "*.als",
+    callback = function()
+        vim.bo.filetype = "alloy"
+        -- Set commentstring for single-line and block comments
+        vim.bo.commentstring = "// %s"
+        vim.b.comment_nvim_block_comment = "/* %s */"
+    end,
+})
