@@ -5,5 +5,5 @@ git-delta@0.17.0
 kanata@1.6.1
 lsd@1.1.2
 toipe@0.5.0
-tree-sitter-cli@0.22.6
+tree-sitter-cli@0.25.10
 vivid@0.10.1
