@@ -172,16 +172,12 @@
       order = 0
       profile = default
       uuid = 57baf0f2-d6a7-4435-ab85-cbe48205fc31
-      directory = /home/z0d1ac/UMinho/recent/ESR/project
-      command = sudo core-gui
     [[[terminal4]]]
       type = Terminal
       parent = child2
       order = 1
       profile = default
       uuid = 01fd386e-db4d-4651-9795-0b0f11405e26
-      directory = /home/z0d1ac/UMinho/recent/ESR/project
-      command = sudo core-daemon
     [[[child5]]]
       type = HPaned
       parent = child1
@@ -210,8 +206,8 @@
       type = VPaned
       parent = child7
       order = 1
-      position = 230
-      ratio = 0.49783549783549785
+      position = 231
+      ratio = 0.5
     [[[terminal10]]]
       type = Terminal
       parent = child9
